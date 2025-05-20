@@ -1,78 +1,98 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - InventarioLPS</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/InventarioLPS.styles.css" asp-append-version="true" />
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>@ViewData["Title"] - InventarioLPS</title>
+	<link rel="shortcut icon" href="~/favicon.ico">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">InventarioLPS</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
+<body class="d-flex flex-column">
+	<main class="d-flex h-100">
+		<div id="sidebarMenu" class="collapse d-md-block bg-primary-site p-3">
+			<div class="d-flex flex-column flex-shrink-0 p-3">
+				<a asp-action="Index">
+					<img src="~/images/logo-lps.png" class="toWhite my-2 mx-3" width="180" />
+				</a>
+				<hr class="toWhite" />
+				<ul class="nav nav-pills flex-column mb-auto">
+					<li class="nav-item">
+						<a asp-controller="Home" asp-action="Index" class="nav-link text-white @(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" ? "active" : "")">
+							<i class="bi bi-house-door-fill"></i> Inicio
+						</a>
+					</li>
+					<li class="nav-item">
+						<div>
+							<div class="nav-link text-white" data-bs-toggle="collapse" data-bs-target="#permisosNav">
+								<i class="bi bi-people-fill"></i> Administrador
+							</div>
+							<ul id="permisosNav" class="collapse nav nav-pills flex-column ms-3">
+								<li class="nav-item">
+									<a asp-controller="Usuarios" asp-action="Index" class="sub-nav-link nav-link text-white  @(ViewContext.RouteData.Values["controller"]?.ToString() == "Usuarios" ? "active" : "")"><i class="bi bi-eyeglasses"></i> Usuarios</a>
+								</li>
+								<li class="nav-item">
+									<a asp-controller="Perfiles" asp-action="Index" class="sub-nav-link nav-link text-white  @(ViewContext.RouteData.Values["controller"]?.ToString() == "Perfiles" ? "active" : "")"><i class="bi bi-circle-square"></i> Perfiles</a>
+								</li>
+								<li class="nav-item">
+									<a asp-controller="Permisos" asp-action="Index" class="sub-nav-link nav-link text-white  @(ViewContext.RouteData.Values["controller"]?.ToString() == "Permisos" ? "active" : "")"><i class="bi bi-card-checklist"></i> Permisos</a>
+								</li>
+							</ul>
+						</div>
+					</li>
+					<li class="nav-item">
+						<a asp-controller="Departamentos" asp-action="Index" class="nav-link text-white @(ViewContext.RouteData.Values["controller"]?.ToString() == "Departamentos" ? "active" : "")"><i class="bi bi-stack"></i> Departamentos </a>
+					</li>
+					<li class="nav-item">
+						<a asp-controller="Categorias" asp-action="Index" class="nav-link text-white @(ViewContext.RouteData.Values["controller"]?.ToString() == "Categorias" ? "active" : "")"><i class="bi bi-tag"></i> Categorías </a>
+					</li>
+					<li class="nav-item">
+						<a asp-controller="LineasServicio" asp-action="Index" class="nav-link text-white"><i class="bi bi-card-heading"></i> Líneas de Servicio </a>
+					</li>
+					<li class="nav-item">
+						<a asp-controller="Ubicaciones" asp-action="Index" class="nav-link text-white"><i class="bi bi-geo-alt-fill"></i> Ubicaciones </a>
+					</li>
+					<li class="nav-item">
+						<a asp-controller="Clasificaciones" asp-action="Index" class="nav-link text-white"><i class="bi bi-list-nested"></i> Clasificaciones </a>
+					</li>
+					<li class="nav-item">
+						<a asp-controller="Proveedores" asp-action="Index" class="nav-link text-white"><i class="bi bi-duffle"></i> Proveedores</a>
+					</li>
+					<li class="nav-item">
+						<a asp-controller="Inventario" asp-action="Index" class="nav-link text-white"><i class="bi bi-box"></i> Inventario </a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="container d-flex flex-column flex-grow-1 bg-light" style="min-height: calc(100vh - 120px);">
+			<div>
+				<div class="d-md-none m-0">
+					<button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+						<i class="bi bi-list"></i>
+					</button>
+				</div>
+				<div class="d-flex justify-content-between mt-2">
+					<h3>@ViewBag.Title</h3>
+					<a asp-controller="Account" asp-action="Logout" class="btn btn-secondary bg-primary-site"><i class="bi bi-person-circle"></i> Cerrar Sesión</a>
+				</div>
+			</div>
+			<div class="shadow-lg rounded-2 bg-light-subtle flex-grow-1 overflow-auto mt-3 p-2 ">
+				@RenderBody()
+			</div>
+		</div>
+
+	</main>
+	<footer class="text-muted">
+		<div class="container">
+			&copy; 2025 - Desoteem
+		</div>
+	</footer>
 
 
-
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Productos" asp-action="Index">Productos</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="ItemsInventario" asp-action="Index">ItemsInventario</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Usuarios" asp-action="Index">Usuarios</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Empleados" asp-action="Index">Empleados</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Proveedores" asp-action="Index">Proveedores</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="FormasRegistro" asp-action="Index">FormasRegistro</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="InformacionRegistros" asp-action="Index">InformacionRegistros</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="NovedadesItem" asp-action="Index">NovedadesItem</a>
-                        </li>
-
-
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
-
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - InventarioLPS - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+	@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
 </body>
 </html>

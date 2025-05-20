@@ -1,0 +1,131 @@
+﻿@model IEnumerable<InventarioLPS.Data.Entities.ItemInventario>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.CodigoItem)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Departamento)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Categoria)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LineaServicio)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SubLineaServicio)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DescripcionEspecifica)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EspecificacionesTecnicas)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FechaCompra)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ValorSinIva)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NumeroParteFabricante)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NumeroSerieLps)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Estatus)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CodigoProductoNavigation)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IdClasificacionNavigation)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IdInformacionRegistroNavigation)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IdProveedorNavigation)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IdUbicacionNavigation)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.CodigoItem)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Departamento)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Categoria)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LineaServicio)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SubLineaServicio)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DescripcionEspecifica)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EspecificacionesTecnicas)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaCompra)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ValorSinIva)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NumeroParteFabricante)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NumeroSerieLps)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Estatus)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CodigoProductoNavigation.Codigo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdClasificacionNavigation.Nombre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdInformacionRegistroNavigation.NumeroDocumento)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdProveedorNavigation.Correo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdUbicacionNavigation.Nombre)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -1,0 +1,44 @@
+﻿@model Usuario;
+@{
+	ViewBag.Title = "Iniciar Sesión";
+	Layout = "~/Views/Shared/_AccountLayout.cshtml";
+}
+
+<div class="account-container d-flex justify-content-center align-items-center vh-100">
+
+    <div class="d-flex bg-white rounded">
+        <div class="p-5">
+            <form asp-action="Login" style="min-width: 20rem;">
+                <span class="fs-3 d-block text-center mb-3">Iniciar sesión</span>
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="mb-3">
+                    <label>Usuario</label>
+                    <div class="input-group">
+                        <div class="input-group-text"><i class="bi bi-person-fill"></i></div>
+                        <input asp-for="NombreUsuario" class="form-control" placeholder="Ingrese su nombre de usuario" />
+                    </div>
+                    <span asp-validation-for="NombreUsuario" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label>Contraseña</label>
+                    <div class="input-group">
+                        <div class="input-group-text"><i class="bi bi-lock-fill"></i></div>
+                        <input asp-for="Contrasena" class="form-control" placeholder="Ingrese su contraseña">
+                    </div>
+                    <span asp-validation-for="Contrasena" class="text-danger"></span>
+                </div>
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-secondary bg-primary-site mx-5">Ingresar</button>
+                </div>
+            </form>
+        </div>
+        <div class="d-none d-lg-block bg-primary-site ">
+            <div class="d-flex flex-column align-items-center h-100">
+				<h2 class="fs-4 text-light mt-auto mb-5">Bienvenido</h2>
+                <img src="~/images/logo-lps.png" alt="Logo Empresa LPS" class="toWhite px-5" width="270" />
+                <img src="~/images/desoteem_logo_texto.png" alt="Logo Desoteem" class="toWhite mt-auto mb-3" width="90" />
+            </div>
+        </div>
+    </div>
+
+</div>
