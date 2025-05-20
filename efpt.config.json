@@ -1,0 +1,149 @@
+﻿{
+   "CodeGenerationMode": 4,
+   "ContextClassName": "InventarioLPSContext",
+   "ContextNamespace": null,
+   "FilterSchemas": false,
+   "IncludeConnectionString": false,
+   "ModelNamespace": "Data.Entities",
+   "OutputContextPath": "Data",
+   "OutputPath": "Entities",
+   "PreserveCasingWithRegex": true,
+   "ProjectRootNamespace": "InventarioLPS",
+   "Schemas": null,
+   "SelectedHandlebarsLanguage": 2,
+   "SelectedToBeGenerated": 0,
+   "T4TemplatePath": null,
+   "Tables": [
+      {
+         "Name": "[dbo].[Categoria]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Clasificacion]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Cliente]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[CorreoAdicionalProveedor]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Departamento]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[DetalleLIH]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[DetalleNoOperativo]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[DetalleVendido]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Empleado]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Estatus]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[FormaRegistro]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[GuiaRemision]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[InformacionRegistro]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ItemInventario]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ItemsNoOperativo]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[LineaServicio]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[NovedadItem]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Perfil]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[PerfilPermisos]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Permisos]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Producto]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Proveedor]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[SubLineaServicio]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[TransaccionesEstadoItem]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Ubicacion]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Usuario]",
+         "ObjectType": 0
+      }
+   ],
+   "UiHint": null,
+   "UncountableWords": null,
+   "UseAsyncStoredProcedureCalls": true,
+   "UseBoolPropertiesWithoutDefaultSql": false,
+   "UseDatabaseNames": false,
+   "UseDatabaseNamesForRoutines": true,
+   "UseDateOnlyTimeOnly": true,
+   "UseDbContextSplitting": false,
+   "UseDecimalDataAnnotationForSprocResult": true,
+   "UseFluentApiOnly": false,
+   "UseHandleBars": false,
+   "UseHierarchyId": false,
+   "UseInflector": false,
+   "UseInternalAccessModifiersForSprocsAndFunctions": false,
+   "UseLegacyPluralizer": false,
+   "UseManyToManyEntity": true,
+   "UseNoDefaultConstructor": false,
+   "UseNoNavigations": false,
+   "UseNoObjectFilter": true,
+   "UseNodaTime": false,
+   "UseNullableReferences": false,
+   "UsePrefixNavigationNaming": false,
+   "UseSchemaFolders": false,
+   "UseSchemaNamespaces": false,
+   "UseSpatial": false,
+   "UseT4": false,
+   "UseT4Split": false
+}
