@@ -1,12 +1,19 @@
 using InventarioLPS.Data;
 using InventarioLPS.Services.Authorization;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews().AddMvcOptions(options =>
+    options.Filters.Add(
+        new ResponseCacheAttribute
+        {
+            NoStore = true,
+            Location = ResponseCacheLocation.None
+        }));
 
 builder.Services.AddDbContext<InventarioLPSContext>(
     options => options.UseSqlServer(builder.Configuration.GetConnectionString("InventarioLpsConn")));

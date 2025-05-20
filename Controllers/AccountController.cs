@@ -9,7 +9,6 @@ using Microsoft.EntityFrameworkCore;
 namespace InventarioLPS.Controllers
 {
     [AllowAnonymous]
-    [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
     public class AccountController : BaseController
     {
         private readonly InventarioLPSContext _context;
