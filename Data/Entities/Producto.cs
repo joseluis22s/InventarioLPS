@@ -17,7 +17,7 @@ public partial class Producto
 
     public int IdLineaServicio { get; set; }
 
-    public int IdSubLineaServicio { get; set; }
+    public int? IdSubLineaServicio { get; set; }
 
     public virtual Categoria IdCategoriaNavigation { get; set; }
 

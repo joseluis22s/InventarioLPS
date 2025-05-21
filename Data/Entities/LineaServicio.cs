@@ -11,8 +11,6 @@ public partial class LineaServicio
 
     public string Nombre { get; set; }
 
-    public bool TieneSubLinea { get; set; }
-
     public virtual ICollection<Producto> Producto { get; set; } = new List<Producto>();
 
     public virtual ICollection<SubLineaServicio> SubLineaServicio { get; set; } = new List<SubLineaServicio>();

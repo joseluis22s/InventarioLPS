@@ -1,31 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using InventarioLPS.Data;
+using InventarioLPS.Data.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using InventarioLPS.Data;
-using InventarioLPS.Data.Entities;
 
 namespace InventarioLPS.Controllers
 {
-    public class LineasServicioController : Controller
+    public class SubLineasServicioController : Controller
     {
         private readonly InventarioLPSContext _context;
 
-        public LineasServicioController(InventarioLPSContext context)
+        public SubLineasServicioController(InventarioLPSContext context)
         {
             _context = context;
         }
 
-        // GET: LineasServicio
+        // GET: SubLineasServicio
         public async Task<IActionResult> Index()
         {
-            return View(await _context.LineaServicio.ToListAsync());
+            var inventarioLPSContext = _context.SubLineaServicio.Include(s => s.IdLineaServicioNavigation);
+            return View(await inventarioLPSContext.ToListAsync());
         }
 
-        // GET: LineasServicio/Details/5
+        // GET: SubLineasServicio/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,39 +30,42 @@ namespace InventarioLPS.Controllers
                 return NotFound();
             }
 
-            var lineaServicio = await _context.LineaServicio
+            var subLineaServicio = await _context.SubLineaServicio
+                .Include(s => s.IdLineaServicioNavigation)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (lineaServicio == null)
+            if (subLineaServicio == null)
             {
                 return NotFound();
             }
 
-            return View(lineaServicio);
+            return View(subLineaServicio);
         }
 
-        // GET: LineasServicio/Create
+        // GET: SubLineasServicio/Create
         public IActionResult Create()
         {
+            ViewData["IdLineaServicio"] = new SelectList(_context.LineaServicio, "Id", "Nombre");
             return View();
         }
 
-        // POST: LineasServicio/Create
+        // POST: SubLineasServicio/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Nombre")] LineaServicio lineaServicio)
+        public async Task<IActionResult> Create([Bind("Id,Nombre,IdLineaServicio")] SubLineaServicio subLineaServicio)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(lineaServicio);
+                _context.Add(subLineaServicio);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(lineaServicio);
+            ViewData["IdLineaServicio"] = new SelectList(_context.LineaServicio, "Id", "Nombre", subLineaServicio.IdLineaServicio);
+            return View(subLineaServicio);
         }
 
-        // GET: LineasServicio/Edit/5
+        // GET: SubLineasServicio/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -73,22 +73,23 @@ namespace InventarioLPS.Controllers
                 return NotFound();
             }
 
-            var lineaServicio = await _context.LineaServicio.FindAsync(id);
-            if (lineaServicio == null)
+            var subLineaServicio = await _context.SubLineaServicio.FindAsync(id);
+            if (subLineaServicio == null)
             {
                 return NotFound();
             }
-            return View(lineaServicio);
+            ViewData["IdLineaServicio"] = new SelectList(_context.LineaServicio, "Id", "Nombre", subLineaServicio.IdLineaServicio);
+            return View(subLineaServicio);
         }
 
-        // POST: LineasServicio/Edit/5
+        // POST: SubLineasServicio/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre")] LineaServicio lineaServicio)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre,IdLineaServicio")] SubLineaServicio subLineaServicio)
         {
-            if (id != lineaServicio.Id)
+            if (id != subLineaServicio.Id)
             {
                 return NotFound();
             }
@@ -97,12 +98,12 @@ namespace InventarioLPS.Controllers
             {
                 try
                 {
-                    _context.Update(lineaServicio);
+                    _context.Update(subLineaServicio);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!LineaServicioExists(lineaServicio.Id))
+                    if (!SubLineaServicioExists(subLineaServicio.Id))
                     {
                         return NotFound();
                     }
@@ -113,10 +114,11 @@ namespace InventarioLPS.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(lineaServicio);
+            ViewData["IdLineaServicio"] = new SelectList(_context.LineaServicio, "Id", "Nombre", subLineaServicio.IdLineaServicio);
+            return View(subLineaServicio);
         }
 
-        // GET: LineasServicio/Delete/5
+        // GET: SubLineasServicio/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -124,34 +126,35 @@ namespace InventarioLPS.Controllers
                 return NotFound();
             }
 
-            var lineaServicio = await _context.LineaServicio
+            var subLineaServicio = await _context.SubLineaServicio
+                .Include(s => s.IdLineaServicioNavigation)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (lineaServicio == null)
+            if (subLineaServicio == null)
             {
                 return NotFound();
             }
 
-            return View(lineaServicio);
+            return View(subLineaServicio);
         }
 
-        // POST: LineasServicio/Delete/5
+        // POST: SubLineasServicio/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var lineaServicio = await _context.LineaServicio.FindAsync(id);
-            if (lineaServicio != null)
+            var subLineaServicio = await _context.SubLineaServicio.FindAsync(id);
+            if (subLineaServicio != null)
             {
-                _context.LineaServicio.Remove(lineaServicio);
+                _context.SubLineaServicio.Remove(subLineaServicio);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool LineaServicioExists(int id)
+        private bool SubLineaServicioExists(int id)
         {
-            return _context.LineaServicio.Any(e => e.Id == id);
+            return _context.SubLineaServicio.Any(e => e.Id == id);
         }
     }
 }

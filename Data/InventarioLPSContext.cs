@@ -78,7 +78,6 @@ public partial class InventarioLPSContext : DbContext
 
         modelBuilder.Entity<Clasificacion>(entity =>
         {
-            entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.Nombre)
                 .IsRequired()
                 .HasMaxLength(120)
@@ -105,7 +104,6 @@ public partial class InventarioLPSContext : DbContext
         {
             entity.HasKey(e => e.IdCorreo);
 
-            entity.Property(e => e.IdCorreo).ValueGeneratedNever();
             entity.Property(e => e.Correo)
                 .IsRequired()
                 .HasMaxLength(120)
@@ -119,7 +117,6 @@ public partial class InventarioLPSContext : DbContext
 
         modelBuilder.Entity<Departamento>(entity =>
         {
-            entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.Nombre)
                 .IsRequired()
                 .HasMaxLength(120)
@@ -203,7 +200,6 @@ public partial class InventarioLPSContext : DbContext
 
         modelBuilder.Entity<Empleado>(entity =>
         {
-            entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.PrimerApellido)
                 .IsRequired()
                 .HasMaxLength(150)
@@ -253,7 +249,6 @@ public partial class InventarioLPSContext : DbContext
 
         modelBuilder.Entity<InformacionRegistro>(entity =>
         {
-            entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.MontoTotal).HasColumnType("decimal(18, 12)");
             entity.Property(e => e.NumeroDocumento)
                 .IsRequired()
@@ -440,7 +435,6 @@ public partial class InventarioLPSContext : DbContext
 
             entity.HasOne(d => d.IdSubLineaServicioNavigation).WithMany(p => p.Producto)
                 .HasForeignKey(d => d.IdSubLineaServicio)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Producto_SubLineaServicio");
         });
 
