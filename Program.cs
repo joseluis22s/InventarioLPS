@@ -8,12 +8,15 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews().AddMvcOptions(options =>
+{
     options.Filters.Add(
         new ResponseCacheAttribute
         {
             NoStore = true,
             Location = ResponseCacheLocation.None
-        }));
+        });
+    options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+});
 
 builder.Services.AddDbContext<InventarioLPSContext>(
     options => options.UseSqlServer(builder.Configuration.GetConnectionString("InventarioLpsConn")));

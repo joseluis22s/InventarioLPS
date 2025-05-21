@@ -26,8 +26,6 @@ public partial class ItemInventario
 
     public string EspecificacionesTecnicas { get; set; }
 
-    public DateTime FechaCompra { get; set; }
-
     public decimal ValorSinIva { get; set; }
 
     public string NumeroParteFabricante { get; set; }
@@ -48,6 +46,8 @@ public partial class ItemInventario
     public int IdProveedor { get; set; }
 
     public int IdInformacionRegistro { get; set; }
+
+    public int Cantidad { get; set; }
 
     public virtual Producto CodigoProductoNavigation { get; set; }
 

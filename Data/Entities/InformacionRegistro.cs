@@ -15,6 +15,8 @@ public partial class InformacionRegistro
 
     public int IdFormaRegistro { get; set; }
 
+    public DateTime FechaCompra { get; set; }
+
     public virtual FormaRegistro IdFormaRegistroNavigation { get; set; }
 
     public virtual ICollection<ItemInventario> ItemInventario { get; set; } = new List<ItemInventario>();

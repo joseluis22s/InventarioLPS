@@ -249,6 +249,7 @@ public partial class InventarioLPSContext : DbContext
 
         modelBuilder.Entity<InformacionRegistro>(entity =>
         {
+            entity.Property(e => e.FechaCompra).HasColumnType("datetime");
             entity.Property(e => e.MontoTotal).HasColumnType("decimal(18, 12)");
             entity.Property(e => e.NumeroDocumento)
                 .IsRequired()
@@ -297,7 +298,6 @@ public partial class InventarioLPSContext : DbContext
                 .IsRequired()
                 .HasMaxLength(80)
                 .IsUnicode(false);
-            entity.Property(e => e.FechaCompra).HasColumnType("datetime");
             entity.Property(e => e.LineaServicio)
                 .IsRequired()
                 .HasMaxLength(120)
@@ -312,7 +312,6 @@ public partial class InventarioLPSContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("NumeroSerieLPS");
             entity.Property(e => e.SubLineaServicio)
-                .IsRequired()
                 .HasMaxLength(120)
                 .IsUnicode(false);
             entity.Property(e => e.ValorSinIva)

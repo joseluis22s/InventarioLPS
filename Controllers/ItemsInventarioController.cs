@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using InventarioLPS.Data;
+using InventarioLPS.Data.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using InventarioLPS.Data;
-using InventarioLPS.Data.Entities;
 
 namespace InventarioLPS.Controllers
 {
@@ -52,6 +48,7 @@ namespace InventarioLPS.Controllers
         // GET: ItemsInventario/Create
         public IActionResult Create()
         {
+            ViewData["FormasRegistro"] = new SelectList(_context.FormaRegistro, "Id", "Nombre");
             ViewData["CodigoProducto"] = new SelectList(_context.Producto, "Codigo", "Codigo");
             ViewData["IdClasificacion"] = new SelectList(_context.Clasificacion, "Id", "Nombre");
             ViewData["IdInformacionRegistro"] = new SelectList(_context.InformacionRegistro, "Id", "NumeroDocumento");

@@ -3,13 +3,13 @@
 }
 
 html {
-  font-size: 12px;
+    font-size: 12px;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 14px;
-  }
+    html {
+        font-size: 14px;
+    }
 }
 
 /*.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
@@ -17,12 +17,12 @@ html {
 }*/
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
 }
 
 
@@ -45,10 +45,29 @@ body {
 }
 
 /* Pila de navegación */
-.nav-link:hover {
-    background-color: #0022bb; /* color de fondo al hacer hover */
+.nav-link-sidebar:hover {
+    background-color: #0022bb;
 }
 
 .sub-nav-link:hover {
-    background-color: #091c70; /* color de fondo al hacer hover */
+    background-color: #091c70;
+}
+
+/* PARA ITEM ADMINISTRADOR DE NAVEGACION*/
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.user-select-none {
+    user-select: none;
+}
+
+/* FONT SIZE PARA TABLAS*/
+
+.fs-theader {
+    font-size: 10px;
+}
+
+.fs-tbody {
+    font-size: 8px;
 }

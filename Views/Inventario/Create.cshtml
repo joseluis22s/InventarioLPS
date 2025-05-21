@@ -1,0 +1,410 @@
+﻿@model InventarioLPS.Models.Inventario.RegistroInventarioViewModel
+
+@{
+	ViewData["Title"] = "Nuevo registro de inventario";
+}
+@* MODAL PARA DUPLICAR *@
+
+<div class="modal fade" id="duplicaModal" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="duplicaModalLabel">Número de duplicados</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+			</div>
+			<div class="modal-body">
+				<input type="number" id="duplicaCount" min="1" value="1" class="form-control" />
+			</div>
+			<div class="modal-footer">
+				<button type="button" id="confirmDuplica" class="btn btn-primary">Duplicar</button>
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<h2>@ViewBag.Title</h2>
+<hr />
+<form asp-action="Create" class="container-fluid">
+	<div class="row">
+		@* NÚMERO DE DOCUMENTO *@
+		<div class="col-8 col-md-4">
+			<label asp-for="NumeroDocumento" class="form-label">No. Documento</label>
+			<input asp-for="NumeroDocumento" class="form-control" />
+			<span asp-validation-for="NumeroDocumento" class="text-danger"></span>
+		</div>
+		@* FORMA DE REGISTRO *@
+		<div class="col-8 col-md-4">
+			<label asp-for="FormaRegistro" class="form-label">Forma de registro</label>
+			<select asp-for="FormaRegistro" asp-items="ViewBag.FormasRegistro" class="form-select">
+				<option value="">-- Seleccione --</option>
+			</select>
+			<span asp-validation-for="FormaRegistro" class="text-danger"></span>
+		</div>
+		@* FECHA DE COMPRA *@
+		<div class="col-8 col-md-4">
+			<label asp-for="FechaCompra" class="form-label"></label>
+			<input asp-for="FechaCompra" class="form-control" />
+			<span asp-validation-for="FechaCompra" class="text-danger"></span>
+		</div>
+	</div>
+
+	@* BLOQUE POR CANTIDAD*@
+	<div class="row border rounded p-2 overflow-auto">
+		<h4>Ingreso por cantidad</h4>
+		<i class="btn btn-light bi bi-plus-lg"></i>
+		<table class="table">
+			<thead class="fs-theader">
+				<tr>
+					<th>Código</th>
+					<th>Cantidad</th>
+					<th>Valor sin IVA</th>
+					<th>Proveedor</th>
+					<th>Producto</th>
+					<th>Departamento</th>
+					<th>Categoría</th>
+					<th>Linea de servicio</th>
+					<th>Sub-línea</th>
+					<th>Descrip. específica</th>
+					<th>Especifi. técnicas</th>
+					<th># fabricante</th>
+					<th># serie LPS</th>
+					<th>Ubicación</th>
+					<th>Estatus</th>
+					<th>Clasificación</th>
+				</tr>
+			</thead>
+			<tbody id="tbodyCantidad" class="fs-tbody">
+				@for (int i = 0; i < Model.RegistroPorCantidad.Count; i++)
+				{
+					<tr>
+						<td>
+							<input asp-for="RegistroPorCantidad[@i].CodigoItem" class="form-control" />
+							<span asp-validation-for="RegistroPorCantidad[@i].CodigoItem" class="text-danger"></span>
+						</td>
+						<td>
+							<input asp-for="RegistroPorCantidad[@i].Cantidad" class="form-control" />
+							<span asp-validation-for="RegistroPorCantidad[@i].Cantidad" class="text-danger"></span>
+						</td>
+						<td>
+							<input asp-for="RegistroPorCantidad[@i].ValorSinIva" class="form-control" />
+							<span asp-validation-for="RegistroPorCantidad[@i].ValorSinIva" class="text-danger"></span>
+						</td>
+						<td>
+							<select asp-for="RegistroPorCantidad[@i].Proveedor" class="form-select">
+								<option value="">-- Seleccione --</option>
+							</select>
+							<span asp-validation-for="RegistroPorCantidad[@i].Proveedor" class="text-danger"></span>
+						</td>
+						<td>
+							<select asp-for="RegistroPorCantidad[@i].Producto" class="form-select">
+								<option value="">-- Seleccione --</option>
+							</select>
+							<span asp-validation-for="RegistroPorCantidad[@i].Producto" class="text-danger"></span>
+						</td>
+						<td>
+							<input asp-for="RegistroPorCantidad[@i].Departamento" class="form-control" disabled readonly />
+							<span asp-validation-for="RegistroPorCantidad[@i].Departamento" class="text-danger"></span>
+						</td>
+						<td>
+							<input asp-for="RegistroPorCantidad[@i].Categoria" class="form-control" disabled readonly />
+							<span asp-validation-for="RegistroPorCantidad[@i].Categoria" class="text-danger"></span>
+						</td>
+						<td>
+							<input asp-for="RegistroPorCantidad[@i].LineaServicio" class="form-control" disabled readonly />
+							<span asp-validation-for="RegistroPorCantidad[@i].LineaServicio" class="text-danger"></span>
+						</td>
+						<td>
+							<input asp-for="RegistroPorCantidad[@i].SubLineaServicio" class="form-control" disabled readonly />
+							<span asp-validation-for="RegistroPorCantidad[@i].SubLineaServicio" class="text-danger"></span>
+						</td>
+						<td>
+							<input asp-for="RegistroPorCantidad[@i].DescripcionEspecifica" class="form-control" />
+							<span asp-validation-for="RegistroPorCantidad[@i].DescripcionEspecifica" class="text-danger"></span>
+						</td>
+						<td>
+							<input asp-for="RegistroPorCantidad[@i].EspecificacionesTecnicas" class="form-control" />
+							<span asp-validation-for="RegistroPorCantidad[@i].EspecificacionesTecnicas" class="text-danger"></span>
+						</td>
+						<td>
+							<input asp-for="RegistroPorCantidad[@i].NumeroParteFabricante" class="form-control" />
+							<span asp-validation-for="RegistroPorCantidad[@i].NumeroParteFabricante" class="text-danger"></span>
+						</td>
+						<td>
+							<input asp-for="RegistroPorCantidad[@i].NumeroSerieLps" class="form-control" />
+							<span asp-validation-for="RegistroPorCantidad[@i].NumeroSerieLps" class="text-danger"></span>
+						</td>
+						<td>
+							<select asp-for="RegistroPorCantidad[@i].Ubicacion" class="form-select">
+								<option value="">-- Seleccione --</option>
+							</select>
+							<span asp-validation-for="RegistroPorCantidad[@i].Ubicacion" class="text-danger"></span>
+						</td>
+						<td>
+							<select asp-for="RegistroPorCantidad[@i].Estatus" class="form-control" class="form-select">
+								<option value="">-- Seleccione --</option>
+							</select>
+							<span asp-validation-for="RegistroPorCantidad[@i].Estatus" class="text-danger"></span>
+						</td>
+						<td>
+							<select asp-for="RegistroPorCantidad[@i].Clasificacion" class="form-select">
+								<option value="">-- Seleccione --</option>
+							</select>
+							<span asp-validation-for="RegistroPorCantidad[@i].Clasificacion" class="text-danger"></span>
+						</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+		@* FILA PLANTILLA POR CANTIDAD OCULTA *@
+		<table style="display:none;">
+			<tbody>
+				<tr id="plantillaCantidad" style="display:none;">
+					<td>
+						<input name="RegistroPorCantidad[__index__].CodigoItem" class="form-control" />
+						<span data-valmsg-for="RegistroPorCantidad[__index__].CodigoItem" class="text-danger"></span>
+					</td>
+					<td>
+						<input name="RegistroPorCantidad[__index__].Cantidad" class="form-control" />
+						<span data-valmsg-for="RegistroPorCantidad[__index__].Cantidad" class="text-danger"></span>
+					</td>
+					<td>
+						<input name="RegistroPorCantidad[__index__].ValorSinIva" class="form-control" />
+						<span data-valmsg-for="RegistroPorCantidad[__index__].ValorSinIva" class="text-danger"></span>
+					</td>
+					<td>
+						<select name="RegistroPorCantidad[__index__].Proveedor" class="form-select">
+							<option value="">-- Seleccione --</option>
+						</select>
+						<span data-valmsg-for="RegistroPorCantidad[__index__].Proveedor" class="text-danger"></span>
+					</td>
+					<td>
+						<select name="RegistroPorCantidad[__index__].Producto" class="form-select">
+							<option value="">-- Seleccione --</option>
+						</select>
+						<span data-valmsg-for="RegistroPorCantidad[__index__].Producto" class="text-danger"></span>
+					</td>
+					<td>
+						<input name="RegistroPorCantidad[__index__].Departamento" class="form-control" disabled readonly />
+						<span data-valmsg-for="RegistroPorCantidad[__index__].Departamento" class="text-danger"></span>
+					</td>
+					<td>
+						<input name="RegistroPorCantidad[__index__].Categoria" class="form-control" disabled readonly />
+						<span data-valmsg-for="RegistroPorCantidad[__index__].Categoria" class="text-danger"></span>
+					</td>
+					<td>
+						<input name="RegistroPorCantidad[__index__].LineaServicio" class="form-control" disabled readonly />
+						<span data-valmsg-for="RegistroPorCantidad[__index__].LineaServicio" class="text-danger"></span>
+					</td>
+					<td>
+						<input name="RegistroPorCantidad[__index__].SubLineaServicio" class="form-control" disabled readonly />
+						<span data-valmsg-for="RegistroPorCantidad[__index__].SubLineaServicio" class="text-danger"></span>
+					</td>
+					<td>
+						<input name="RegistroPorCantidad[__index__].DescripcionEspecifica" class="form-control" />
+						<span data-valmsg-for="RegistroPorCantidad[__index__].DescripcionEspecifica" class="text-danger"></span>
+					</td>
+					<td>
+						<input name="RegistroPorCantidad[__index__].EspecificacionesTecnicas" class="form-control" />
+						<span data-valmsg-for="RegistroPorCantidad[__index__].EspecificacionesTecnicas" class="text-danger"></span>
+					</td>
+					<td>
+						<input name="RegistroPorCantidad[__index__].NumeroParteFabricante" class="form-control" />
+						<span data-valmsg-for="RegistroPorCantidad[__index__].NumeroParteFabricante" class="text-danger"></span>
+					</td>
+					<td>
+						<input name="RegistroPorCantidad[__index__].NumeroSerieLps" class="form-control" />
+						<span data-valmsg-for="RegistroPorCantidad[__index__].NumeroSerieLps" class="text-danger"></span>
+					</td>
+					<td>
+						<select name="RegistroPorCantidad[__index__].Ubicacion" class="form-select">
+							<option value="">-- Seleccione --</option>
+						</select>
+						<span data-valmsg-for="RegistroPorCantidad[__index__].Ubicacion" class="text-danger"></span>
+					</td>
+					<td>
+						<select name="RegistroPorCantidad[__index__].Estatus" class="form-select">
+							<option value="">-- Seleccione --</option>
+						</select>
+						<span data-valmsg-for="RegistroPorCantidad[__index__].Estatus" class="text-danger"></span>
+					</td>
+					<td>
+						<select name="RegistroPorCantidad[__index__].Clasificacion" class="form-select">
+							<option value="">-- Seleccione --</option>
+						</select>
+						<span data-valmsg-for="RegistroPorCantidad[__index__].Clasificacion" class="text-danger"></span>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+	@* BLOQUE POR DUPLICAR*@
+	<div class="row border rounded p-2 overflow-auto">
+		<h4>Ingreso por duplicación</h4>
+		<i class="btn btn-light bi bi-plus-lg"></i>
+		<table class="table">
+			<thead class="fs-theader">
+				<tr>
+					<th></th>
+					<th>Código</th>
+					<th>Cantidad</th>
+					<th>Valor sin IVA</th>
+					<th>Proveedor</th>
+					<th>Producto</th>
+					<th>Departamento</th>
+					<th>Categoría</th>
+					<th>Linea de servicio</th>
+					<th>Sub-línea</th>
+					<th>Descrip. específica</th>
+					<th>Especifi. técnicas</th>
+					<th># fabricante</th>
+					<th># serie LPS</th>
+					<th>Ubicación</th>
+					<th>Estatus</th>
+					<th>Clasificación</th>
+				</tr>
+			</thead>
+			<tbody id="tbodyDuplicado" class="fs-tbody">
+				@for (int i = 0; i < Model.RegistroDuplicado.Count; i++){
+					<tr>
+						<td>
+							<i class="btn btn-light bi bi-clipboard-plus" data-index="@i"></i>
+						</td>
+						<td>
+							<input asp-for="RegistroDuplicado[@i].CodigoItem" class="form-control" />
+							<span asp-validation-for="RegistroDuplicado[@i].CodigoItem" class="text-danger"></span>
+						</td>
+						<td>
+							<input asp-for="RegistroDuplicado[@i].Cantidad" class="form-control" value="1" disabled readonly />
+						</td>
+						<td>
+							<input asp-for="RegistroDuplicado[@i].ValorSinIva" class="form-control" />
+							<span asp-validation-for="RegistroDuplicado[@i].ValorSinIva" class="text-danger"></span>
+						</td>
+						<td>
+							<select asp-for="RegistroDuplicado[@i].Proveedor" class="form-select">
+								<option value="">-- Seleccione --</option>
+							</select>
+							<span asp-validation-for="RegistroDuplicado[@i].Proveedor" class="text-danger"></span>
+						</td>
+						<td>
+							<select asp-for="RegistroDuplicado[@i].Producto" class="form-select">
+								<option value="">-- Seleccione --</option>
+							</select>
+							<span asp-validation-for="RegistroDuplicado[@i].Producto" class="text-danger"></span>
+						</td>
+						<td>
+							<input asp-for="RegistroDuplicado[@i].Departamento" class="form-control" disabled readonly />
+							<span asp-validation-for="RegistroDuplicado[@i].Departamento" class="text-danger"></span>
+						</td>
+						<td>
+							<input asp-for="RegistroDuplicado[@i].Categoria" class="form-control" disabled readonly />
+							<span asp-validation-for="RegistroDuplicado[@i].Categoria" class="text-danger"></span>
+						</td>
+						<td>
+							<input asp-for="RegistroDuplicado[@i].LineaServicio" class="form-control" disabled readonly />
+							<span asp-validation-for="RegistroDuplicado[@i].LineaServicio" class="text-danger"></span>
+						</td>
+						<td>
+							<input asp-for="RegistroDuplicado[@i].SubLineaServicio" class="form-control" disabled readonly />
+							<span asp-validation-for="RegistroDuplicado[@i].SubLineaServicio" class="text-danger"></span>
+						</td>
+						<td>
+							<input asp-for="RegistroDuplicado[@i].DescripcionEspecifica" class="form-control" />
+							<span asp-validation-for="RegistroDuplicado[@i].DescripcionEspecifica" class="text-danger"></span>
+						</td>
+						<td>
+							<input asp-for="RegistroDuplicado[@i].EspecificacionesTecnicas" class="form-control" />
+							<span asp-validation-for="RegistroDuplicado[@i].EspecificacionesTecnicas" class="text-danger"></span>
+						</td>
+						<td>
+							<input asp-for="RegistroDuplicado[@i].NumeroParteFabricante" class="form-control" />
+							<span asp-validation-for="RegistroDuplicado[@i].NumeroParteFabricante" class="text-danger"></span>
+						</td>
+						<td>
+							<input asp-for="RegistroDuplicado[@i].NumeroSerieLps" class="form-control" />
+							<span asp-validation-for="RegistroDuplicado[@i].NumeroSerieLps" class="text-danger"></span>
+						</td>
+						<td>
+							<select asp-for="RegistroDuplicado[@i].Ubicacion" class="form-select">
+								<option value="">-- Seleccione --</option>
+							</select>
+							<span asp-validation-for="RegistroDuplicado[@i].Ubicacion" class="text-danger"></span>
+						</td>
+						<td>
+							<select asp-for="RegistroDuplicado[@i].Estatus" class="form-control" class="form-select">
+								<option value="">-- Seleccione --</option>
+							</select>
+							<span asp-validation-for="RegistroDuplicado[@i].Estatus" class="text-danger"></span>
+						</td>
+						<td>
+							<select asp-for="RegistroDuplicado[@i].Clasificacion" class="form-select">
+								<option value="">-- Seleccione --</option>
+							</select>
+							<span asp-validation-for="RegistroDuplicado[@i].Clasificacion" class="text-danger"></span>
+						</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
+</form>
+<script>
+	let index = @Model.RegistroPorCantidad.Count;
+
+	document.querySelector('.bi-plus-lg').addEventListener('click', function() {
+	  const template = document.getElementById('plantillaCantidad').outerHTML;
+	  const newRowHtml = template.replace(/__index__/g, index);
+	  const tbody = document.getElementById('tbodyCantidad');
+
+	  const tempDiv = document.createElement('tbody');
+	  tempDiv.innerHTML = newRowHtml;
+	  const newRow = tempDiv.querySelector('tr');
+	  newRow.style.display = '';
+
+	  tbody.appendChild(newRow);
+	  index++;
+	});
+
+
+
+
+	Let duplicadoIndex = @Model.RegistroDuplicado.Count;
+	let filaSeleccionada = null;
+
+	const modal = new bootstrap.Modal(document.getElementById('duplicaModal'));
+
+	document.querySelectorAll('.duplicate-btn').forEach(btn => {
+	  btn.addEventListener('click', e => {
+		const idx = e.target.getAttribute('data-index');
+		filaSeleccionada = document.querySelector(`#tbodyDuplicado tr:nth-child(${parseInt(idx) + 1})`);
+		modal.show();
+	  });
+	});
+
+	document.getElementById('confirmDuplica').addEventListener('click', () => {
+	  const n = parseInt(document.getElementById('duplicaCount').value);
+	  if (!n || n < 1) return;
+
+	  for (let i = 0; i < n; i++) {
+		const clone = filaSeleccionada.cloneNode(true);
+		// Actualizar nombres e índices de inputs en clone
+		clone.querySelectorAll('input, select, span').forEach(el => {
+		  if(el.name) {
+			el.name = el.name.replace(/\[\d+\]/, `[${duplicadoIndex}]`);
+		  }
+		  if(el.getAttribute('asp-for')) {
+			el.setAttribute('asp-for', el.getAttribute('asp-for').replace(/\[\d+\]/, `[${duplicadoIndex}]`));
+		  }
+		  // Limpia valores si quieres (opcional)
+		});
+		document.getElementById('tbodyDuplicado').appendChild(clone);
+		duplicadoIndex++;
+	  }
+
+	  modal.hide();
+	});
+
+</script>
