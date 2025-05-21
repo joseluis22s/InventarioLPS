@@ -1,4 +1,5 @@
 ﻿using InventarioLPS.Data;
+using InventarioLPS.Models.Inventario;
 using InventarioLPS.Services.Mappings;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -42,7 +43,7 @@ namespace InventarioLPS.Controllers
             ViewData["FormasRegistro"] = new SelectList(_context.FormaRegistro, "Id", "Nombre");
             ViewData["Productos"] = new SelectList(_context.Producto, "Codigo", "Nombre");
 
-            return View();
+            return View(new RegistroInventarioViewModel());
         }
 
         // POST: InventarioController/Create
