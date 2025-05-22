@@ -1,0 +1,915 @@
+USE [InventarioLPS]
+GO
+
+EXEC sys.sp_dropextendedproperty @name=N'MS_Description' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'ItemInventario', @level2type=N'CONSTRAINT',@level2name=N'UQ_ItemInventario_IdItem'
+GO
+
+EXEC sys.sp_dropextendedproperty @name=N'MS_Description' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'ItemInventario', @level2type=N'COLUMN',@level2name=N'CodigoProducto'
+GO
+
+EXEC sys.sp_dropextendedproperty @name=N'MS_Description' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'ItemInventario', @level2type=N'COLUMN',@level2name=N'CodigoItem'
+GO
+
+ALTER TABLE [dbo].[PerfilPermisos] DROP CONSTRAINT [FK_PerfilPermisos_Permisos]
+GO
+
+ALTER TABLE [dbo].[PerfilPermisos] DROP CONSTRAINT [FK_PerfilPermisos_Perfil]
+GO
+
+ALTER TABLE [dbo].[DetalleVendido] DROP CONSTRAINT [FK_DetalleVendido_GuiaRemision]
+GO
+
+ALTER TABLE [dbo].[DetalleVendido] DROP CONSTRAINT [FK_DetalleEstatusVendido_Estatus]
+GO
+
+ALTER TABLE [dbo].[DetalleVendido] DROP CONSTRAINT [FK_DetalleEstatusVendido_Cliente]
+GO
+
+ALTER TABLE [dbo].[DetalleLIH] DROP CONSTRAINT [FK_DetalleEstatusLIH_Estatus]
+GO
+
+ALTER TABLE [dbo].[DetalleLIH] DROP CONSTRAINT [FK_DetalleEstatusLIH_Cliente]
+GO
+
+ALTER TABLE [dbo].[NovedadItem] DROP CONSTRAINT [FK_NovedadesRelevantes_ItemInventario]
+GO
+
+ALTER TABLE [dbo].[Usuario] DROP CONSTRAINT [FK_Usuario_Perfil]
+GO
+
+ALTER TABLE [dbo].[TransaccionesEstadoItem] DROP CONSTRAINT [FK_TransaccionesEstadoItem_ItemInventario]
+GO
+
+ALTER TABLE [dbo].[TransaccionesEstadoItem] DROP CONSTRAINT [FK_TransaccionesEstadoItem_Estatus]
+GO
+
+ALTER TABLE [dbo].[DetalleNoOperativo] DROP CONSTRAINT [FK_DetalleNoOperativo_Estatus]
+GO
+
+ALTER TABLE [dbo].[DetalleNoOperativo] DROP CONSTRAINT [FK_DetalleItemNoOperativo_ItemsNoOperativo]
+GO
+
+ALTER TABLE [dbo].[Empleado] DROP CONSTRAINT [FK_Empleado_Usuario]
+GO
+
+ALTER TABLE [dbo].[CorreoAdicionalProveedor] DROP CONSTRAINT [FK_CorreoAdicionalProveedor_Proveedor]
+GO
+
+ALTER TABLE [dbo].[SubLineaServicio] DROP CONSTRAINT [FK_SubLineaServicio_LineaServicio]
+GO
+
+ALTER TABLE [dbo].[Producto] DROP CONSTRAINT [FK_Producto_SubLineaServicio]
+GO
+
+ALTER TABLE [dbo].[Producto] DROP CONSTRAINT [FK_Producto_LineaServicio]
+GO
+
+ALTER TABLE [dbo].[Producto] DROP CONSTRAINT [FK_Producto_Departamento]
+GO
+
+ALTER TABLE [dbo].[Producto] DROP CONSTRAINT [FK_Producto_Categoria]
+GO
+
+ALTER TABLE [dbo].[ItemInventario] DROP CONSTRAINT [FK_RegistroItem_Proveedor]
+GO
+
+ALTER TABLE [dbo].[ItemInventario] DROP CONSTRAINT [FK_ItemInventario_Ubicacion]
+GO
+
+ALTER TABLE [dbo].[ItemInventario] DROP CONSTRAINT [FK_ItemInventario_Producto]
+GO
+
+ALTER TABLE [dbo].[ItemInventario] DROP CONSTRAINT [FK_ItemInventario_InformacionRegistro]
+GO
+
+ALTER TABLE [dbo].[ItemInventario] DROP CONSTRAINT [FK_ItemInventario_Clasificacion]
+GO
+
+ALTER TABLE [dbo].[InformacionRegistro] DROP CONSTRAINT [FK_InformacionRegistro_FormaRegistro]
+GO
+
+/****** Object:  Table [dbo].[Perfil]    Script Date: 22/05/2025 18:06:34 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Perfil]') AND type in (N'U'))
+DROP TABLE [dbo].[Perfil]
+GO
+
+/****** Object:  Table [dbo].[Permisos]    Script Date: 22/05/2025 18:06:34 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Permisos]') AND type in (N'U'))
+DROP TABLE [dbo].[Permisos]
+GO
+
+/****** Object:  Table [dbo].[PerfilPermisos]    Script Date: 22/05/2025 18:06:34 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PerfilPermisos]') AND type in (N'U'))
+DROP TABLE [dbo].[PerfilPermisos]
+GO
+
+/****** Object:  Table [dbo].[Estatus]    Script Date: 22/05/2025 18:06:34 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Estatus]') AND type in (N'U'))
+DROP TABLE [dbo].[Estatus]
+GO
+
+/****** Object:  Table [dbo].[Cliente]    Script Date: 22/05/2025 18:06:34 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Cliente]') AND type in (N'U'))
+DROP TABLE [dbo].[Cliente]
+GO
+
+/****** Object:  Table [dbo].[FormaRegistro]    Script Date: 22/05/2025 18:06:34 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[FormaRegistro]') AND type in (N'U'))
+DROP TABLE [dbo].[FormaRegistro]
+GO
+
+/****** Object:  Table [dbo].[DetalleVendido]    Script Date: 22/05/2025 18:06:34 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[DetalleVendido]') AND type in (N'U'))
+DROP TABLE [dbo].[DetalleVendido]
+GO
+
+/****** Object:  Table [dbo].[DetalleLIH]    Script Date: 22/05/2025 18:06:34 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[DetalleLIH]') AND type in (N'U'))
+DROP TABLE [dbo].[DetalleLIH]
+GO
+
+/****** Object:  Table [dbo].[Proveedor]    Script Date: 22/05/2025 18:06:34 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Proveedor]') AND type in (N'U'))
+DROP TABLE [dbo].[Proveedor]
+GO
+
+/****** Object:  Table [dbo].[Categoria]    Script Date: 22/05/2025 18:06:34 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Categoria]') AND type in (N'U'))
+DROP TABLE [dbo].[Categoria]
+GO
+
+/****** Object:  Table [dbo].[LineaServicio]    Script Date: 22/05/2025 18:06:34 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[LineaServicio]') AND type in (N'U'))
+DROP TABLE [dbo].[LineaServicio]
+GO
+
+/****** Object:  Table [dbo].[NovedadItem]    Script Date: 22/05/2025 18:06:34 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[NovedadItem]') AND type in (N'U'))
+DROP TABLE [dbo].[NovedadItem]
+GO
+
+/****** Object:  Table [dbo].[Ubicacion]    Script Date: 22/05/2025 18:06:34 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Ubicacion]') AND type in (N'U'))
+DROP TABLE [dbo].[Ubicacion]
+GO
+
+/****** Object:  Table [dbo].[Usuario]    Script Date: 22/05/2025 18:06:34 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Usuario]') AND type in (N'U'))
+DROP TABLE [dbo].[Usuario]
+GO
+
+/****** Object:  Table [dbo].[TransaccionesEstadoItem]    Script Date: 22/05/2025 18:06:34 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[TransaccionesEstadoItem]') AND type in (N'U'))
+DROP TABLE [dbo].[TransaccionesEstadoItem]
+GO
+
+/****** Object:  Table [dbo].[ItemsNoOperativo]    Script Date: 22/05/2025 18:06:34 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[ItemsNoOperativo]') AND type in (N'U'))
+DROP TABLE [dbo].[ItemsNoOperativo]
+GO
+
+/****** Object:  Table [dbo].[DetalleNoOperativo]    Script Date: 22/05/2025 18:06:34 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[DetalleNoOperativo]') AND type in (N'U'))
+DROP TABLE [dbo].[DetalleNoOperativo]
+GO
+
+/****** Object:  Table [dbo].[GuiaRemision]    Script Date: 22/05/2025 18:06:34 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GuiaRemision]') AND type in (N'U'))
+DROP TABLE [dbo].[GuiaRemision]
+GO
+
+/****** Object:  Table [dbo].[Clasificacion]    Script Date: 22/05/2025 18:06:34 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Clasificacion]') AND type in (N'U'))
+DROP TABLE [dbo].[Clasificacion]
+GO
+
+/****** Object:  Table [dbo].[Empleado]    Script Date: 22/05/2025 18:06:34 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Empleado]') AND type in (N'U'))
+DROP TABLE [dbo].[Empleado]
+GO
+
+/****** Object:  Table [dbo].[CorreoAdicionalProveedor]    Script Date: 22/05/2025 18:06:34 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[CorreoAdicionalProveedor]') AND type in (N'U'))
+DROP TABLE [dbo].[CorreoAdicionalProveedor]
+GO
+
+/****** Object:  Table [dbo].[Departamento]    Script Date: 22/05/2025 18:06:34 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Departamento]') AND type in (N'U'))
+DROP TABLE [dbo].[Departamento]
+GO
+
+/****** Object:  Table [dbo].[SubLineaServicio]    Script Date: 22/05/2025 18:06:34 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[SubLineaServicio]') AND type in (N'U'))
+DROP TABLE [dbo].[SubLineaServicio]
+GO
+
+/****** Object:  Table [dbo].[Producto]    Script Date: 22/05/2025 18:06:34 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Producto]') AND type in (N'U'))
+DROP TABLE [dbo].[Producto]
+GO
+
+/****** Object:  Table [dbo].[ItemInventario]    Script Date: 22/05/2025 18:06:34 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[ItemInventario]') AND type in (N'U'))
+DROP TABLE [dbo].[ItemInventario]
+GO
+
+/****** Object:  Table [dbo].[InformacionRegistro]    Script Date: 22/05/2025 18:06:34 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[InformacionRegistro]') AND type in (N'U'))
+DROP TABLE [dbo].[InformacionRegistro]
+GO
+
+/****** Object:  Table [dbo].[InformacionRegistro]    Script Date: 22/05/2025 18:06:34 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[InformacionRegistro](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[NumeroDocumento] [varchar](150) NOT NULL,
+	[MontoTotal] [decimal](18, 12) NOT NULL,
+	[IdFormaRegistro] [int] NOT NULL,
+	[FechaCompra] [datetime] NOT NULL,
+ CONSTRAINT [PK_InformacionRegistro] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[ItemInventario]    Script Date: 22/05/2025 18:06:34 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[ItemInventario](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[CodigoItem] [varchar](120) NOT NULL,
+	[Departamento] [varchar](120) NOT NULL,
+	[Categoria] [varchar](120) NOT NULL,
+	[LineaServicio] [varchar](120) NOT NULL,
+	[SubLineaServicio] [varchar](120) NULL,
+	[DescripcionEspecifica] [varchar](1000) NOT NULL,
+	[EspecificacionesTecnicas] [varchar](1500) NOT NULL,
+	[ValorSinIVA] [decimal](18, 12) NOT NULL,
+	[NumeroParteFabricante] [varchar](100) NOT NULL,
+	[NumeroSerieLPS] [varchar](100) NOT NULL,
+	[Estatus] [varchar](80) NOT NULL,
+	[IdUbicacion] [int] NOT NULL,
+	[IdClasificacion] [int] NOT NULL,
+	[CodigoProducto] [varchar](120) NOT NULL,
+	[IdProveedor] [int] NOT NULL,
+	[IdInformacionRegistro] [int] NOT NULL,
+	[Cantidad] [int] NOT NULL,
+ CONSTRAINT [PK_ItemInventario_1] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY],
+ CONSTRAINT [UQ_ItemInventario_IdItem] UNIQUE NONCLUSTERED 
+(
+	[CodigoItem] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[Producto]    Script Date: 22/05/2025 18:06:34 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[Producto](
+	[Codigo] [varchar](120) NOT NULL,
+	[Nombre] [varchar](120) NOT NULL,
+	[IdDepartamento] [int] NOT NULL,
+	[IdCategoria] [int] NOT NULL,
+	[IdLineaServicio] [int] NOT NULL,
+	[IdSubLineaServicio] [int] NULL,
+ CONSTRAINT [PK_Producto] PRIMARY KEY CLUSTERED 
+(
+	[Codigo] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[SubLineaServicio]    Script Date: 22/05/2025 18:06:34 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[SubLineaServicio](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Nombre] [varchar](120) NOT NULL,
+	[IdLineaServicio] [int] NOT NULL,
+ CONSTRAINT [PK_SubLineaServicio] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[Departamento]    Script Date: 22/05/2025 18:06:34 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[Departamento](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Nombre] [varchar](120) NOT NULL,
+ CONSTRAINT [PK_Departamento] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[CorreoAdicionalProveedor]    Script Date: 22/05/2025 18:06:34 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[CorreoAdicionalProveedor](
+	[IdCorreo] [int] IDENTITY(1,1) NOT NULL,
+	[Correo] [varchar](120) NOT NULL,
+	[IdProveedor] [int] NOT NULL,
+ CONSTRAINT [PK_CorreoAdicionalProveedor] PRIMARY KEY CLUSTERED 
+(
+	[IdCorreo] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[Empleado]    Script Date: 22/05/2025 18:06:34 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[Empleado](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[PrimerNombre] [varchar](150) NOT NULL,
+	[SegundoNombre] [varchar](150) NULL,
+	[PrimerApellido] [varchar](150) NOT NULL,
+	[SegundoApellido] [varchar](150) NULL,
+	[Activo] [bit] NOT NULL,
+	[IdUsuario] [int] NULL,
+ CONSTRAINT [PK_Empleado] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[Clasificacion]    Script Date: 22/05/2025 18:06:34 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[Clasificacion](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Nombre] [varchar](120) NOT NULL,
+ CONSTRAINT [PK_Clasificacion] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[GuiaRemision]    Script Date: 22/05/2025 18:06:34 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[GuiaRemision](
+	[Id] [int] NOT NULL,
+	[Numero] [varchar](200) NOT NULL,
+ CONSTRAINT [PK_GuiaRemision] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[DetalleNoOperativo]    Script Date: 22/05/2025 18:06:34 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[DetalleNoOperativo](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[IdItemNoOp] [int] NOT NULL,
+	[Fecha] [datetime] NOT NULL,
+	[Justificativo] [varchar](60) NOT NULL,
+	[AprobarBajaInventario] [bit] NOT NULL,
+	[EspecificarOtro] [varchar](60) NOT NULL,
+	[IdEstatusNoOp] [int] NOT NULL,
+ CONSTRAINT [PK_DetalleItemNoOperativo] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[ItemsNoOperativo]    Script Date: 22/05/2025 18:06:34 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[ItemsNoOperativo](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Nombre] [varchar](150) NOT NULL,
+ CONSTRAINT [PK_ItemsNoOperativo] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[TransaccionesEstadoItem]    Script Date: 22/05/2025 18:06:34 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[TransaccionesEstadoItem](
+	[Id] [int] NOT NULL,
+	[FechaTransaccion] [datetime] NOT NULL,
+	[IdEstatus] [int] NOT NULL,
+	[IdItemInventario] [int] NOT NULL,
+ CONSTRAINT [PK_TransaccionesEstadoItem] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[Usuario]    Script Date: 22/05/2025 18:06:34 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[Usuario](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[NombreUsuario] [varchar](120) NOT NULL,
+	[Contrasena] [varchar](200) NOT NULL,
+	[IdPerfil] [int] NOT NULL,
+ CONSTRAINT [PK_Usuario] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[Ubicacion]    Script Date: 22/05/2025 18:06:34 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[Ubicacion](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Nombre] [varchar](150) NOT NULL,
+ CONSTRAINT [PK_Ubicacion] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[NovedadItem]    Script Date: 22/05/2025 18:06:34 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[NovedadItem](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Fecha] [datetime] NOT NULL,
+	[Novedad] [varchar](500) NOT NULL,
+	[IdItemInventario] [int] NOT NULL,
+ CONSTRAINT [PK_NovedadesRelevantes] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[LineaServicio]    Script Date: 22/05/2025 18:06:34 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[LineaServicio](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Nombre] [varchar](120) NOT NULL,
+ CONSTRAINT [PK_LineaServicio] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[Categoria]    Script Date: 22/05/2025 18:06:34 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[Categoria](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Nombre] [varchar](120) NOT NULL,
+ CONSTRAINT [PK_Categoria] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[Proveedor]    Script Date: 22/05/2025 18:06:34 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[Proveedor](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Ruc] [varchar](14) NOT NULL,
+	[RazonSocial] [varchar](500) NOT NULL,
+	[NombreComercial] [varchar](500) NOT NULL,
+	[Direccion] [varchar](200) NOT NULL,
+	[PersonaContacto] [varchar](80) NOT NULL,
+	[Telefono] [varchar](12) NOT NULL,
+	[Correo] [varchar](120) NOT NULL,
+ CONSTRAINT [PK_Proveedor] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[DetalleLIH]    Script Date: 22/05/2025 18:06:34 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[DetalleLIH](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[IdEstatusLIH] [int] NOT NULL,
+	[Fecha] [datetime] NOT NULL,
+	[IdCliente] [int] NOT NULL,
+	[Pozo] [varchar](80) NOT NULL,
+ CONSTRAINT [PK_DetalleEstatusLIH] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[DetalleVendido]    Script Date: 22/05/2025 18:06:34 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[DetalleVendido](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[IdEstatusVendido] [int] NOT NULL,
+	[Fecha] [datetime] NOT NULL,
+	[IdCliente] [int] NOT NULL,
+	[Pozo] [varchar](80) NOT NULL,
+	[IdGuiaRemision] [int] NOT NULL,
+ CONSTRAINT [PK_DetalleEstatusVendido] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[FormaRegistro]    Script Date: 22/05/2025 18:06:34 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[FormaRegistro](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Nombre] [varchar](50) NOT NULL,
+ CONSTRAINT [PK_FormaRegistroItem] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[Cliente]    Script Date: 22/05/2025 18:06:34 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[Cliente](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[NumeroIdentificacion] [varchar](14) NOT NULL,
+	[NombreCliente] [varchar](60) NOT NULL,
+	[Telefono] [varchar](11) NOT NULL,
+ CONSTRAINT [PK_Cliente] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[Estatus]    Script Date: 22/05/2025 18:06:34 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[Estatus](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Nombre] [varchar](80) NOT NULL,
+ CONSTRAINT [PK_Estatus] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[PerfilPermisos]    Script Date: 22/05/2025 18:06:34 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[PerfilPermisos](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[IdPermiso] [int] NOT NULL,
+	[IdPerfil] [int] NOT NULL,
+ CONSTRAINT [PK_PerfilPermisos] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[Permisos]    Script Date: 22/05/2025 18:06:34 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[Permisos](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Nombre] [varchar](80) NOT NULL,
+ CONSTRAINT [PK_Permisos] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[Perfil]    Script Date: 22/05/2025 18:06:34 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[Perfil](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Nombre] [varchar](50) NOT NULL,
+ CONSTRAINT [PK_Perfil] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[InformacionRegistro]  WITH CHECK ADD  CONSTRAINT [FK_InformacionRegistro_FormaRegistro] FOREIGN KEY([IdFormaRegistro])
+REFERENCES [dbo].[FormaRegistro] ([Id])
+GO
+
+ALTER TABLE [dbo].[InformacionRegistro] CHECK CONSTRAINT [FK_InformacionRegistro_FormaRegistro]
+GO
+
+ALTER TABLE [dbo].[ItemInventario]  WITH CHECK ADD  CONSTRAINT [FK_ItemInventario_Clasificacion] FOREIGN KEY([IdClasificacion])
+REFERENCES [dbo].[Clasificacion] ([Id])
+GO
+
+ALTER TABLE [dbo].[ItemInventario] CHECK CONSTRAINT [FK_ItemInventario_Clasificacion]
+GO
+
+ALTER TABLE [dbo].[ItemInventario]  WITH CHECK ADD  CONSTRAINT [FK_ItemInventario_InformacionRegistro] FOREIGN KEY([IdInformacionRegistro])
+REFERENCES [dbo].[InformacionRegistro] ([Id])
+GO
+
+ALTER TABLE [dbo].[ItemInventario] CHECK CONSTRAINT [FK_ItemInventario_InformacionRegistro]
+GO
+
+ALTER TABLE [dbo].[ItemInventario]  WITH CHECK ADD  CONSTRAINT [FK_ItemInventario_Producto] FOREIGN KEY([CodigoProducto])
+REFERENCES [dbo].[Producto] ([Codigo])
+GO
+
+ALTER TABLE [dbo].[ItemInventario] CHECK CONSTRAINT [FK_ItemInventario_Producto]
+GO
+
+ALTER TABLE [dbo].[ItemInventario]  WITH CHECK ADD  CONSTRAINT [FK_ItemInventario_Ubicacion] FOREIGN KEY([IdUbicacion])
+REFERENCES [dbo].[Ubicacion] ([Id])
+GO
+
+ALTER TABLE [dbo].[ItemInventario] CHECK CONSTRAINT [FK_ItemInventario_Ubicacion]
+GO
+
+ALTER TABLE [dbo].[ItemInventario]  WITH CHECK ADD  CONSTRAINT [FK_RegistroItem_Proveedor] FOREIGN KEY([IdProveedor])
+REFERENCES [dbo].[Proveedor] ([Id])
+GO
+
+ALTER TABLE [dbo].[ItemInventario] CHECK CONSTRAINT [FK_RegistroItem_Proveedor]
+GO
+
+ALTER TABLE [dbo].[Producto]  WITH CHECK ADD  CONSTRAINT [FK_Producto_Categoria] FOREIGN KEY([IdCategoria])
+REFERENCES [dbo].[Categoria] ([Id])
+GO
+
+ALTER TABLE [dbo].[Producto] CHECK CONSTRAINT [FK_Producto_Categoria]
+GO
+
+ALTER TABLE [dbo].[Producto]  WITH CHECK ADD  CONSTRAINT [FK_Producto_Departamento] FOREIGN KEY([IdDepartamento])
+REFERENCES [dbo].[Departamento] ([Id])
+GO
+
+ALTER TABLE [dbo].[Producto] CHECK CONSTRAINT [FK_Producto_Departamento]
+GO
+
+ALTER TABLE [dbo].[Producto]  WITH CHECK ADD  CONSTRAINT [FK_Producto_LineaServicio] FOREIGN KEY([IdLineaServicio])
+REFERENCES [dbo].[LineaServicio] ([Id])
+GO
+
+ALTER TABLE [dbo].[Producto] CHECK CONSTRAINT [FK_Producto_LineaServicio]
+GO
+
+ALTER TABLE [dbo].[Producto]  WITH CHECK ADD  CONSTRAINT [FK_Producto_SubLineaServicio] FOREIGN KEY([IdSubLineaServicio])
+REFERENCES [dbo].[SubLineaServicio] ([Id])
+GO
+
+ALTER TABLE [dbo].[Producto] CHECK CONSTRAINT [FK_Producto_SubLineaServicio]
+GO
+
+ALTER TABLE [dbo].[SubLineaServicio]  WITH CHECK ADD  CONSTRAINT [FK_SubLineaServicio_LineaServicio] FOREIGN KEY([IdLineaServicio])
+REFERENCES [dbo].[LineaServicio] ([Id])
+GO
+
+ALTER TABLE [dbo].[SubLineaServicio] CHECK CONSTRAINT [FK_SubLineaServicio_LineaServicio]
+GO
+
+ALTER TABLE [dbo].[CorreoAdicionalProveedor]  WITH CHECK ADD  CONSTRAINT [FK_CorreoAdicionalProveedor_Proveedor] FOREIGN KEY([IdProveedor])
+REFERENCES [dbo].[Proveedor] ([Id])
+GO
+
+ALTER TABLE [dbo].[CorreoAdicionalProveedor] CHECK CONSTRAINT [FK_CorreoAdicionalProveedor_Proveedor]
+GO
+
+ALTER TABLE [dbo].[Empleado]  WITH CHECK ADD  CONSTRAINT [FK_Empleado_Usuario] FOREIGN KEY([IdUsuario])
+REFERENCES [dbo].[Usuario] ([Id])
+GO
+
+ALTER TABLE [dbo].[Empleado] CHECK CONSTRAINT [FK_Empleado_Usuario]
+GO
+
+ALTER TABLE [dbo].[DetalleNoOperativo]  WITH CHECK ADD  CONSTRAINT [FK_DetalleItemNoOperativo_ItemsNoOperativo] FOREIGN KEY([IdItemNoOp])
+REFERENCES [dbo].[ItemsNoOperativo] ([Id])
+GO
+
+ALTER TABLE [dbo].[DetalleNoOperativo] CHECK CONSTRAINT [FK_DetalleItemNoOperativo_ItemsNoOperativo]
+GO
+
+ALTER TABLE [dbo].[DetalleNoOperativo]  WITH CHECK ADD  CONSTRAINT [FK_DetalleNoOperativo_Estatus] FOREIGN KEY([IdEstatusNoOp])
+REFERENCES [dbo].[Estatus] ([Id])
+GO
+
+ALTER TABLE [dbo].[DetalleNoOperativo] CHECK CONSTRAINT [FK_DetalleNoOperativo_Estatus]
+GO
+
+ALTER TABLE [dbo].[TransaccionesEstadoItem]  WITH CHECK ADD  CONSTRAINT [FK_TransaccionesEstadoItem_Estatus] FOREIGN KEY([IdEstatus])
+REFERENCES [dbo].[Estatus] ([Id])
+GO
+
+ALTER TABLE [dbo].[TransaccionesEstadoItem] CHECK CONSTRAINT [FK_TransaccionesEstadoItem_Estatus]
+GO
+
+ALTER TABLE [dbo].[TransaccionesEstadoItem]  WITH CHECK ADD  CONSTRAINT [FK_TransaccionesEstadoItem_ItemInventario] FOREIGN KEY([IdItemInventario])
+REFERENCES [dbo].[ItemInventario] ([Id])
+GO
+
+ALTER TABLE [dbo].[TransaccionesEstadoItem] CHECK CONSTRAINT [FK_TransaccionesEstadoItem_ItemInventario]
+GO
+
+ALTER TABLE [dbo].[Usuario]  WITH CHECK ADD  CONSTRAINT [FK_Usuario_Perfil] FOREIGN KEY([IdPerfil])
+REFERENCES [dbo].[Perfil] ([Id])
+GO
+
+ALTER TABLE [dbo].[Usuario] CHECK CONSTRAINT [FK_Usuario_Perfil]
+GO
+
+ALTER TABLE [dbo].[NovedadItem]  WITH CHECK ADD  CONSTRAINT [FK_NovedadesRelevantes_ItemInventario] FOREIGN KEY([IdItemInventario])
+REFERENCES [dbo].[ItemInventario] ([Id])
+GO
+
+ALTER TABLE [dbo].[NovedadItem] CHECK CONSTRAINT [FK_NovedadesRelevantes_ItemInventario]
+GO
+
+ALTER TABLE [dbo].[DetalleLIH]  WITH CHECK ADD  CONSTRAINT [FK_DetalleEstatusLIH_Cliente] FOREIGN KEY([IdCliente])
+REFERENCES [dbo].[Cliente] ([Id])
+GO
+
+ALTER TABLE [dbo].[DetalleLIH] CHECK CONSTRAINT [FK_DetalleEstatusLIH_Cliente]
+GO
+
+ALTER TABLE [dbo].[DetalleLIH]  WITH CHECK ADD  CONSTRAINT [FK_DetalleEstatusLIH_Estatus] FOREIGN KEY([IdEstatusLIH])
+REFERENCES [dbo].[Estatus] ([Id])
+GO
+
+ALTER TABLE [dbo].[DetalleLIH] CHECK CONSTRAINT [FK_DetalleEstatusLIH_Estatus]
+GO
+
+ALTER TABLE [dbo].[DetalleVendido]  WITH CHECK ADD  CONSTRAINT [FK_DetalleEstatusVendido_Cliente] FOREIGN KEY([IdCliente])
+REFERENCES [dbo].[Cliente] ([Id])
+GO
+
+ALTER TABLE [dbo].[DetalleVendido] CHECK CONSTRAINT [FK_DetalleEstatusVendido_Cliente]
+GO
+
+ALTER TABLE [dbo].[DetalleVendido]  WITH CHECK ADD  CONSTRAINT [FK_DetalleEstatusVendido_Estatus] FOREIGN KEY([IdEstatusVendido])
+REFERENCES [dbo].[Estatus] ([Id])
+GO
+
+ALTER TABLE [dbo].[DetalleVendido] CHECK CONSTRAINT [FK_DetalleEstatusVendido_Estatus]
+GO
+
+ALTER TABLE [dbo].[DetalleVendido]  WITH CHECK ADD  CONSTRAINT [FK_DetalleVendido_GuiaRemision] FOREIGN KEY([IdGuiaRemision])
+REFERENCES [dbo].[GuiaRemision] ([Id])
+GO
+
+ALTER TABLE [dbo].[DetalleVendido] CHECK CONSTRAINT [FK_DetalleVendido_GuiaRemision]
+GO
+
+ALTER TABLE [dbo].[PerfilPermisos]  WITH CHECK ADD  CONSTRAINT [FK_PerfilPermisos_Perfil] FOREIGN KEY([IdPerfil])
+REFERENCES [dbo].[Perfil] ([Id])
+GO
+
+ALTER TABLE [dbo].[PerfilPermisos] CHECK CONSTRAINT [FK_PerfilPermisos_Perfil]
+GO
+
+ALTER TABLE [dbo].[PerfilPermisos]  WITH CHECK ADD  CONSTRAINT [FK_PerfilPermisos_Permisos] FOREIGN KEY([IdPermiso])
+REFERENCES [dbo].[Permisos] ([Id])
+GO
+
+ALTER TABLE [dbo].[PerfilPermisos] CHECK CONSTRAINT [FK_PerfilPermisos_Permisos]
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Código propio identificador para el usuario.' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'ItemInventario', @level2type=N'COLUMN',@level2name=N'CodigoItem'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Clave foránea que ya tiene detalles' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'ItemInventario', @level2type=N'COLUMN',@level2name=N'CodigoProducto'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'IdItem que sea para el usuario que no se repita.' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'ItemInventario', @level2type=N'CONSTRAINT',@level2name=N'UQ_ItemInventario_IdItem'
+GO
+
+
