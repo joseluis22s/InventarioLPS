@@ -5,384 +5,203 @@
 }
 
 @* MODAL PARA DUPLICAR *@
-<div class="modal fade" id="duplicaModal" tabindex="-1" aria-labelledby="duplicaModalLabel" aria-modal="true">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" id="duplicaModalLabel">Número de duplicados</h5>
-				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-			</div>
-			<div class="modal-body">
-				<input type="number" id="duplicaCount" min="1" max="20" value="1" class="form-control" required />
-				<div class="invalid-feedback">Por favor ingrese un número entre 1 y 20</div>
-			</div>
-			<div class="modal-footer">
-				<button type="button" id="confirmDuplica" class="btn btn-primary">Duplicar</button>
-				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-			</div>
-		</div>
-	</div>
+<div class="modal" id="duplicaModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Número de duplicados</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label">¿Cuántas copias desea crear?</label>
+                    <input type="number" id="duplicaCount" min="1" max="20" value="1" class="form-control" required />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" id="confirmDuplica" class="btn btn-primary">Duplicar</button>
+            </div>
+        </div>
+    </div>
 </div>
 
-
-<h2>@ViewBag.Title</h2>
-<hr />
-<form asp-action="Create" class="container-fluid">
-	<div class="row">
-		@* NÚMERO DE DOCUMENTO *@
-		<div class="col-8 col-md-4">
-			<label asp-for="NumeroDocumento" class="form-label">No. Documento</label>
-			<input asp-for="NumeroDocumento" class="form-control" />
-			<span asp-validation-for="NumeroDocumento" class="text-danger"></span>
+<h5 class="ps-1">@ViewBag.Title</h5>
+<form asp-action="Create" class="container-fluid border-top border-start">
+    <div class="row mt-3">
+        <div class="col-12">
+            <button type="submit" class="btn btn-primary btn-form">Guardar</button>
+        </div>
+    </div>
+    <div class="row mx-2 mt-1">
+		<!-- Campos del documento (sin cambios) -->
+		<div class="col-8 col-md-6 col-lg-2">
+            <label asp-for="MontoTotal" class="form-label label-sm"></label>
+            <input asp-for="MontoTotal" class="form-control input-sm" />
+            <span asp-validation-for="MontoTotal" class="text-danger label-sm"></span>
 		</div>
-		@* FORMA DE REGISTRO *@
-		<div class="col-8 col-md-4">
-			<label asp-for="FormaRegistro" class="form-label">Forma de registro</label>
-			<select asp-for="FormaRegistro" asp-items="ViewBag.FormasRegistro" class="form-select">
+        <div class="col-8 col-md-6 col-lg-3">
+            <label asp-for="NumeroDocumento" class="form-label label-sm">No. Documento</label>
+            <input asp-for="NumeroDocumento" class="form-control input-sm" />
+            <span asp-validation-for="NumeroDocumento" class="text-danger label-sm"></span>
+		</div>
+        <div class="w-100 d-md-none"></div>
+        <div class="col-8 col-md-6 col-lg-4">
+            <label asp-for="FormaRegistro" class="form-label label-sm">Forma de registro</label>
+            <select asp-for="FormaRegistro" asp-items="ViewBag.FormasRegistro" class="form-select input-sm">
 				<option value="">-- Seleccione --</option>
 			</select>
-			<span asp-validation-for="FormaRegistro" class="text-danger"></span>
+            <span asp-validation-for="FormaRegistro" class="text-danger label-sm"></span>
 		</div>
-		@* FECHA DE COMPRA *@
-		<div class="col-8 col-md-4">
-			<label asp-for="FechaCompra" class="form-label"></label>
-			<input asp-for="FechaCompra" class="form-control" />
-			<span asp-validation-for="FechaCompra" class="text-danger"></span>
-		</div>
+        <div class="col-8 col-md-6 col-lg-3">
+            <label asp-for="FechaCompra" class="form-label label-sm"></label>
+            <input asp-for="FechaCompra" class="form-control input-sm" />
+            <span asp-validation-for="FechaCompra" class="text-danger label-sm"></span>
+        </div>
 	</div>
 
-	@* BLOQUE POR CANTIDAD*@
-	<div class="row border rounded p-2 overflow-auto">
-		<h4>Ingreso por cantidad</h4>
-		<button type="button" id="btnAddRowQuantity" class="btn btn-light">
-			<i class="bi bi-plus-lg"></i> Agregar fila
-		</button>
+    <hr class="mx-2"/>
 
-		<table class="table">
-			<thead class="fs-theader">
-				<tr>
-					<th>Código</th>
-					<th>Cantidad</th>
-					<th>Valor sin IVA</th>
-					<th>Proveedor</th>
-					<th>Producto</th>
-					<th>Departamento</th>
-					<th>Categoría</th>
-					<th>Linea de servicio</th>
-					<th>Sub-línea</th>
-					<th>Descrip. específica</th>
-					<th>Especifi. técnicas</th>
-					<th># fabricante</th>
-					<th># serie LPS</th>
-					<th>Ubicación</th>
-					<th>Estatus</th>
-					<th>Clasificación</th>
-				</tr>
-			</thead>
-			<tbody id="tbodyCantidad" class="fs-tbody">
-				@foreach (var (item, index) in Model.RegistroPorCantidad.Select((item, index) => (item, index)))
-				{
-					@await Html.PartialAsync("_ClonarFilaPartial.cshtml", item, new ViewDataDictionary(ViewData) { { "Index", index }, { "MostrarBotonDuplicar", false } })
-				}
-			</tbody>
-		</table>
-	</div>
-
-	@* BLOQUE POR DUPLICAR*@
-	<div class="row border rounded p-2 overflow-auto">
-		<h4>Ingreso por duplicación</h4>
-		<button type="button" id="btnAddRowDuplicado" class="btn btn-light">
-			<i class="bi bi-plus-lg"></i> Agregar fila
-		</button>
-		<table class="table">
-			<thead class="fs-theader">
-				<tr>
-					<th></th>
-					<th>Código</th>
-					<th>Cantidad</th>
-					<th>Valor sin IVA</th>
-					<th>Proveedor</th>
-					<th>Producto</th>
-					<th>Departamento</th>
-					<th>Categoría</th>
-					<th>Linea de servicio</th>
-					<th>Sub-línea</th>
-					<th>Descrip. específica</th>
-					<th>Especifi. técnicas</th>
-					<th># fabricante</th>
-					<th># serie LPS</th>
-					<th>Ubicación</th>
-					<th>Estatus</th>
-					<th>Clasificación</th>
-				</tr>
-			</thead>
-			<tbody id="tbodyDuplicado" class="fs-tbody">
-				@foreach (var (item, index) in Model.RegistroDuplicado.Select((item, index) => (item, index)))
-				{
-					@await Html.PartialAsync("_ClonarFilaPartial.cshtml", item, new ViewDataDictionary(ViewData) { { "Index", index }, { "MostrarBotonDuplicar", false } })
-				}
-			</tbody>
-		</table>
+	<!-- Tabla  -->
+	<div class="row overflow-auto">
+		<div class="d-flex justify-content-between align-items-center mb-2">
+			<h6>Registro de items</h6>
+			<div>
+                <button type="button" id="btnAddRow" class="btn btn-outline-dark btn-form">
+					<i class="bi bi-plus-lg"></i> Agregar fila
+				</button>
+                <button type="button" id="btnDuplicarSeleccionados" class="btn btn-outline-danger btn-form">
+                    <i class="bi bi-trash"></i> Borrar seleccionados
+				</button>
+			</div>
+		</div>
+        <div class="table-responsive">
+            <table class="table">
+                <thead class="fs-theader">
+                    <tr>
+                        <th></th>
+                        <th>Código</th>
+                        <th>Cantidad</th>
+                        <th>Valor sin IVA</th>
+                        <th>Proveedor</th>
+                        <th>Producto</th>
+                        <th>Departamento</th>
+                        <th>Categoría</th>
+                        <th>Linea de servicio</th>
+                        <th>Sub-línea</th>
+                        <th>Descrip. específica</th>
+                        <th>Especifi. técnicas</th>
+                        <th># fabricante</th>
+                        <th># serie LPS</th>
+                        <th>Ubicación</th>
+                        <th>Estatus</th>
+                        <th>Clasificación</th>
+                    </tr>
+                </thead>
+                <tbody id="tbodyItems" class="fs-tbody">
+                    @foreach (var (item, index) in Model.Items.Select((item, index) => (item, index)))
+                    {
+                        @await Html.PartialAsync("_ItemInventarioPartial", item, new ViewDataDictionary(ViewData) { { "Index", index } })
+                    }
+                </tbody>
+            </table>
+        </div>
 	</div>
 </form>
 <script>
-	$(document).ready(function() {
-		// Variables para controlar índices
-		let rowCountCantidad = @Model.RegistroPorCantidad.Count;
-		let rowCountDuplicado = @Model.RegistroDuplicado.Count;
-		let currentRowToDuplicate = null;
+        $(document).ready(function() {
+        let rowCount = @Model.Items.Count;
+        let selectedRowForDuplication = null;
 
-		// Configuración común para agregar filas
-		function setupAddRow(btnSelector, tbodySelector, actionUrl, rowCountVar) {
-			$(btnSelector).click(async function() {
-				try {
-					const response = await fetch(`${actionUrl}?index=${rowCountVar}`);
-					if (!response.ok) throw new Error(`Error al obtener fila. Estado: ${response.status}`);
+        // Función genérica para agregar filas
+        const addNewRow = async (index) => {
+            try {
+                const response = await fetch(`@Url.Action("GetNewItemRow", "Inventario")?index=${index}`);
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                return await response.text();
+            } catch (error) {
+                console.error('Error adding row:', error);
+                throw error;
+            }
+        };
 
-					const html = await response.text();
-					$(tbodySelector).append(html);
-					rowCountVar++;
+        // Agregar nueva fila
+        $('#btnAddRow').click(async () => {
+            try {
+                const html = await addNewRow(rowCount);
+                $('#tbodyItems').append(html);
+                rowCount++;
+                $.validator.unobtrusive.parse('form');
+            } catch (error) {
+                alert('Error al agregar fila: ' + error.message);
+            }
+        });
 
-					$.validator.unobtrusive.parse('form');
-				} catch (error) {
-					console.error('Error:', error);
-					alert('No se pudo agregar la fila: ' + error.message);
-				}
-			});
-		}
+        // Duplicar fila
+        $(document).on('click', '.btn-duplicate-row', function() {
+            selectedRowForDuplication = $(this).closest('tr');
+            $('#duplicaModal').modal('show');
+        });
 
-		// Configurar ambas secciones
-		setupAddRow('#btnAddRowQuantity', '#tbodyCantidad', '@Url.Action("GetNewRow", "Inventario")', rowCountCantidad);
-		setupAddRow('#btnAddRowDuplicado', '#tbodyDuplicado', '@Url.Action("GetNewRowDuplicado", "Inventario")', rowCountDuplicado);
+        // Confirmar duplicación
+        $('#confirmDuplica').click(() => {
+            const count = Math.min(Math.max(1, parseInt($('#duplicaCount').val()) || 1), 20);
 
-		// Eliminar fila
-		$(document).on('click', '.btn-remove-row', function() {
-			$(this).closest('tr').remove();
-			reindexRows($(this).closest('tbody'));
-		});
+            const originalData = {};
+            selectedRowForDuplication.find('input, select').each(function() {
+                const field = $(this).attr('name').split('.').pop();
+                originalData[field] = $(this).val();
+            });
 
-		// Función para reindexar filas
-		function reindexRows(tbody) {
-			tbody.find('tr').each(function(index) {
-				$(this).find('input, select').each(function() {
-					const name = $(this).attr('name');
-					if (name) {
-						const newName = name.replace(/\[\d+\]/, `[${index}]`);
-						$(this).attr('name', newName);
-					}
-				});
-			});
-		}
+            const newRows = [];
+            for (let i = 0; i < count; i++) {
+                const newIndex = rowCount + i;
+                const newRow = selectedRowForDuplication.clone();
 
-		// Manejo del modal de duplicación
-		$(document).on('click', '.btnDuplicar', function() {
-			currentRowToDuplicate = $(this).closest('tr');
-			$('#duplicaModal').modal('show');
-		});
+                newRow.find('input, select').each(function() {
+                    const $el = $(this);
+                    const name = $el.attr('name').replace(/\[\d+\]/, `[${newIndex}]`);
+                    $el.attr('name', name)
+                       .val(originalData[name.split('.').pop()])
+                       .removeClass('input-validation-error')
+                       .next('.field-validation-error').remove();
 
-		// Confirmar duplicación
-		$('#confirmDuplica').click(function() {
-			const count = parseInt($('#duplicaCount').val()) || 1;
+                    if (name.endsWith('CodigoItem]')) {
+                        $el.val($el.val() + '-' + (i+1));
+                    }
+                });
 
-			if (count < 1 || count > 20) {
-				alert('Por favor ingrese un número entre 1 y 20');
-				return;
-			}
+                newRows.push(newRow);
+            }
 
-			// Capturar datos de la fila a duplicar
-			const rowData = {};
-			currentRowToDuplicate.find('input, select').each(function() {
-				const name = $(this).attr('name').split('.').pop();
-				rowData[name] = $(this).val();
-			});
+            $('#tbodyItems').append(newRows);
+            rowCount += count;
+            $('#duplicaModal').modal('hide');
+            $.validator.unobtrusive.parse('form');
+        });
 
-			// Agregar filas duplicadas
-			for (let i = 0; i < count; i++) {
-				const newIndex = $('#tbodyDuplicado tr').length;
-				const newRow = `
-				<tr>
-					<td>
-						<button type="button" class="btn btn-sm btn-outline-primary btnDuplicar" data-index="${newIndex}">+</button>
-					</td>
-					<td>
-						<input name="RegistroDuplicado[${newIndex}].CodigoItem" class="form-control" value="${rowData['CodigoItem']}-${i+1}" />
-					</td>
-					<td>
-						<input name="RegistroDuplicado[${newIndex}].Cantidad" class="form-control" value="${rowData['Cantidad']}" />
-					</td>
-					<td>
-						<input name="RegistroDuplicado[${newIndex}].ValorSinIva" class="form-control" value="${rowData['ValorSinIva']}" />
-					</td>
-					<td>
-						<select name="RegistroDuplicado[${newIndex}].Proveedor" class="form-select">
-							${currentRowToDuplicate.find('select[name$="Proveedor"]').html()}
-						</select>
-					</td>
-					<td>
-						<select name="RegistroDuplicado[${newIndex}].Producto" class="form-select">
-							${currentRowToDuplicate.find('select[name$="Producto"]').html()}
-						</select>
-					</td>
-					<td>
-						<input name="RegistroDuplicado[${newIndex}].Departamento" class="form-control" value="${rowData['Departamento']}" disabled readonly />
-					</td>
-					<!-- Completa con todos los demás campos -->
-					<td>
-						<button type="button" class="btn btn-danger btn-remove-row">
-							<i class="bi bi-x-circle"></i>
-						</button>
-					</td>
-				</tr>`;
+        // Eliminar fila
+        $(document).on('click', '.btn-remove-row', function() {
+            $(this).closest('tr').remove();
+            reindexRows();
+        });
 
-				$('#tbodyDuplicado').append(newRow);
-				rowCountDuplicado++;
-			}
+        // Reindexar filas
+        const reindexRows = () => {
+            $('#tbodyItems tr').each(function(index) {
+                $(this).find('input, select').attr('name', (i, name) =>
+                    name.replace(/\[\d+\]/, `[${index}]`)
+                );
+            });
+            rowCount = $('#tbodyItems tr').length;
+        };
 
-			$('#duplicaModal').modal('hide');
-			$('#duplicaCount').val(1);
-			$.validator.unobtrusive.parse('form');
-		});
-
-		// Resetear modal al cerrar
-		$('#duplicaModal').on('hidden.bs.modal', function() {
-			currentRowToDuplicate = null;
-			$('#duplicaCount').val(1);
-		});
-
-		// Agregar fila inicial si no hay
-	@if (Model.RegistroPorCantidad.Count == 0)
-	{
-		<text>$('#btnAddRowQuantity').click();</text>
-	}
-	@if (Model.RegistroDuplicado.Count == 0)
-	{
-		<text>$('#btnAddRowDuplicado').click();</text>
-	}
-	});
+        // Inicializar con una fila si está vacío
+    @if (!Model.Items.Any())
+    {
+        <text>$('#btnAddRow').click();</text>
+    }
+    });
+    
 </script>
-@* <script>
-	$(document).ready(function() {
-		// Configuración para la sección de Cantidad
-		let rowCountCantidad = @Model.RegistroPorCantidad.Count;
-		let rowCountDuplicado = @Model.RegistroDuplicado.Count;
-
-		// Agregar fila en sección Cantidad
-		$('#btnAddRowQuantity').click(async function() {
-			try {
-				const response = await fetch('@Url.Action("GetNewRow", "Inventario")?index=' + rowCountCantidad);
-				if (!response.ok) throw new Error('Error al obtener fila');
-
-				const html = await response.text();
-				$('#tbodyCantidad').append(html);
-				rowCountCantidad++;
-
-				$.validator.unobtrusive.parse('form');
-			} catch (error) {
-				console.error('Error:', error);
-				alert('No se pudo agregar la fila');
-			}
-		});
-
-		// Agregar fila en sección Duplicado
-		$('#btnAddRowDuplicado').click(async function() {
-			try {
-				const response = await fetch('@Url.Action("GetNewRowDuplicado", "Inventario")?index=' + rowCountDuplicado);
-				if (!response.ok) throw new Error('Error al obtener fila');
-
-				const html = await response.text();
-				$('#tbodyDuplicado').append(html);
-				rowCountDuplicado++;
-
-				$.validator.unobtrusive.parse('form');
-			} catch (error) {
-				console.error('Error:', error);
-				alert('No se pudo agregar la fila');
-			}
-		});
-
-		// Eliminar fila (funciona para ambas secciones)
-		$(document).on('click', '.btn-remove-row', function() {
-			const tbody = $(this).closest('tbody');
-			$(this).closest('tr').remove();
-			reindexRows(tbody);
-		});
-
-		// Función para reindexar filas
-		function reindexRows(tbody) {
-			tbody.find('tr').each(function(index) {
-				$(this).find('input, select').each(function() {
-					const name = $(this).attr('name');
-					if (name) {
-						const newName = name.replace(/\[\d+\]/, `[${index}]`);
-						$(this).attr('name', newName);
-					}
-				});
-			});
-		}
-
-		// Manejo del modal de duplicación
-	let currentRowToDuplicate = null;
-
-		// Botón duplicar (solo para sección Duplicado)
-	$(document).on('click', '.btnDuplicar', function() {
-		currentRowToDuplicate = $(this).closest('tr');
-		$('#duplicaModal').modal('show');
-	});
-
-		// Confirmar duplicación
-	$('#confirmDuplica').click(function() {
-		const count = parseInt($('#duplicaCount').val()) || 1;
-		const rowData = {};
-
-		// Capturar datos de la fila a duplicar
-		currentRowToDuplicate.find('input, select').each(function() {
-			const name = $(this).attr('name').split('.').pop();
-			rowData[name] = $(this).val();
-		});
-
-		// Agregar filas duplicadas
-		for (let i = 0; i < count; i++) {
-			const newIndex = $('#tbodyDuplicado tr').length;
-			const newRow = `
-			<tr>
-				<td>
-					<button type="button" class="btn btn-sm btn-outline-primary btnDuplicar" data-index="${newIndex}">+</button>
-				</td>
-				<td>
-					<input name="RegistroDuplicado[${newIndex}].CodigoItem" class="form-control" value="${rowData['CodigoItem']}-${i+1}" />
-				</td>
-				<td>
-					<input name="RegistroDuplicado[${newIndex}].Cantidad" class="form-control" value="${rowData['Cantidad']}" />
-				</td>
-				<!-- Completa con todos los demás campos -->
-				<td>
-					<button type="button" class="btn btn-danger btn-remove-row">
-						<i class="bi bi-x-circle"></i>
-					</button>
-				</td>
-			</tr>`;
-
-			$('#tbodyDuplicado').append(newRow);
-		}
-
-		$('#duplicaModal').modal('hide');
-		$('#duplicaCount').val(1); // Resetear contador
-	});
-
-	// Cerrar modal al hacer click fuera o en cancelar
-	$('#duplicaModal').on('hidden.bs.modal', function() {
-		currentRowToDuplicate = null;
-	});
-
-
-		// Agregar fila inicial si no hay
-	@if (Model.RegistroPorCantidad.Count == 0)
-	{
-		<text>$('#btnAddRowQuantity').click();</text>
-	}
-	@if (Model.RegistroDuplicado.Count == 0)
-	{
-		<text>$('#btnAddRowDuplicado').click();</text>
-	}
-	});
-</script> *@
+	

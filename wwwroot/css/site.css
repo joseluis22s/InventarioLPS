@@ -68,6 +68,52 @@ body {
     font-size: 10px;
 }
 
-.fs-tbody {
-    font-size: 8px;
+.fs-td {
+    font-size: 13px !important;
 }
+
+.fs-td * {
+    font-size: inherit !important;
+}
+
+.label-sm {
+    font-size: 12px;
+}
+
+.input-sm {
+    font-size: 13px;
+}
+
+.btn-form {
+    font-size: 13px;
+}
+
+
+/* ESTILOS PARA FORM DE INEVNETAIRO*/
+.td-codigo, .td-valor, .td-parte, .td-serie {
+    min-width: 100px;
+    max-width: 120px;
+    width: 110px;
+}
+
+.td-cantidad {
+    min-width: 60px;
+    max-width: 80px;
+    width: 70px;
+}
+
+.td-proveedor, .td-producto, .td-departamento, .td-categoria, .td-linea, .td-sublinea, .td-ubicacion, .td-estatus, .td-clasificacion {
+    min-width: 180px;
+    max-width: 220px;
+    width: 200px;
+}
+
+.td-descripcion, .td-especificaciones {
+    min-width: 220px;
+    max-width: 260px;
+    width: 240px;
+}
+
+}
+
+

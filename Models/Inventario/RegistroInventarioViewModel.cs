@@ -1,13 +1,26 @@
-﻿namespace InventarioLPS.Models.Inventario
+﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.Extensions.Options;
+
+namespace InventarioLPS.Models.Inventario
 {
     public class RegistroInventarioViewModel
     {
+
+        [Required(ErrorMessage = "*Campo requerido.")]
         public string FormaRegistro { get; set; }
 
+        [Required(ErrorMessage = "*Campo requerido.")]
         public string NumeroDocumento { get; set; }
 
-        public DateTime FechaCompra { get; set; }
+        [Required(ErrorMessage = "*Campo requerido.")]
+        [DisplayFormat(DataFormatString = "{0:dd-MMM-yyyy}")]
+        public DateTime FechaCompra { get; set; } = DateTime.Now;
 
-        public List<ItemInventarioClonViewModel> Items { get; set; } = new();
+        [Required(ErrorMessage = "*Campo requerido.")]
+        [Range(0.01, double.MaxValue, ErrorMessage = "El monto debe ser mayor a 0.")]
+        public decimal MontoTotal { get; set; }
+
+        [ValidateEnumeratedItems]
+        public List<ItemInventarioViewModel> Items { get; set; } = new();
     }
 }
