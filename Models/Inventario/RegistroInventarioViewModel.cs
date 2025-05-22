@@ -8,8 +8,6 @@
 
         public DateTime FechaCompra { get; set; }
 
-
-        public List<ItemCantidadViewModel> RegistroPorCantidad { get; set; } = new();
-        public List<ItemDuplicadoViewModel> RegistroDuplicado { get; set; } = new();
+        public List<ItemInventarioClonViewModel> Items { get; set; } = new();
     }
 }

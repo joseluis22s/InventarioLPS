@@ -3,9 +3,9 @@
 @{
 	ViewData["Title"] = "Nuevo registro de inventario";
 }
-@* MODAL PARA DUPLICAR *@
 
-<div class="modal fade" id="duplicaModal" tabindex="-1">
+@* MODAL PARA DUPLICAR *@
+<div class="modal fade" id="duplicaModal" tabindex="-1" aria-labelledby="duplicaModalLabel" aria-modal="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -13,7 +13,8 @@
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
 			</div>
 			<div class="modal-body">
-				<input type="number" id="duplicaCount" min="1" value="1" class="form-control" />
+				<input type="number" id="duplicaCount" min="1" max="20" value="1" class="form-control" required />
+				<div class="invalid-feedback">Por favor ingrese un número entre 1 y 20</div>
 			</div>
 			<div class="modal-footer">
 				<button type="button" id="confirmDuplica" class="btn btn-primary">Duplicar</button>
@@ -53,7 +54,10 @@
 	@* BLOQUE POR CANTIDAD*@
 	<div class="row border rounded p-2 overflow-auto">
 		<h4>Ingreso por cantidad</h4>
-		<i class="btn btn-light bi bi-plus-lg"></i>
+		<button type="button" id="btnAddRowQuantity" class="btn btn-light">
+			<i class="bi bi-plus-lg"></i> Agregar fila
+		</button>
+
 		<table class="table">
 			<thead class="fs-theader">
 				<tr>
@@ -76,166 +80,10 @@
 				</tr>
 			</thead>
 			<tbody id="tbodyCantidad" class="fs-tbody">
-				@for (int i = 0; i < Model.RegistroPorCantidad.Count; i++)
+				@foreach (var (item, index) in Model.RegistroPorCantidad.Select((item, index) => (item, index)))
 				{
-					<tr>
-						<td>
-							<input asp-for="RegistroPorCantidad[@i].CodigoItem" class="form-control" />
-							<span asp-validation-for="RegistroPorCantidad[@i].CodigoItem" class="text-danger"></span>
-						</td>
-						<td>
-							<input asp-for="RegistroPorCantidad[@i].Cantidad" class="form-control" />
-							<span asp-validation-for="RegistroPorCantidad[@i].Cantidad" class="text-danger"></span>
-						</td>
-						<td>
-							<input asp-for="RegistroPorCantidad[@i].ValorSinIva" class="form-control" />
-							<span asp-validation-for="RegistroPorCantidad[@i].ValorSinIva" class="text-danger"></span>
-						</td>
-						<td>
-							<select asp-for="RegistroPorCantidad[@i].Proveedor" class="form-select">
-								<option value="">-- Seleccione --</option>
-							</select>
-							<span asp-validation-for="RegistroPorCantidad[@i].Proveedor" class="text-danger"></span>
-						</td>
-						<td>
-							<select asp-for="RegistroPorCantidad[@i].Producto" class="form-select">
-								<option value="">-- Seleccione --</option>
-							</select>
-							<span asp-validation-for="RegistroPorCantidad[@i].Producto" class="text-danger"></span>
-						</td>
-						<td>
-							<input asp-for="RegistroPorCantidad[@i].Departamento" class="form-control" disabled readonly />
-							<span asp-validation-for="RegistroPorCantidad[@i].Departamento" class="text-danger"></span>
-						</td>
-						<td>
-							<input asp-for="RegistroPorCantidad[@i].Categoria" class="form-control" disabled readonly />
-							<span asp-validation-for="RegistroPorCantidad[@i].Categoria" class="text-danger"></span>
-						</td>
-						<td>
-							<input asp-for="RegistroPorCantidad[@i].LineaServicio" class="form-control" disabled readonly />
-							<span asp-validation-for="RegistroPorCantidad[@i].LineaServicio" class="text-danger"></span>
-						</td>
-						<td>
-							<input asp-for="RegistroPorCantidad[@i].SubLineaServicio" class="form-control" disabled readonly />
-							<span asp-validation-for="RegistroPorCantidad[@i].SubLineaServicio" class="text-danger"></span>
-						</td>
-						<td>
-							<input asp-for="RegistroPorCantidad[@i].DescripcionEspecifica" class="form-control" />
-							<span asp-validation-for="RegistroPorCantidad[@i].DescripcionEspecifica" class="text-danger"></span>
-						</td>
-						<td>
-							<input asp-for="RegistroPorCantidad[@i].EspecificacionesTecnicas" class="form-control" />
-							<span asp-validation-for="RegistroPorCantidad[@i].EspecificacionesTecnicas" class="text-danger"></span>
-						</td>
-						<td>
-							<input asp-for="RegistroPorCantidad[@i].NumeroParteFabricante" class="form-control" />
-							<span asp-validation-for="RegistroPorCantidad[@i].NumeroParteFabricante" class="text-danger"></span>
-						</td>
-						<td>
-							<input asp-for="RegistroPorCantidad[@i].NumeroSerieLps" class="form-control" />
-							<span asp-validation-for="RegistroPorCantidad[@i].NumeroSerieLps" class="text-danger"></span>
-						</td>
-						<td>
-							<select asp-for="RegistroPorCantidad[@i].Ubicacion" class="form-select">
-								<option value="">-- Seleccione --</option>
-							</select>
-							<span asp-validation-for="RegistroPorCantidad[@i].Ubicacion" class="text-danger"></span>
-						</td>
-						<td>
-							<select asp-for="RegistroPorCantidad[@i].Estatus" class="form-control" class="form-select">
-								<option value="">-- Seleccione --</option>
-							</select>
-							<span asp-validation-for="RegistroPorCantidad[@i].Estatus" class="text-danger"></span>
-						</td>
-						<td>
-							<select asp-for="RegistroPorCantidad[@i].Clasificacion" class="form-select">
-								<option value="">-- Seleccione --</option>
-							</select>
-							<span asp-validation-for="RegistroPorCantidad[@i].Clasificacion" class="text-danger"></span>
-						</td>
-					</tr>
+					@await Html.PartialAsync("_ClonarFilaPartial.cshtml", item, new ViewDataDictionary(ViewData) { { "Index", index }, { "MostrarBotonDuplicar", false } })
 				}
-			</tbody>
-		</table>
-		@* FILA PLANTILLA POR CANTIDAD OCULTA *@
-		<table style="display:none;">
-			<tbody>
-				<tr id="plantillaCantidad" style="display:none;">
-					<td>
-						<input name="RegistroPorCantidad[__index__].CodigoItem" class="form-control" />
-						<span data-valmsg-for="RegistroPorCantidad[__index__].CodigoItem" class="text-danger"></span>
-					</td>
-					<td>
-						<input name="RegistroPorCantidad[__index__].Cantidad" class="form-control" />
-						<span data-valmsg-for="RegistroPorCantidad[__index__].Cantidad" class="text-danger"></span>
-					</td>
-					<td>
-						<input name="RegistroPorCantidad[__index__].ValorSinIva" class="form-control" />
-						<span data-valmsg-for="RegistroPorCantidad[__index__].ValorSinIva" class="text-danger"></span>
-					</td>
-					<td>
-						<select name="RegistroPorCantidad[__index__].Proveedor" class="form-select">
-							<option value="">-- Seleccione --</option>
-						</select>
-						<span data-valmsg-for="RegistroPorCantidad[__index__].Proveedor" class="text-danger"></span>
-					</td>
-					<td>
-						<select name="RegistroPorCantidad[__index__].Producto" class="form-select">
-							<option value="">-- Seleccione --</option>
-						</select>
-						<span data-valmsg-for="RegistroPorCantidad[__index__].Producto" class="text-danger"></span>
-					</td>
-					<td>
-						<input name="RegistroPorCantidad[__index__].Departamento" class="form-control" disabled readonly />
-						<span data-valmsg-for="RegistroPorCantidad[__index__].Departamento" class="text-danger"></span>
-					</td>
-					<td>
-						<input name="RegistroPorCantidad[__index__].Categoria" class="form-control" disabled readonly />
-						<span data-valmsg-for="RegistroPorCantidad[__index__].Categoria" class="text-danger"></span>
-					</td>
-					<td>
-						<input name="RegistroPorCantidad[__index__].LineaServicio" class="form-control" disabled readonly />
-						<span data-valmsg-for="RegistroPorCantidad[__index__].LineaServicio" class="text-danger"></span>
-					</td>
-					<td>
-						<input name="RegistroPorCantidad[__index__].SubLineaServicio" class="form-control" disabled readonly />
-						<span data-valmsg-for="RegistroPorCantidad[__index__].SubLineaServicio" class="text-danger"></span>
-					</td>
-					<td>
-						<input name="RegistroPorCantidad[__index__].DescripcionEspecifica" class="form-control" />
-						<span data-valmsg-for="RegistroPorCantidad[__index__].DescripcionEspecifica" class="text-danger"></span>
-					</td>
-					<td>
-						<input name="RegistroPorCantidad[__index__].EspecificacionesTecnicas" class="form-control" />
-						<span data-valmsg-for="RegistroPorCantidad[__index__].EspecificacionesTecnicas" class="text-danger"></span>
-					</td>
-					<td>
-						<input name="RegistroPorCantidad[__index__].NumeroParteFabricante" class="form-control" />
-						<span data-valmsg-for="RegistroPorCantidad[__index__].NumeroParteFabricante" class="text-danger"></span>
-					</td>
-					<td>
-						<input name="RegistroPorCantidad[__index__].NumeroSerieLps" class="form-control" />
-						<span data-valmsg-for="RegistroPorCantidad[__index__].NumeroSerieLps" class="text-danger"></span>
-					</td>
-					<td>
-						<select name="RegistroPorCantidad[__index__].Ubicacion" class="form-select">
-							<option value="">-- Seleccione --</option>
-						</select>
-						<span data-valmsg-for="RegistroPorCantidad[__index__].Ubicacion" class="text-danger"></span>
-					</td>
-					<td>
-						<select name="RegistroPorCantidad[__index__].Estatus" class="form-select">
-							<option value="">-- Seleccione --</option>
-						</select>
-						<span data-valmsg-for="RegistroPorCantidad[__index__].Estatus" class="text-danger"></span>
-					</td>
-					<td>
-						<select name="RegistroPorCantidad[__index__].Clasificacion" class="form-select">
-							<option value="">-- Seleccione --</option>
-						</select>
-						<span data-valmsg-for="RegistroPorCantidad[__index__].Clasificacion" class="text-danger"></span>
-					</td>
-				</tr>
 			</tbody>
 		</table>
 	</div>
@@ -243,7 +91,9 @@
 	@* BLOQUE POR DUPLICAR*@
 	<div class="row border rounded p-2 overflow-auto">
 		<h4>Ingreso por duplicación</h4>
-		<i class="btn btn-light bi bi-plus-lg"></i>
+		<button type="button" id="btnAddRowDuplicado" class="btn btn-light">
+			<i class="bi bi-plus-lg"></i> Agregar fila
+		</button>
 		<table class="table">
 			<thead class="fs-theader">
 				<tr>
@@ -267,144 +117,272 @@
 				</tr>
 			</thead>
 			<tbody id="tbodyDuplicado" class="fs-tbody">
-				@for (int i = 0; i < Model.RegistroDuplicado.Count; i++){
-					<tr>
-						<td>
-							<i class="btn btn-light bi bi-clipboard-plus" data-index="@i"></i>
-						</td>
-						<td>
-							<input asp-for="RegistroDuplicado[@i].CodigoItem" class="form-control" />
-							<span asp-validation-for="RegistroDuplicado[@i].CodigoItem" class="text-danger"></span>
-						</td>
-						<td>
-							<input asp-for="RegistroDuplicado[@i].Cantidad" class="form-control" value="1" disabled readonly />
-						</td>
-						<td>
-							<input asp-for="RegistroDuplicado[@i].ValorSinIva" class="form-control" />
-							<span asp-validation-for="RegistroDuplicado[@i].ValorSinIva" class="text-danger"></span>
-						</td>
-						<td>
-							<select asp-for="RegistroDuplicado[@i].Proveedor" class="form-select">
-								<option value="">-- Seleccione --</option>
-							</select>
-							<span asp-validation-for="RegistroDuplicado[@i].Proveedor" class="text-danger"></span>
-						</td>
-						<td>
-							<select asp-for="RegistroDuplicado[@i].Producto" class="form-select">
-								<option value="">-- Seleccione --</option>
-							</select>
-							<span asp-validation-for="RegistroDuplicado[@i].Producto" class="text-danger"></span>
-						</td>
-						<td>
-							<input asp-for="RegistroDuplicado[@i].Departamento" class="form-control" disabled readonly />
-							<span asp-validation-for="RegistroDuplicado[@i].Departamento" class="text-danger"></span>
-						</td>
-						<td>
-							<input asp-for="RegistroDuplicado[@i].Categoria" class="form-control" disabled readonly />
-							<span asp-validation-for="RegistroDuplicado[@i].Categoria" class="text-danger"></span>
-						</td>
-						<td>
-							<input asp-for="RegistroDuplicado[@i].LineaServicio" class="form-control" disabled readonly />
-							<span asp-validation-for="RegistroDuplicado[@i].LineaServicio" class="text-danger"></span>
-						</td>
-						<td>
-							<input asp-for="RegistroDuplicado[@i].SubLineaServicio" class="form-control" disabled readonly />
-							<span asp-validation-for="RegistroDuplicado[@i].SubLineaServicio" class="text-danger"></span>
-						</td>
-						<td>
-							<input asp-for="RegistroDuplicado[@i].DescripcionEspecifica" class="form-control" />
-							<span asp-validation-for="RegistroDuplicado[@i].DescripcionEspecifica" class="text-danger"></span>
-						</td>
-						<td>
-							<input asp-for="RegistroDuplicado[@i].EspecificacionesTecnicas" class="form-control" />
-							<span asp-validation-for="RegistroDuplicado[@i].EspecificacionesTecnicas" class="text-danger"></span>
-						</td>
-						<td>
-							<input asp-for="RegistroDuplicado[@i].NumeroParteFabricante" class="form-control" />
-							<span asp-validation-for="RegistroDuplicado[@i].NumeroParteFabricante" class="text-danger"></span>
-						</td>
-						<td>
-							<input asp-for="RegistroDuplicado[@i].NumeroSerieLps" class="form-control" />
-							<span asp-validation-for="RegistroDuplicado[@i].NumeroSerieLps" class="text-danger"></span>
-						</td>
-						<td>
-							<select asp-for="RegistroDuplicado[@i].Ubicacion" class="form-select">
-								<option value="">-- Seleccione --</option>
-							</select>
-							<span asp-validation-for="RegistroDuplicado[@i].Ubicacion" class="text-danger"></span>
-						</td>
-						<td>
-							<select asp-for="RegistroDuplicado[@i].Estatus" class="form-control" class="form-select">
-								<option value="">-- Seleccione --</option>
-							</select>
-							<span asp-validation-for="RegistroDuplicado[@i].Estatus" class="text-danger"></span>
-						</td>
-						<td>
-							<select asp-for="RegistroDuplicado[@i].Clasificacion" class="form-select">
-								<option value="">-- Seleccione --</option>
-							</select>
-							<span asp-validation-for="RegistroDuplicado[@i].Clasificacion" class="text-danger"></span>
-						</td>
-					</tr>
+				@foreach (var (item, index) in Model.RegistroDuplicado.Select((item, index) => (item, index)))
+				{
+					@await Html.PartialAsync("_ClonarFilaPartial.cshtml", item, new ViewDataDictionary(ViewData) { { "Index", index }, { "MostrarBotonDuplicar", false } })
 				}
 			</tbody>
 		</table>
 	</div>
 </form>
 <script>
-	let index = @Model.RegistroPorCantidad.Count;
+	$(document).ready(function() {
+		// Variables para controlar índices
+		let rowCountCantidad = @Model.RegistroPorCantidad.Count;
+		let rowCountDuplicado = @Model.RegistroDuplicado.Count;
+		let currentRowToDuplicate = null;
 
-	document.querySelector('.bi-plus-lg').addEventListener('click', function() {
-	  const template = document.getElementById('plantillaCantidad').outerHTML;
-	  const newRowHtml = template.replace(/__index__/g, index);
-	  const tbody = document.getElementById('tbodyCantidad');
+		// Configuración común para agregar filas
+		function setupAddRow(btnSelector, tbodySelector, actionUrl, rowCountVar) {
+			$(btnSelector).click(async function() {
+				try {
+					const response = await fetch(`${actionUrl}?index=${rowCountVar}`);
+					if (!response.ok) throw new Error(`Error al obtener fila. Estado: ${response.status}`);
 
-	  const tempDiv = document.createElement('tbody');
-	  tempDiv.innerHTML = newRowHtml;
-	  const newRow = tempDiv.querySelector('tr');
-	  newRow.style.display = '';
+					const html = await response.text();
+					$(tbodySelector).append(html);
+					rowCountVar++;
 
-	  tbody.appendChild(newRow);
-	  index++;
-	});
+					$.validator.unobtrusive.parse('form');
+				} catch (error) {
+					console.error('Error:', error);
+					alert('No se pudo agregar la fila: ' + error.message);
+				}
+			});
+		}
 
+		// Configurar ambas secciones
+		setupAddRow('#btnAddRowQuantity', '#tbodyCantidad', '@Url.Action("GetNewRow", "Inventario")', rowCountCantidad);
+		setupAddRow('#btnAddRowDuplicado', '#tbodyDuplicado', '@Url.Action("GetNewRowDuplicado", "Inventario")', rowCountDuplicado);
 
-
-
-	Let duplicadoIndex = @Model.RegistroDuplicado.Count;
-	let filaSeleccionada = null;
-
-	const modal = new bootstrap.Modal(document.getElementById('duplicaModal'));
-
-	document.querySelectorAll('.duplicate-btn').forEach(btn => {
-	  btn.addEventListener('click', e => {
-		const idx = e.target.getAttribute('data-index');
-		filaSeleccionada = document.querySelector(`#tbodyDuplicado tr:nth-child(${parseInt(idx) + 1})`);
-		modal.show();
-	  });
-	});
-
-	document.getElementById('confirmDuplica').addEventListener('click', () => {
-	  const n = parseInt(document.getElementById('duplicaCount').value);
-	  if (!n || n < 1) return;
-
-	  for (let i = 0; i < n; i++) {
-		const clone = filaSeleccionada.cloneNode(true);
-		// Actualizar nombres e índices de inputs en clone
-		clone.querySelectorAll('input, select, span').forEach(el => {
-		  if(el.name) {
-			el.name = el.name.replace(/\[\d+\]/, `[${duplicadoIndex}]`);
-		  }
-		  if(el.getAttribute('asp-for')) {
-			el.setAttribute('asp-for', el.getAttribute('asp-for').replace(/\[\d+\]/, `[${duplicadoIndex}]`));
-		  }
-		  // Limpia valores si quieres (opcional)
+		// Eliminar fila
+		$(document).on('click', '.btn-remove-row', function() {
+			$(this).closest('tr').remove();
+			reindexRows($(this).closest('tbody'));
 		});
-		document.getElementById('tbodyDuplicado').appendChild(clone);
-		duplicadoIndex++;
-	  }
 
-	  modal.hide();
+		// Función para reindexar filas
+		function reindexRows(tbody) {
+			tbody.find('tr').each(function(index) {
+				$(this).find('input, select').each(function() {
+					const name = $(this).attr('name');
+					if (name) {
+						const newName = name.replace(/\[\d+\]/, `[${index}]`);
+						$(this).attr('name', newName);
+					}
+				});
+			});
+		}
+
+		// Manejo del modal de duplicación
+		$(document).on('click', '.btnDuplicar', function() {
+			currentRowToDuplicate = $(this).closest('tr');
+			$('#duplicaModal').modal('show');
+		});
+
+		// Confirmar duplicación
+		$('#confirmDuplica').click(function() {
+			const count = parseInt($('#duplicaCount').val()) || 1;
+
+			if (count < 1 || count > 20) {
+				alert('Por favor ingrese un número entre 1 y 20');
+				return;
+			}
+
+			// Capturar datos de la fila a duplicar
+			const rowData = {};
+			currentRowToDuplicate.find('input, select').each(function() {
+				const name = $(this).attr('name').split('.').pop();
+				rowData[name] = $(this).val();
+			});
+
+			// Agregar filas duplicadas
+			for (let i = 0; i < count; i++) {
+				const newIndex = $('#tbodyDuplicado tr').length;
+				const newRow = `
+				<tr>
+					<td>
+						<button type="button" class="btn btn-sm btn-outline-primary btnDuplicar" data-index="${newIndex}">+</button>
+					</td>
+					<td>
+						<input name="RegistroDuplicado[${newIndex}].CodigoItem" class="form-control" value="${rowData['CodigoItem']}-${i+1}" />
+					</td>
+					<td>
+						<input name="RegistroDuplicado[${newIndex}].Cantidad" class="form-control" value="${rowData['Cantidad']}" />
+					</td>
+					<td>
+						<input name="RegistroDuplicado[${newIndex}].ValorSinIva" class="form-control" value="${rowData['ValorSinIva']}" />
+					</td>
+					<td>
+						<select name="RegistroDuplicado[${newIndex}].Proveedor" class="form-select">
+							${currentRowToDuplicate.find('select[name$="Proveedor"]').html()}
+						</select>
+					</td>
+					<td>
+						<select name="RegistroDuplicado[${newIndex}].Producto" class="form-select">
+							${currentRowToDuplicate.find('select[name$="Producto"]').html()}
+						</select>
+					</td>
+					<td>
+						<input name="RegistroDuplicado[${newIndex}].Departamento" class="form-control" value="${rowData['Departamento']}" disabled readonly />
+					</td>
+					<!-- Completa con todos los demás campos -->
+					<td>
+						<button type="button" class="btn btn-danger btn-remove-row">
+							<i class="bi bi-x-circle"></i>
+						</button>
+					</td>
+				</tr>`;
+
+				$('#tbodyDuplicado').append(newRow);
+				rowCountDuplicado++;
+			}
+
+			$('#duplicaModal').modal('hide');
+			$('#duplicaCount').val(1);
+			$.validator.unobtrusive.parse('form');
+		});
+
+		// Resetear modal al cerrar
+		$('#duplicaModal').on('hidden.bs.modal', function() {
+			currentRowToDuplicate = null;
+			$('#duplicaCount').val(1);
+		});
+
+		// Agregar fila inicial si no hay
+	@if (Model.RegistroPorCantidad.Count == 0)
+	{
+		<text>$('#btnAddRowQuantity').click();</text>
+	}
+	@if (Model.RegistroDuplicado.Count == 0)
+	{
+		<text>$('#btnAddRowDuplicado').click();</text>
+	}
+	});
+</script>
+@* <script>
+	$(document).ready(function() {
+		// Configuración para la sección de Cantidad
+		let rowCountCantidad = @Model.RegistroPorCantidad.Count;
+		let rowCountDuplicado = @Model.RegistroDuplicado.Count;
+
+		// Agregar fila en sección Cantidad
+		$('#btnAddRowQuantity').click(async function() {
+			try {
+				const response = await fetch('@Url.Action("GetNewRow", "Inventario")?index=' + rowCountCantidad);
+				if (!response.ok) throw new Error('Error al obtener fila');
+
+				const html = await response.text();
+				$('#tbodyCantidad').append(html);
+				rowCountCantidad++;
+
+				$.validator.unobtrusive.parse('form');
+			} catch (error) {
+				console.error('Error:', error);
+				alert('No se pudo agregar la fila');
+			}
+		});
+
+		// Agregar fila en sección Duplicado
+		$('#btnAddRowDuplicado').click(async function() {
+			try {
+				const response = await fetch('@Url.Action("GetNewRowDuplicado", "Inventario")?index=' + rowCountDuplicado);
+				if (!response.ok) throw new Error('Error al obtener fila');
+
+				const html = await response.text();
+				$('#tbodyDuplicado').append(html);
+				rowCountDuplicado++;
+
+				$.validator.unobtrusive.parse('form');
+			} catch (error) {
+				console.error('Error:', error);
+				alert('No se pudo agregar la fila');
+			}
+		});
+
+		// Eliminar fila (funciona para ambas secciones)
+		$(document).on('click', '.btn-remove-row', function() {
+			const tbody = $(this).closest('tbody');
+			$(this).closest('tr').remove();
+			reindexRows(tbody);
+		});
+
+		// Función para reindexar filas
+		function reindexRows(tbody) {
+			tbody.find('tr').each(function(index) {
+				$(this).find('input, select').each(function() {
+					const name = $(this).attr('name');
+					if (name) {
+						const newName = name.replace(/\[\d+\]/, `[${index}]`);
+						$(this).attr('name', newName);
+					}
+				});
+			});
+		}
+
+		// Manejo del modal de duplicación
+	let currentRowToDuplicate = null;
+
+		// Botón duplicar (solo para sección Duplicado)
+	$(document).on('click', '.btnDuplicar', function() {
+		currentRowToDuplicate = $(this).closest('tr');
+		$('#duplicaModal').modal('show');
 	});
 
-</script>
+		// Confirmar duplicación
+	$('#confirmDuplica').click(function() {
+		const count = parseInt($('#duplicaCount').val()) || 1;
+		const rowData = {};
+
+		// Capturar datos de la fila a duplicar
+		currentRowToDuplicate.find('input, select').each(function() {
+			const name = $(this).attr('name').split('.').pop();
+			rowData[name] = $(this).val();
+		});
+
+		// Agregar filas duplicadas
+		for (let i = 0; i < count; i++) {
+			const newIndex = $('#tbodyDuplicado tr').length;
+			const newRow = `
+			<tr>
+				<td>
+					<button type="button" class="btn btn-sm btn-outline-primary btnDuplicar" data-index="${newIndex}">+</button>
+				</td>
+				<td>
+					<input name="RegistroDuplicado[${newIndex}].CodigoItem" class="form-control" value="${rowData['CodigoItem']}-${i+1}" />
+				</td>
+				<td>
+					<input name="RegistroDuplicado[${newIndex}].Cantidad" class="form-control" value="${rowData['Cantidad']}" />
+				</td>
+				<!-- Completa con todos los demás campos -->
+				<td>
+					<button type="button" class="btn btn-danger btn-remove-row">
+						<i class="bi bi-x-circle"></i>
+					</button>
+				</td>
+			</tr>`;
+
+			$('#tbodyDuplicado').append(newRow);
+		}
+
+		$('#duplicaModal').modal('hide');
+		$('#duplicaCount').val(1); // Resetear contador
+	});
+
+	// Cerrar modal al hacer click fuera o en cancelar
+	$('#duplicaModal').on('hidden.bs.modal', function() {
+		currentRowToDuplicate = null;
+	});
+
+
+		// Agregar fila inicial si no hay
+	@if (Model.RegistroPorCantidad.Count == 0)
+	{
+		<text>$('#btnAddRowQuantity').click();</text>
+	}
+	@if (Model.RegistroDuplicado.Count == 0)
+	{
+		<text>$('#btnAddRowDuplicado').click();</text>
+	}
+	});
+</script> *@

@@ -1,0 +1,91 @@
+﻿@model ItemDuplicadoViewModel
+@{
+    var index = ViewData["Index"] ?? "0";
+    var proveedores = ViewData["Proveedores"] as SelectList;
+    var productos = ViewData["Productos"] as SelectList;
+    var ubicaciones = ViewData["Ubicaciones"] as SelectList;
+    var estatus = ViewData["Estatus"] as SelectList;
+    var clasificaciones = ViewData["Clasificaciones"] as SelectList;
+}
+
+<tr>
+    <td>
+        <input asp-for="CodigoItem" name="RegistroPorCantidad[@index].CodigoItem" class="form-control" />
+        <span asp-validation-for="CodigoItem" class="text-danger"></span>
+    </td>
+    <td>
+        <input asp-for="Cantidad" name="RegistroPorCantidad[@index].Cantidad" class="form-control" />
+        <span asp-validation-for="Cantidad" class="text-danger"></span>
+    </td>
+    <td>
+        <input asp-for="ValorSinIva" name="RegistroPorCantidad[@index].ValorSinIva" class="form-control" />
+        <span asp-validation-for="ValorSinIva" class="text-danger"></span>
+    </td>
+    <td>
+        <select asp-for="Proveedor" name="RegistroPorCantidad[@index].Proveedor" asp-items="proveedores" class="form-select">
+            <option value="">-- Seleccione --</option>
+        </select>
+        <span asp-validation-for="Proveedor" class="text-danger"></span>
+    </td>
+    <td>
+        <select asp-for="Producto" name="RegistroPorCantidad[@index].Producto" asp-items="productos" class="form-select">
+            <option value="">-- Seleccione --</option>
+        </select>
+        <span asp-validation-for="Producto" class="text-danger"></span>
+    </td>
+    <td>
+        <input asp-for="Departamento" name="RegistroPorCantidad[@index].Departamento" class="form-control" disabled readonly />
+        <span asp-validation-for="Departamento" class="text-danger"></span>
+    </td>
+    <td>
+        <input asp-for="Categoria" name="RegistroPorCantidad[@index].Categoria" class="form-control" disabled readonly />
+        <span asp-validation-for="Categoria" class="text-danger"></span>
+    </td>
+    <td>
+        <input asp-for="LineaServicio" name="RegistroPorCantidad[@index].LineaServicio" class="form-control" disabled readonly />
+        <span asp-validation-for="LineaServicio" class="text-danger"></span>
+    </td>
+    <td>
+        <input asp-for="SubLineaServicio" name="RegistroPorCantidad[@index].SubLineaServicio" class="form-control" disabled readonly />
+        <span asp-validation-for="SubLineaServicio" class="text-danger"></span>
+    </td>
+    <td>
+        <input asp-for="DescripcionEspecifica" name="RegistroPorCantidad[@index].DescripcionEspecifica" class="form-control" />
+        <span asp-validation-for="DescripcionEspecifica" class="text-danger"></span>
+    </td>
+    <td>
+        <input asp-for="EspecificacionesTecnicas" name="RegistroPorCantidad[@index].EspecificacionesTecnicas" class="form-control" />
+        <span asp-validation-for="EspecificacionesTecnicas" class="text-danger"></span>
+    </td>
+    <td>
+        <input asp-for="NumeroParteFabricante" name="RegistroPorCantidad[@index].NumeroParteFabricante" class="form-control" />
+        <span asp-validation-for="NumeroParteFabricante" class="text-danger"></span>
+    </td>
+    <td>
+        <input asp-for="NumeroSerieLps" name="RegistroPorCantidad[@index].NumeroSerieLps" class="form-control" />
+        <span asp-validation-for="NumeroSerieLps" class="text-danger"></span>
+    </td>
+    <td>
+        <select asp-for="Ubicacion" name="RegistroPorCantidad[@index].Ubicacion" asp-items="ubicaciones" class="form-select">
+            <option value="">-- Seleccione --</option>
+        </select>
+        <span asp-validation-for="Ubicacion" class="text-danger"></span>
+    </td>
+    <td>
+        <select asp-for="Estatus" name="RegistroPorCantidad[@index].Estatus" asp-items="estatus" class="form-select">
+            <option value="">-- Seleccione --</option>
+        </select>
+        <span asp-validation-for="Estatus" class="text-danger"></span>
+    </td>
+    <td>
+        <select asp-for="Clasificacion" name="RegistroPorCantidad[@index].Clasificacion" asp-items="clasificaciones" class="form-select">
+            <option value="">-- Seleccione --</option>
+        </select>
+        <span asp-validation-for="Clasificacion" class="text-danger"></span>
+    </td>
+    <td>
+        <button type="button" class="btn btn-danger btn-remove-row">
+            <i class="bi bi-x-circle"></i>
+        </button>
+    </td>
+</tr>

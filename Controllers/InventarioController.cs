@@ -41,9 +41,42 @@ namespace InventarioLPS.Controllers
         public ActionResult Create()
         {
             ViewData["FormasRegistro"] = new SelectList(_context.FormaRegistro, "Id", "Nombre");
+            ViewData["Proveedores"] = new SelectList(_context.Proveedor, "Id", "NombreComercial");
             ViewData["Productos"] = new SelectList(_context.Producto, "Codigo", "Nombre");
-
+            ViewData["Ubicaciones"] = new SelectList(_context.Ubicacion, "Id", "Nombre");
+            ViewData["Estatus"] = new SelectList(_context.Estatus, "Id", "Nombre");
+            ViewData["Clasificaciones"] = new SelectList(_context.Clasificacion, "Id", "Nombre");
             return View(new RegistroInventarioViewModel());
+        }
+
+
+        public async Task<IActionResult> GetNewRow(int index)
+        {
+            try
+            {
+                ViewData["Index"] = index;
+                return PartialView("~/Views/Inventario/_ClonarFilaPartial.cshtml", new ItemInventarioClonViewModel());
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex, "Error al generar nueva fila por cantidad");
+                return StatusCode(500, "Error al generar nueva fila por cantidad");
+            }
+        }
+        public IActionResult GetNewRowDuplicado(int index)
+        {
+
+            try
+            {
+                ViewData["Index"] = index;
+                ViewData["MostrarBotonDuplicar"] = true;
+                return PartialView("~/Views/Inventario/_ClonarFilaPartial.cshtml", new ItemInventarioClonViewModel());
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex, "Error al generar nueva fila para duplicar");
+                return StatusCode(500, "Error al generar nueva fila para duplicar");
+            }
         }
 
         // POST: InventarioController/Create
