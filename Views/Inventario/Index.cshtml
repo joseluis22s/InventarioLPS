@@ -5,69 +5,72 @@
 }
 <h2>@ViewBag.Title</h2>
 <a asp-action="Create" class="btn btn-secondary bg-primary-site"><i class="bi bi-plus"></i>Nuevo</a>
-<table class="table">
-	<thead>
-		<tr>
-			<th>Opciones</th>
-			<th>Código</th>
-			<th>Forma registro</th>
-			<th># Documento</th>
-			<th>Fecha de compra</th>
-			<th>Valor Unit. sin IVA</th>
-			<th>Cantidad</th>
-			<th>Total sin IVA</th>
-			<th>Producto</th>
-			<th>Departamento</th>
-			<th>Categoría</th>
-			<th>Línea de servicio</th>
-			<th>Sub-línea</th>
-			<th>Descrip. específica</th>
-			<th>Especifi. técnicas</th>
-			<th># fabricante</th>
-			<th># serie LPS</th>
-			<th>Estatus</th>
-			<th>Ubicación</th>
-			<th>Clasificación</th>
-			<th>Proveedor</th>
-			<th>Novedades</th>
-		</tr>
-	</thead>
-	<tbody>
-		@foreach (var item in Model)
-		{
+<div class="table-responsive">
+
+	<table class="table">
+		<thead class="fs-theader">
 			<tr>
-				<td class="ps-4 pe-5">
-					<a asp-action="Edit" asp-route-id="@item.Id" data-bs-toggle="tooltip" data-bs-title="Editar" class="btn btn-light px-2 py-1">
-						<i class="bi bi-pencil-square"></i>
-					</a>
-					<a asp-action="Delete" asp-route-id="@item.Id" data-bs-toggle="tooltip" data-bs-title="Eliminar" class="btn btn-danger px-2 py-1">
-						<i class="bi bi-trash"></i>
-					</a>
-					<a asp-controller="NovedadesItem" asp-action="Index" asp-route-id="@item.Id" data-bs-toggle="tooltip" data-bs-title="Ver Novedades" class="btn btn-light px-2 py-1">
-						<i class="bi bi-card-list"></i>
-					</a>
-				</td>
-				<td>@item.CodigoItem</td>
-				<td>@item.FormaRegistro</td>
-				<td>@item.NumeroDocumento</td>
-				<td>@item.FechaCompra</td>
-				<td>@item.ValorUnitarioSinIva</td>
-				<td>@item.Cantidad</td>
-				<td>@item.TotalSinIva</td>
-				<td>@item.Producto</td>
-				<td>@item.Departamento</td>
-				<td>@item.Categoria</td>
-				<td>@item.LineaServicio</td>
-				<td>@item.SubLineaServicio</td>
-				<td>@item.DescripcionEspecifica</td>
-				<td>@item.EspecificacionesTecnicas</td>
-				<td>@item.NumeroParteFabricante</td>
-				<td>@item.NumeroSerieLps</td>
-				<td>@item.Estatus</td>
-				<td>@item.Ubicacion</td>
-				<td>@item.Clasificacion</td>
-				<td>@item.Proveedor</td>
+				<th>Opciones</th>
+				<th>Código</th>
+				<th>Forma registro</th>
+				<th># Documento</th>
+				<th>Fecha de compra</th>
+				<th>Valor Unit. sin IVA</th>
+				<th>Cantidad</th>
+				<th>Total sin IVA</th>
+				<th>Producto</th>
+				<th>Departamento</th>
+				<th>Categoría</th>
+				<th>Línea de servicio</th>
+				<th>Sub-línea</th>
+				<th>Descrip. específica</th>
+				<th>Especifi. técnicas</th>
+				<th># fabricante</th>
+				<th># serie LPS</th>
+				<th>Estatus</th>
+				<th>Ubicación</th>
+				<th>Clasificación</th>
+				<th>Proveedor</th>
+				<th>Novedades</th>
 			</tr>
-		}
-	</tbody>
-</table>
+		</thead>
+		<tbody class="fs-tbody">
+			@foreach (var item in Model)
+			{
+				<tr>
+					<td class="ps-4 pe-5">
+						<a asp-action="Edit" asp-route-id="@item.Id" data-bs-toggle="tooltip" data-bs-title="Editar" class="btn btn-light px-2 py-1">
+							<i class="bi bi-pencil-square"></i>
+						</a>
+						<a asp-action="Delete" asp-route-id="@item.Id" data-bs-toggle="tooltip" data-bs-title="Eliminar" class="btn btn-danger px-2 py-1">
+							<i class="bi bi-trash"></i>
+						</a>
+						<a asp-controller="NovedadesItem" asp-action="Index" asp-route-id="@item.Id" data-bs-toggle="tooltip" data-bs-title="Ver Novedades" class="btn btn-light px-2 py-1">
+							<i class="bi bi-card-list"></i>
+						</a>
+					</td>
+					<td class="fs-td td-codigo">@item.CodigoItem</td>
+					<td>@item.FormaRegistro</td>
+					<td>@item.NumeroDocumento</td>
+					<td>@item.FechaCompra</td>
+					<td class="fs-td td-valor">@item.ValorUnitarioSinIva</td>
+					<td class="fs-td td-cantidad">@item.Cantidad</td>
+					<td class="fs-td td-valor">@item.TotalSinIva</td>
+					<td class="fs-td td-producto">@item.Producto</td>
+					<td class="fs-td td-departamento">@item.Departamento</td>
+					<td class="fs-td td-categoria">@item.Categoria</td>
+					<td class="fs-td td-linea">@item.LineaServicio</td>
+					<td class="fs-td td-sublinea">@item.SubLineaServicio</td>
+					<td class="fs-td td-descripcion">@item.DescripcionEspecifica</td>
+					<td class="fs-td td-especificaciones">@item.EspecificacionesTecnicas</td>
+					<td class="fs-td td-parte">@item.NumeroParteFabricante</td>
+					<td class="fs-td td-serie">@item.NumeroSerieLps</td>
+					<td class="fs-td td-estatus">@item.Estatus</td>
+					<td class="fs-td td-ubicacion">@item.Ubicacion</td>
+					<td class="fs-td td-clasificacion">@item.Clasificacion</td>
+					<td class="fs-td td-proveedor">@item.Proveedor</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+</div>
