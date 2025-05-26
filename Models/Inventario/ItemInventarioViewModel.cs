@@ -4,6 +4,8 @@ namespace InventarioLPS.Models.Inventario
 {
     public class ItemInventarioViewModel
     {
+        // CAMPOS DE ESCRITURA.
+
         [Required(ErrorMessage = "*Campo requerido.")]
         public string CodigoItem { get; set; }
 
@@ -15,10 +17,12 @@ namespace InventarioLPS.Models.Inventario
         public decimal ValorSinIva { get; set; }
 
         [Required(ErrorMessage = "*Campo requerido.")]
-        public string Proveedor { get; set; }
+        public int ProveedorId { get; set; }
 
         [Required(ErrorMessage = "*Campo requerido.")]
-        public string Producto { get; set; }
+        public string CodigoProducto { get; set; }
+        
+        // CAMPOS DE SOLO LECTURA.
 
         public string Departamento { get; set; }
 
@@ -27,6 +31,8 @@ namespace InventarioLPS.Models.Inventario
         public string LineaServicio { get; set; }
 
         public string SubLineaServicio { get; set; }
+
+        // CAMPOS DE ESCRITURA.
 
         [Required(ErrorMessage = "*Campo requerido.")]
         public string DescripcionEspecifica { get; set; }
@@ -41,13 +47,13 @@ namespace InventarioLPS.Models.Inventario
         public string NumeroSerieLps { get; set; }
 
         [Required(ErrorMessage = "*Campo requerido.")]
-        public string Ubicacion { get; set; }
+        public int UbicacionId { get; set; }
 
         [Required(ErrorMessage = "*Campo requerido.")]
         public string Estatus { get; set; }
 
         [Required(ErrorMessage = "*Campo requerido.")]
-        public string Clasificacion { get; set; }
+        public int ClasificacionId { get; set; }
 
     }
 }

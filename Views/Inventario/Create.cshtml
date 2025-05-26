@@ -1,10 +1,10 @@
-﻿@model InventarioLPS.Models.Inventario.RegistroInventarioViewModel
+﻿@model InventarioLPS.Models.Inventario.CreateRegistroInventarioViewModel
 
 @{
-	ViewData["Title"] = "Nuevo registro de inventario";
+    ViewData["Title"] = "Nuevo registro de inventario";
 }
 
-@* MODAL PARA DUPLICAR *@
+@* — MODAL PARA DUPLICAR N VECES — *@
 <div class="modal" id="duplicaModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -15,71 +15,210 @@
             <div class="modal-body">
                 <div class="mb-3">
                     <label class="form-label">¿Cuántas copias desea crear?</label>
-                    <input type="number" id="duplicaCount" min="1" max="20" value="1" class="form-control" required />
+                    <input type="number" id="duplicaCount" min="1" max="20" value="1"
+                           class="form-control input-sm" required />
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" id="confirmDuplica" class="btn btn-primary">Duplicar</button>
+                <button type="button" class="btn btn-secondary btn-form"
+                        data-bs-dismiss="modal">
+                    Cancelar
+                </button>
+                <button type="button" id="confirmDuplica"
+                        class="btn btn-primary btn-form">
+                    Duplicar
+                </button>
             </div>
         </div>
     </div>
 </div>
 
-<h5 class="ps-1">@ViewBag.Title</h5>
+<script>
+    var productInfo = @Html.Raw(Model.ProductInfoJson);
+</script>
+
+@* — TEMPLATE PARA CLONAR FILAS — *@
+<template id="row-template">
+    <tr>
+        @* BOTONES PARA ELIMINAR O DUPLICAR FILA*@
+        <td class="fs-td">
+            <button type="button" class="btn btn-sm btn-outline-primary btn-duplicate-row px-2 py-1">
+                <i class="bi bi-copy"></i>
+            </button>
+            <button type="button" class="btn btn-sm btn-danger btn-remove-row px-2 py-1">
+                <i class="bi bi-x-circle"></i>
+            </button>
+        </td>
+        @* CHECKBOX PARA CADA FILA *@
+        <td class="fs-td">
+            <input type="checkbox" class="row-select form-check-input" />
+        </td>
+        @* CodigoItem *@
+        <td class="fs-td td-codigo">
+            <input name="Items[__idx__].CodigoItem" class="form-control input-sm" />
+            <span class="text-danger form-control-sm"></span>
+        </td>
+        @* Cantidad *@
+        <td class="fs-td td-cantidad">
+            <input type="number" name="Items[__idx__].Cantidad" class="form-control input-sm" />
+            <span class="text-danger form-control-sm"></span>
+        </td>
+		@* ValorsinIVA *@
+        <td class="fs-td td-valor">
+            <input type="number" step="0.01" name="Items[__idx__].ValorSinIva" class="form-control input-sm" />
+            <span class="text-danger form-control-sm"></span>
+        </td>
+		@* Proveedor *@
+        <td class="fs-td td-proveedor">
+            <select name="Items[__idx__].ProveedorId" class="form-select input-sm">
+                <option value="">-- Seleccione --</option>
+                @foreach (var o in Model.ProveedoresOptions)
+                {
+                    <option value="@o.Value">@o.Text</option>
+                }
+            </select>
+            <span class="text-danger form-control-sm"></span>
+        </td>
+        @* Producto *@
+        <td class="fs-td td-producto">
+            <select name="Items[__idx__].CodigoProducto" class="form-select input-sm">
+                <option value="">-- Seleccione --</option>
+                @foreach (var o in Model.ProductosOptions)
+                {
+                    <option value="@o.Value">@o.Text</option>
+                }
+            </select>
+            <span class="text-danger form-control-sm"></span>
+        </td>
+        @* Departamento *@
+        <td class="fs-td td-departamento">
+            <input name="Items[__idx__].Departamento" readonly class="form-control input-sm departamento-field" />
+        </td>
+        @* Categoria *@
+        <td class="fs-td td-categoria">
+            <input name="Items[__idx__].Categoria" readonly class="form-control input-sm categoria-field" />
+        </td>
+		@* LineaServicio *@
+        <td class="fs-td td-linea">
+            <input name="Items[__idx__].LineaServicio" readonly class="form-control input-sm linea-field" />
+        </td>
+		@* SubLineaServicio *@
+        <td class="fs-td td-sublinea">
+            <input name="Items[__idx__].SubLineaServicio" readonly class="form-control input-sm sublinea-field" />
+        </td>
+        @* DescripcionEspecifica *@
+        <td class="fs-td td-descripcion">
+            <input name="Items[__idx__].DescripcionEspecifica" class="form-control input-sm" />
+            <span class="text-danger form-control-sm"></span>
+        </td>
+		@* EspecificacionesTecnicas *@
+        <td class="fs-td td-especificaciones">
+            <input name="Items[__idx__].EspecificacionesTecnicas" class="form-control input-sm" />
+            <span class="text-danger form-control-sm"></span>
+        </td>
+		@* NumeroParteFabricante *@
+        <td class="fs-td td-parte">
+            <input name="Items[__idx__].NumeroParteFabricante" class="form-control input-sm" />
+            <span class="text-danger form-control-sm"></span>
+        </td>
+		@* NumeroSerieLps *@
+        <td class="fs-td td-serie">
+            <input name="Items[__idx__].NumeroSerieLps" class="form-control input-sm" />
+            <span class="text-danger form-control-sm"></span>
+        </td>
+        @* Ubicacion *@
+        <td class="fs-td td-ubicacion">
+            <select name="Items[__idx__].UbicacionId" class="form-select input-sm">
+                <option value="">-- Seleccione --</option>
+                @foreach (var o in Model.UbicacionesOptions)
+                {
+                    <option value="@o.Value">@o.Text</option>
+                }
+            </select>
+            <span class="text-danger form-control-sm"></span>
+        </td>
+		@* Estatus *@
+        <td class="fs-td td-estatus">
+            <select name="Items[__idx__].Estatus" class="form-select input-sm">
+                <option value="">-- Seleccione --</option>
+                @foreach (var o in Model.EstatusOptions)
+                {
+                    <option value="@o.Value">@o.Text</option>
+                }
+            </select>
+            <span class="text-danger form-control-sm"></span>
+        </td>
+		@* Clasificacion *@
+        <td class="fs-td td-clasificacion">
+            <select name="Items[__idx__].ClasificacionId" class="form-select input-sm">
+                <option value="">-- Seleccione --</option>
+                @foreach (var o in Model.ClasificacionesOptions)
+                {
+                    <option value="@o.Value">@o.Text</option>
+                }
+            </select>
+            <span class="text-danger form-control-sm"></span>
+        </td>
+    </tr>
+</template>
+
+
+<h5 class="ps-1">@ViewData["Title"]</h5>
+
 <form asp-action="Create" class="container-fluid border-top border-start">
     <div class="row mt-3">
         <div class="col-12">
             <button type="submit" class="btn btn-primary btn-form">Guardar</button>
         </div>
     </div>
+
     <div class="row mx-2 mt-1">
-		<!-- Campos del documento (sin cambios) -->
-		<div class="col-8 col-md-6 col-lg-2">
+        <div class="col-8 col-md-6 col-lg-2">
             <label asp-for="MontoTotal" class="form-label label-sm"></label>
             <input asp-for="MontoTotal" class="form-control input-sm" />
             <span asp-validation-for="MontoTotal" class="text-danger label-sm"></span>
-		</div>
+        </div>
         <div class="col-8 col-md-6 col-lg-3">
             <label asp-for="NumeroDocumento" class="form-label label-sm">No. Documento</label>
             <input asp-for="NumeroDocumento" class="form-control input-sm" />
             <span asp-validation-for="NumeroDocumento" class="text-danger label-sm"></span>
-		</div>
+        </div>
         <div class="w-100 d-md-none"></div>
         <div class="col-8 col-md-6 col-lg-4">
-            <label asp-for="FormaRegistro" class="form-label label-sm">Forma de registro</label>
-            <select asp-for="FormaRegistro" asp-items="ViewBag.FormasRegistro" class="form-select input-sm">
-				<option value="">-- Seleccione --</option>
-			</select>
-            <span asp-validation-for="FormaRegistro" class="text-danger label-sm"></span>
-		</div>
+            <label asp-for="FormaRegistroId" class="form-label label-sm">Forma de registro</label>
+            <select asp-for="FormaRegistroId" asp-items="Model.FormasRegistroOptions"
+                    class="form-select input-sm">
+                <option value="">-- Seleccione --</option>
+            </select>
+            <span asp-validation-for="FormaRegistroId" class="text-danger label-sm"></span>
+        </div>
         <div class="col-8 col-md-6 col-lg-3">
             <label asp-for="FechaCompra" class="form-label label-sm"></label>
             <input asp-for="FechaCompra" class="form-control input-sm" />
             <span asp-validation-for="FechaCompra" class="text-danger label-sm"></span>
         </div>
-	</div>
+    </div>
 
-    <hr class="mx-2"/>
+    <hr class="mx-2" />
 
-	<!-- Tabla  -->
-	<div class="row overflow-auto">
-		<div class="d-flex justify-content-between align-items-center mb-2">
-			<h6>Registro de items</h6>
-			<div>
+    <div class="row overflow-auto">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <h6>Registro de items</h6>
+            <div>
                 <button type="button" id="btnAddRow" class="btn btn-outline-dark btn-form">
-					<i class="bi bi-plus-lg"></i> Agregar fila
-				</button>
-                <button type="button" id="btnDuplicarSeleccionados" class="btn btn-outline-danger btn-form">
+                    <i class="bi bi-plus-lg"></i> Agregar fila
+                </button>
+                <button type="button" id="btnDeleteSelected" class="btn btn-outline-danger btn-form">
                     <i class="bi bi-trash"></i> Borrar seleccionados
-				</button>
-			</div>
-		</div>
+                </button>
+            </div>
+        </div>
         <div class="table-responsive">
             <table class="table">
                 <thead class="fs-theader">
                     <tr>
                         <th></th>
+                        <th><input type="checkbox" id="selectAllRows" /></th>
                         <th>Código</th>
                         <th>Cantidad</th>
                         <th>Valor sin IVA</th>
@@ -99,109 +238,87 @@
                     </tr>
                 </thead>
                 <tbody id="tbodyItems" class="fs-tbody">
-                    @foreach (var (item, index) in Model.Items.Select((item, index) => (item, index)))
-                    {
-                        @await Html.PartialAsync("_ItemInventarioPartial", item, new ViewDataDictionary(ViewData) { { "Index", index } })
-                    }
+                    @* filas generadas por JS *@
                 </tbody>
             </table>
         </div>
-	</div>
+    </div>
 </form>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-        $(document).ready(function() {
-        let rowCount = @Model.Items.Count;
-        let selectedRowForDuplication = null;
+    $(function() {
+      let rowCount = 0;
+      let selectedRowForDuplication = null;
+      const $tbody       = $('#tbodyItems');
+      const templateHtml = $('#row-template').html();
 
-        // Función genérica para agregar filas
-        const addNewRow = async (index) => {
-            try {
-                const response = await fetch(`@Url.Action("GetNewItemRow", "Inventario")?index=${index}`);
-                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-                return await response.text();
-            } catch (error) {
-                console.error('Error adding row:', error);
-                throw error;
-            }
-        };
+      function addRow(data = {}) {
+        let html = templateHtml.replace(/__idx__/g, rowCount);
+        const $row = $(html);
 
-        // Agregar nueva fila
-        $('#btnAddRow').click(async () => {
-            try {
-                const html = await addNewRow(rowCount);
-                $('#tbodyItems').append(html);
-                rowCount++;
-                $.validator.unobtrusive.parse('form');
-            } catch (error) {
-                alert('Error al agregar fila: ' + error.message);
-            }
-        });
+        // Rellenar datos si vienen (para duplicar)
+        for (let key in data) {
+          const $el = $row.find(`[name="Items[${rowCount}].${key}"]`);
+          if ($el.length) $el.val(data[key]).trigger('change');
+        }
 
-        // Duplicar fila
-        $(document).on('click', '.btn-duplicate-row', function() {
-            selectedRowForDuplication = $(this).closest('tr');
-            $('#duplicaModal').modal('show');
-        });
+        $tbody.append($row);
+        rowCount++;
+      }
 
-        // Confirmar duplicación
-        $('#confirmDuplica').click(() => {
-            const count = Math.min(Math.max(1, parseInt($('#duplicaCount').val()) || 1), 20);
+      // Agregar fila vacía
+      $('#btnAddRow').click(() => addRow());
 
-            const originalData = {};
-            selectedRowForDuplication.find('input, select').each(function() {
-                const field = $(this).attr('name').split('.').pop();
-                originalData[field] = $(this).val();
-            });
+      // Seleccionar todo / deseleccionar
+      $('#selectAllRows').change(function(){
+        $tbody.find('.row-select').prop('checked', this.checked);
+      });
 
-            const newRows = [];
-            for (let i = 0; i < count; i++) {
-                const newIndex = rowCount + i;
-                const newRow = selectedRowForDuplication.clone();
+      // Borrar filas seleccionadas
+      $('#btnDeleteSelected').click(() => {
+        $tbody.find('.row-select:checked').closest('tr').remove();
+      });
 
-                newRow.find('input, select').each(function() {
-                    const $el = $(this);
-                    const name = $el.attr('name').replace(/\[\d+\]/, `[${newIndex}]`);
-                    $el.attr('name', name)
-                       .val(originalData[name.split('.').pop()])
-                       .removeClass('input-validation-error')
-                       .next('.field-validation-error').remove();
+      // Borrar fila individual
+      $(document).on('click', '.btn-remove-row', function(){
+        $(this).closest('tr').remove();
+      });
 
-                    if (name.endsWith('CodigoItem]')) {
-                        $el.val($el.val() + '-' + (i+1));
-                    }
-                });
+      // Preparar duplicación (abrir modal)
+      $(document).on('click', '.btn-duplicate-row', function(){
+        selectedRowForDuplication = $(this).closest('tr');
+        $('#duplicaModal').modal('show');
+      });
 
-                newRows.push(newRow);
-            }
+      // Confirmar duplicación N veces
+      $('#confirmDuplica').click(() => {
+        const count = Math.min(Math.max(1, parseInt($('#duplicaCount').val())||1), 20);
+        const data = {};
+        selectedRowForDuplication
+          .find('input[name], select[name]')
+          .each(function(){
+            let name = $(this).attr('name').split('.').pop();
+            data[name] = $(this).val();
+          });
 
-            $('#tbodyItems').append(newRows);
-            rowCount += count;
-            $('#duplicaModal').modal('hide');
-            $.validator.unobtrusive.parse('form');
-        });
+        for (let i = 0; i < count; i++) {
+          addRow(data);
+        }
+        $('#duplicaModal').modal('hide');
+      });
 
-        // Eliminar fila
-        $(document).on('click', '.btn-remove-row', function() {
-            $(this).closest('tr').remove();
-            reindexRows();
-        });
+      // Al cambiar producto, rellenar dependientes
+      $(document).on('change', 'select[name$=".CodigoProducto"]', function(){
+        const code = $(this).val(), info = productInfo[code] || {};
+        const $r = $(this).closest('tr');
+        $r.find('.departamento-field').val(info.Departamento || '');
+        $r.find('.categoria-field') .val(info.Categoria    || '');
+        $r.find('.linea-field')     .val(info.LineaServicio|| '');
+        $r.find('.sublinea-field')  .val(info.SubLineaServicio|| '');
+      });
 
-        // Reindexar filas
-        const reindexRows = () => {
-            $('#tbodyItems tr').each(function(index) {
-                $(this).find('input, select').attr('name', (i, name) =>
-                    name.replace(/\[\d+\]/, `[${index}]`)
-                );
-            });
-            rowCount = $('#tbodyItems tr').length;
-        };
-
-        // Inicializar con una fila si está vacío
-    @if (!Model.Items.Any())
-    {
-        <text>$('#btnAddRow').click();</text>
-    }
+      // Inicial: agrego la primera fila
+      addRow();
     });
-    
 </script>
-	

@@ -1,139 +1,76 @@
 ﻿using InventarioLPS.Data;
+using InventarioLPS.Data.Entities;
 using InventarioLPS.Models.Inventario;
 using InventarioLPS.Services.Mappings;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
+
 
 namespace InventarioLPS.Controllers
 {
     public class InventarioController : Controller
     {
         private readonly InventarioLPSContext _context;
-        private readonly SelectList _formasRegistro;
-        private readonly SelectList _proveedores;
-        private readonly SelectList _productos;
-        private readonly SelectList _ubicaciones;
-        private readonly SelectList _estatus;
-        private readonly SelectList _clasificaciones;
 
         public InventarioController(InventarioLPSContext context)
         {
             _context = context;
 
-            _formasRegistro = new SelectList(_context.FormaRegistro, "Id", "Nombre");
-            _proveedores = new SelectList(_context.Proveedor, "Id", "NombreComercial");
-            _productos = new SelectList(_context.Producto, "Codigo", "Nombre");
-            _ubicaciones = new SelectList(_context.Ubicacion, "Id", "Nombre");
-            _estatus = new SelectList(_context.Estatus, "Id", "Nombre");
-            _clasificaciones = new SelectList(_context.Clasificacion, "Id", "Nombre");
         }
         // GET: InventarioController
         public async Task<IActionResult> Index()
         {
-            var itemsInventario = await _context.ItemInventario
-                .Include(i => i.IdInformacionRegistroNavigation)
+            List<ItemInventario> inventario = await _context.ItemInventario
+                .Include(i => i.IdInformacionRegistroNavigation.IdFormaRegistroNavigation)
                 .Include(i => i.IdProveedorNavigation)
                 .Include(i => i.CodigoProductoNavigation)
                 .Include(i => i.IdUbicacionNavigation)
                 .Include(i => i.IdClasificacionNavigation)
                 .ToListAsync();
 
-            var inventarioViewModel = InventarioMapping.ToViewModelList(itemsInventario);
+            var inventarioViewModel = InventarioMapping.ToViewModelList(inventario);
 
             return View(inventarioViewModel);
         }
 
-        // GET: InventarioController/Create
-        public ActionResult Create()
+        // GET: Inventario/Create
+        public async Task<IActionResult> Create()
         {
-            LoadViewData();
-            return View(new RegistroInventarioViewModel());
+            var model = await BuildCreateViewModelAsync();
+            return View(model);
         }
 
-
-        public async Task<IActionResult> GetNewItemRow(int index)
-        {
-
-            ViewData["Index"] = index;
-            LoadViewData();
-            return PartialView("_ItemInventarioPartial", new ItemInventarioViewModel());
-            //try
-            //{
-            //    ViewData["Index"] = index;
-            //    return PartialView("~/Views/Inventario/_ItemInventarioPartial.cshtml", new ItemInventarioViewModel());
-            //}
-            //catch (Exception ex)
-            //{
-            //    System.Diagnostics.Debug.WriteLine(ex, "Error al generar nueva fila por cantidad");
-            //    return StatusCode(500, "Error al generar nueva fila por cantidad");
-            //}
-        }
 
 
         // POST: InventarioController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(RegistroInventarioViewModel model)
+        public async Task<IActionResult> Create(CreateRegistroInventarioViewModel model)
         {
-
             if (!ModelState.IsValid)
             {
-                LoadViewData();
-                return View(model);
+                var modelInvalid = await BuildCreateViewModelAsync();
+                modelInvalid.Items = model.Items;
+                return View(modelInvalid);
             }
+            
             try
             {
-                //// 1. Guardar información del registro
-                //var registro = new InformacionRegistro
-                //{
-                //    FormaRegistro = model.FormaRegistro,
-                //    NumeroDocumento = model.NumeroDocumento,
-                //    FechaCompra = model.FechaCompra,
-                //    MontoTotal = model.MontoTotal
-                //};
-
-                //_context.Add(registro);
-                //await _context.SaveChangesAsync();
-
-                //// 2. Guardar items del inventario
-                //foreach (var item in model.Items)
-                //{
-                //    var itemInventario = new ItemInventario
-                //    {
-                //        IdInformacionRegistro = registro.Id,
-                //        CodigoItem = item.CodigoItem,
-                //        Cantidad = item.Cantidad,
-                //        ValorSinIva = item.ValorSinIva,
-                //        IdProveedor = item.Proveedor,
-                //        CodigoProducto = item.Producto,
-                //        Departamento = item.Departamento,
-                //        Categoria = item.Categoria,
-                //        LineaServicio = item.LineaServicio,
-                //        SubLineaServicio = item.SubLineaServicio,
-                //        DescripcionEspecifica = item.DescripcionEspecifica,
-                //        EspecificacionesTecnicas = item.EspecificacionesTecnicas,
-                //        NumeroParteFabricante = item.NumeroParteFabricante,
-                //        NumeroSerieLps = item.NumeroSerieLps,
-                //        IdUbicacion = item.Ubicacion,
-                //        IdEstatus = item.Estatus,
-                //        IdClasificacion = item.Clasificacion
-                //    };
-
-                //    _context.Add(itemInventario);
-                //}
-
-                //await _context.SaveChangesAsync();
+                var newRegister = InventarioMapping.ToRegisterData(model);
+                await _context.InformacionRegistro.AddAsync(newRegister);
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
 
                 ModelState.AddModelError("", "Error al guardar: " + ex.Message);
-                LoadViewData();
                 return View(model);
             }
         }
+
 
         // GET: InventarioController/Edit/5
         public ActionResult Edit(int id)
@@ -176,14 +113,50 @@ namespace InventarioLPS.Controllers
                 return View();
             }
         }
-        private void LoadViewData()
+
+        private async Task<CreateRegistroInventarioViewModel> BuildCreateViewModelAsync()
         {
-            ViewData["FormasRegistro"] = _formasRegistro;
-            ViewData["Proveedores"] = _proveedores;
-            ViewData["Productos"] = _productos;
-            ViewData["Ubicaciones"] = _ubicaciones;
-            ViewData["Estatus"] = _estatus;
-            ViewData["Clasificaciones"] = _clasificaciones;
+            var formas = await _context.FormaRegistro.ToListAsync();
+            var proveedores = await _context.Proveedor.ToListAsync();
+            var productos = await _context.Producto.ToListAsync();
+            var ubicaciones = await _context.Ubicacion.ToListAsync();
+            var estatus = await _context.Estatus.ToListAsync();
+            var clasificaciones = await _context.Clasificacion.ToListAsync();
+
+            var productoInfo = await _context.Producto
+                .Include(p => p.IdDepartamentoNavigation)
+                .Include(p => p.IdCategoriaNavigation)
+                .Include(p => p.IdLineaServicioNavigation)
+                .Include(p => p.IdSubLineaServicioNavigation)
+                .Select(p => new {
+                    p.Codigo,
+                    Departamento = p.IdDepartamentoNavigation.Nombre,
+                    Categoria = p.IdCategoriaNavigation.Nombre,
+                    LineaServicio = p.IdLineaServicioNavigation.Nombre,
+                    SubLineaServicio = p.IdSubLineaServicioNavigation != null
+                                       ? p.IdSubLineaServicioNavigation.Nombre
+                                       : ""
+                })
+                .ToListAsync();
+
+            return new CreateRegistroInventarioViewModel
+            {
+                FormasRegistroOptions = new SelectList(formas, "Id", "Nombre"),
+                ProveedoresOptions = new SelectList(proveedores, "Id", "NombreComercial"),
+                ProductosOptions = new SelectList(productos, "Codigo", "Nombre"),
+                UbicacionesOptions = new SelectList(ubicaciones, "Id", "Nombre"),
+                EstatusOptions = new SelectList(estatus, "Id", "Nombre"),
+                ClasificacionesOptions = new SelectList(clasificaciones, "Id", "Nombre"),
+                ProductInfoJson = JsonSerializer.Serialize(
+                    productoInfo.ToDictionary(x => x.Codigo, x => new {
+                        x.Departamento,
+                        x.Categoria,
+                        x.LineaServicio,
+                        x.SubLineaServicio
+                    }),
+                    new JsonSerializerOptions()
+                )
+            };
         }
     }
 }

@@ -5,6 +5,7 @@ namespace InventarioLPS.Models.Inventario
 {
     public class RegistroInventarioViewModel
     {
+        // CAMPOS PARA EL DOCUMENTO
 
         [Required(ErrorMessage = "*Campo requerido.")]
         public string FormaRegistro { get; set; }

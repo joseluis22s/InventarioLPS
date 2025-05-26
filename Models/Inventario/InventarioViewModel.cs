@@ -16,7 +16,7 @@
 
         public string LineaServicio { get; set; }
 
-        public string SubLineaServicio { get; set; }
+        public string? SubLineaServicio { get; set; }
 
         public DateTime FechaCompra { get; set; }
 
