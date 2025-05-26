@@ -20,7 +20,9 @@
 
         public DateTime FechaCompra { get; set; }
 
-        public decimal ValorSinIva { get; set; }
+        public decimal ValorUnitarioSinIva { get; set; }
+
+        public decimal TotalSinIva { get; set; }
 
         public string Proveedor { get; set; }
 

@@ -49,9 +49,9 @@
                 <span asp-validation-for="EspecificacionesTecnicas" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ValorSinIva" class="control-label"></label>
-                <input asp-for="ValorSinIva" class="form-control" />
-                <span asp-validation-for="ValorSinIva" class="text-danger"></span>
+                <label asp-for="ValorUnitarioSinIva" class="control-label"></label>
+                <input asp-for="ValorUnitarioSinIva" class="form-control" />
+                <span asp-validation-for="ValorUnitarioSinIva" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="NumeroParteFabricante" class="control-label"></label>
@@ -68,7 +68,7 @@
                 <input asp-for="Estatus" class="form-control" />
                 <span asp-validation-for="Estatus" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            @* <div class="form-group">
                 <label asp-for="IdUbicacion" class="control-label"></label>
                 <select asp-for="IdUbicacion" class="form-control" asp-items="ViewBag.IdUbicacion"></select>
                 <span asp-validation-for="IdUbicacion" class="text-danger"></span>
@@ -87,7 +87,7 @@
                 <label asp-for="IdProveedor" class="control-label"></label>
                 <select asp-for="IdProveedor" class="form-control" asp-items="ViewBag.IdProveedor"></select>
                 <span asp-validation-for="IdProveedor" class="text-danger"></span>
-            </div>
+            </div> *@
             <div class="form-group">
                 <label asp-for="IdInformacionRegistro" class="control-label"></label>
                 <select asp-for="IdInformacionRegistro" class="form-control" asp-items="ViewBag.IdInformacionRegistro"></select>

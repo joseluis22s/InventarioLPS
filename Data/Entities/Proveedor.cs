@@ -24,6 +24,4 @@ public partial class Proveedor
     public string Correo { get; set; }
 
     public virtual ICollection<CorreoAdicionalProveedor> CorreoAdicionalProveedor { get; set; } = new List<CorreoAdicionalProveedor>();
-
-    public virtual ICollection<ItemInventario> ItemInventario { get; set; } = new List<ItemInventario>();
 }

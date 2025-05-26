@@ -18,7 +18,7 @@ namespace InventarioLPS.Controllers
         // GET: ItemsInventario
         public async Task<IActionResult> Index()
         {
-            var inventarioLPSContext = _context.ItemInventario.Include(i => i.CodigoProductoNavigation).Include(i => i.IdClasificacionNavigation).Include(i => i.IdInformacionRegistroNavigation).Include(i => i.IdProveedorNavigation).Include(i => i.IdUbicacionNavigation);
+            var inventarioLPSContext = _context.ItemInventario.Include(i => i.CodigoProductoNavigation)/*.Include(i => i.IdClasificacionNavigation)*/.Include(i => i.IdInformacionRegistroNavigation)/*.Include(i => i.IdProveedorNavigation).Include(i => i.IdUbicacionNavigation)*/;
             return View(await inventarioLPSContext.ToListAsync());
         }
 
@@ -32,10 +32,10 @@ namespace InventarioLPS.Controllers
 
             var itemInventario = await _context.ItemInventario
                 .Include(i => i.CodigoProductoNavigation)
-                .Include(i => i.IdClasificacionNavigation)
+                //.Include(i => i.IdClasificacionNavigation)
                 .Include(i => i.IdInformacionRegistroNavigation)
-                .Include(i => i.IdProveedorNavigation)
-                .Include(i => i.IdUbicacionNavigation)
+                //.Include(i => i.IdProveedorNavigation)
+                //.Include(i => i.IdUbicacionNavigation)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (itemInventario == null)
             {
@@ -71,10 +71,10 @@ namespace InventarioLPS.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CodigoProducto"] = new SelectList(_context.Producto, "Codigo", "Codigo", itemInventario.CodigoProducto);
-            ViewData["IdClasificacion"] = new SelectList(_context.Clasificacion, "Id", "Nombre", itemInventario.IdClasificacion);
-            ViewData["IdInformacionRegistro"] = new SelectList(_context.InformacionRegistro, "Id", "NumeroDocumento", itemInventario.IdInformacionRegistro);
-            ViewData["IdProveedor"] = new SelectList(_context.Proveedor, "Id", "Correo", itemInventario.IdProveedor);
-            ViewData["IdUbicacion"] = new SelectList(_context.Ubicacion, "Id", "Nombre", itemInventario.IdUbicacion);
+            //ViewData["IdClasificacion"] = new SelectList(_context.Clasificacion, "Id", "Nombre", itemInventario.IdClasificacion);
+            //ViewData["IdInformacionRegistro"] = new SelectList(_context.InformacionRegistro, "Id", "NumeroDocumento", itemInventario.IdInformacionRegistro);
+            //ViewData["IdProveedor"] = new SelectList(_context.Proveedor, "Id", "Correo", itemInventario.IdProveedor);
+            //ViewData["IdUbicacion"] = new SelectList(_context.Ubicacion, "Id", "Nombre", itemInventario.IdUbicacion);
             return View(itemInventario);
         }
 
@@ -92,10 +92,10 @@ namespace InventarioLPS.Controllers
                 return NotFound();
             }
             ViewData["CodigoProducto"] = new SelectList(_context.Producto, "Codigo", "Codigo", itemInventario.CodigoProducto);
-            ViewData["IdClasificacion"] = new SelectList(_context.Clasificacion, "Id", "Nombre", itemInventario.IdClasificacion);
-            ViewData["IdInformacionRegistro"] = new SelectList(_context.InformacionRegistro, "Id", "NumeroDocumento", itemInventario.IdInformacionRegistro);
-            ViewData["IdProveedor"] = new SelectList(_context.Proveedor, "Id", "Correo", itemInventario.IdProveedor);
-            ViewData["IdUbicacion"] = new SelectList(_context.Ubicacion, "Id", "Nombre", itemInventario.IdUbicacion);
+            //ViewData["IdClasificacion"] = new SelectList(_context.Clasificacion, "Id", "Nombre", itemInventario.IdClasificacion);
+            //ViewData["IdInformacionRegistro"] = new SelectList(_context.InformacionRegistro, "Id", "NumeroDocumento", itemInventario.IdInformacionRegistro);
+            //ViewData["IdProveedor"] = new SelectList(_context.Proveedor, "Id", "Correo", itemInventario.IdProveedor);
+            //ViewData["IdUbicacion"] = new SelectList(_context.Ubicacion, "Id", "Nombre", itemInventario.IdUbicacion);
             return View(itemInventario);
         }
 
@@ -132,10 +132,10 @@ namespace InventarioLPS.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CodigoProducto"] = new SelectList(_context.Producto, "Codigo", "Codigo", itemInventario.CodigoProducto);
-            ViewData["IdClasificacion"] = new SelectList(_context.Clasificacion, "Id", "Nombre", itemInventario.IdClasificacion);
-            ViewData["IdInformacionRegistro"] = new SelectList(_context.InformacionRegistro, "Id", "NumeroDocumento", itemInventario.IdInformacionRegistro);
-            ViewData["IdProveedor"] = new SelectList(_context.Proveedor, "Id", "Correo", itemInventario.IdProveedor);
-            ViewData["IdUbicacion"] = new SelectList(_context.Ubicacion, "Id", "Nombre", itemInventario.IdUbicacion);
+            //ViewData["IdClasificacion"] = new SelectList(_context.Clasificacion, "Id", "Nombre", itemInventario.IdClasificacion);
+            //ViewData["IdInformacionRegistro"] = new SelectList(_context.InformacionRegistro, "Id", "NumeroDocumento", itemInventario.IdInformacionRegistro);
+            //ViewData["IdProveedor"] = new SelectList(_context.Proveedor, "Id", "Correo", itemInventario.IdProveedor);
+            //ViewData["IdUbicacion"] = new SelectList(_context.Ubicacion, "Id", "Nombre", itemInventario.IdUbicacion);
             return View(itemInventario);
         }
 
@@ -148,11 +148,11 @@ namespace InventarioLPS.Controllers
             }
 
             var itemInventario = await _context.ItemInventario
-                .Include(i => i.CodigoProductoNavigation)
-                .Include(i => i.IdClasificacionNavigation)
-                .Include(i => i.IdInformacionRegistroNavigation)
-                .Include(i => i.IdProveedorNavigation)
-                .Include(i => i.IdUbicacionNavigation)
+                //.Include(i => i.CodigoProductoNavigation)
+                //.Include(i => i.IdClasificacionNavigation)
+                //.Include(i => i.IdInformacionRegistroNavigation)
+                //.Include(i => i.IdProveedorNavigation)
+                //.Include(i => i.IdUbicacionNavigation)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (itemInventario == null)
             {

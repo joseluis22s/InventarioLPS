@@ -1,324 +1,393 @@
 ﻿@model InventarioLPS.Models.Inventario.CreateRegistroInventarioViewModel
 
 @{
-    ViewData["Title"] = "Nuevo registro de inventario";
+	ViewData["Title"] = "Nuevo registro de inventario";
 }
 
 @* — MODAL PARA DUPLICAR N VECES — *@
 <div class="modal" id="duplicaModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Número de duplicados</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <div class="mb-3">
-                    <label class="form-label">¿Cuántas copias desea crear?</label>
-                    <input type="number" id="duplicaCount" min="1" max="20" value="1"
-                           class="form-control input-sm" required />
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary btn-form"
-                        data-bs-dismiss="modal">
-                    Cancelar
-                </button>
-                <button type="button" id="confirmDuplica"
-                        class="btn btn-primary btn-form">
-                    Duplicar
-                </button>
-            </div>
-        </div>
-    </div>
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Número de duplicados</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+			</div>
+			<div class="modal-body">
+				<div class="mb-3">
+					<label class="form-label">¿Cuántas copias desea crear?</label>
+					<input type="number" id="duplicaCount" min="1" max="20" value="1"
+						   class="form-control input-sm" required />
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary btn-form"
+						data-bs-dismiss="modal">
+					Cancelar
+				</button>
+				<button type="button" id="confirmDuplica"
+						class="btn btn-primary btn-form">
+					Duplicar
+				</button>
+			</div>
+		</div>
+	</div>
 </div>
 
 <script>
-    var productInfo = @Html.Raw(Model.ProductInfoJson);
+	var productInfo = @Html.Raw(Model.ProductInfoJson);
 </script>
 
 @* — TEMPLATE PARA CLONAR FILAS — *@
 <template id="row-template">
-    <tr>
-        @* BOTONES PARA ELIMINAR O DUPLICAR FILA*@
-        <td class="fs-td">
-            <button type="button" class="btn btn-sm btn-outline-primary btn-duplicate-row px-2 py-1">
-                <i class="bi bi-copy"></i>
-            </button>
-            <button type="button" class="btn btn-sm btn-danger btn-remove-row px-2 py-1">
-                <i class="bi bi-x-circle"></i>
-            </button>
-        </td>
-        @* CHECKBOX PARA CADA FILA *@
-        <td class="fs-td">
-            <input type="checkbox" class="row-select form-check-input" />
-        </td>
-        @* CodigoItem *@
-        <td class="fs-td td-codigo">
-            <input name="Items[__idx__].CodigoItem" class="form-control input-sm" />
-            <span class="text-danger form-control-sm"></span>
-        </td>
-        @* Cantidad *@
-        <td class="fs-td td-cantidad">
-            <input type="number" name="Items[__idx__].Cantidad" class="form-control input-sm" />
-            <span class="text-danger form-control-sm"></span>
-        </td>
-		@* ValorsinIVA *@
-        <td class="fs-td td-valor">
-            <input type="number" step="0.01" name="Items[__idx__].ValorSinIva" class="form-control input-sm" />
-            <span class="text-danger form-control-sm"></span>
-        </td>
-		@* Proveedor *@
-        <td class="fs-td td-proveedor">
-            <select name="Items[__idx__].ProveedorId" class="form-select input-sm">
-                <option value="">-- Seleccione --</option>
-                @foreach (var o in Model.ProveedoresOptions)
-                {
-                    <option value="@o.Value">@o.Text</option>
-                }
-            </select>
-            <span class="text-danger form-control-sm"></span>
-        </td>
-        @* Producto *@
-        <td class="fs-td td-producto">
-            <select name="Items[__idx__].CodigoProducto" class="form-select input-sm">
-                <option value="">-- Seleccione --</option>
-                @foreach (var o in Model.ProductosOptions)
-                {
-                    <option value="@o.Value">@o.Text</option>
-                }
-            </select>
-            <span class="text-danger form-control-sm"></span>
-        </td>
-        @* Departamento *@
-        <td class="fs-td td-departamento">
-            <input name="Items[__idx__].Departamento" readonly class="form-control input-sm departamento-field" />
-        </td>
-        @* Categoria *@
-        <td class="fs-td td-categoria">
-            <input name="Items[__idx__].Categoria" readonly class="form-control input-sm categoria-field" />
-        </td>
+	<tr>
+		@* BOTONES PARA ELIMINAR O DUPLICAR FILA*@
+		<td class="fs-td">
+			<button type="button" class="btn btn-sm btn-outline-primary btn-duplicate-row px-2 py-1">
+				<i class="bi bi-copy"></i>
+			</button>
+			<button type="button" class="btn btn-sm btn-danger btn-remove-row px-2 py-1">
+				<i class="bi bi-x-circle"></i>
+			</button>
+		</td>
+		@* CHECKBOX PARA CADA FILA *@
+		<td class="fs-td">
+			<input type="checkbox" class="row-select form-check-input" />
+		</td>
+		@* CodigoItem *@
+		<td class="fs-td td-codigo">
+			<input name="Items[__idx__].CodigoItem" class="form-control input-sm" />
+			<span data-valmsg-for="Items[__idx__].CodigoItem" data-valmsg-replace="true" class="text-danger label-sm"></span>
+		</td>
+		@* ValorUnitarioSinIVA *@
+		<td class="fs-td td-valor">
+			<input type="number" step="0.01" name="Items[__idx__].ValorUnitarioSinIva" class="form-control input-sm" />
+			<span data-valmsg-for="Items[__idx__].ValorUnitarioSinIva" data-valmsg-replace="true" class="text-danger form-control-sm"></span>
+		</td>
+		@* Cantidad *@
+		<td class="fs-td td-cantidad">
+			<input type="number" name="Items[__idx__].Cantidad" class="form-control input-sm" />
+			<span data-valmsg-for="Items[__idx__].Cantidad" data-valmsg-replace="true" class="text-danger label-sm"></span>
+		</td>
+		@* TotalSinIVA *@
+		<td class="fs-td td-valor">
+			<input type="number" step="0.01" name="Items[__idx__].TotalSinIva" class="form-control input-sm readonly" readonly />
+			<span data-valmsg-for="Items[__idx__].TotalSinIva" data-valmsg-replace="true" class="text-danger label-sm"></span>
+		</td>
+		@* Producto *@
+		<td class="fs-td td-producto">
+			<select name="Items[__idx__].CodigoProducto" class="form-select input-sm">
+				<option value="">-- Seleccione --</option>
+				@foreach (var o in Model.ProductosOptions)
+				{
+					<option value="@o.Value">@o.Text</option>
+				}
+			</select>
+			<span data-valmsg-for="Items[__idx__].CodigoProducto" data-valmsg-replace="true" class="text-danger label-sm"></span>
+		</td>@* Departamento *@
+		<td class="fs-td td-departamento">
+			<input name="Items[__idx__].Departamento" readonly class="form-control input-sm departamento-field readonly" />
+			<span data-valmsg-for="Items[__idx__].Cantidad" data-valmsg-replace="true" class="text-danger label-sm"></span>
+		</td>
+		@* Categoria *@
+		<td class="fs-td td-categoria">
+			<input name="Items[__idx__].Categoria" readonly class="form-control input-sm categoria-field readonly" />
+			<span data-valmsg-for="Items[__idx__].Cantidad" data-valmsg-replace="true" class="text-danger label-sm"></span>
+		</td>
 		@* LineaServicio *@
-        <td class="fs-td td-linea">
-            <input name="Items[__idx__].LineaServicio" readonly class="form-control input-sm linea-field" />
-        </td>
+		<td class="fs-td td-linea">
+			<input name="Items[__idx__].LineaServicio" readonly class="form-control input-sm linea-field readonly" />
+			<span data-valmsg-for="Items[__idx__].Cantidad" data-valmsg-replace="true" class="text-danger label-sm"></span>
+		</td>
 		@* SubLineaServicio *@
-        <td class="fs-td td-sublinea">
-            <input name="Items[__idx__].SubLineaServicio" readonly class="form-control input-sm sublinea-field" />
-        </td>
-        @* DescripcionEspecifica *@
-        <td class="fs-td td-descripcion">
-            <input name="Items[__idx__].DescripcionEspecifica" class="form-control input-sm" />
-            <span class="text-danger form-control-sm"></span>
-        </td>
+		<td class="fs-td td-sublinea">
+			<input name="Items[__idx__].SubLineaServicio" readonly class="form-control input-sm sublinea-field readonly" />
+			<span data-valmsg-for="Items[__idx__].Cantidad" data-valmsg-replace="true" class="text-danger label-sm"></span>
+		</td>
+		@* DescripcionEspecifica *@
+		<td class="fs-td td-descripcion">
+			<input name="Items[__idx__].DescripcionEspecifica" class="form-control input-sm" />
+			<span data-valmsg-for="Items[__idx__].Cantidad" data-valmsg-replace="true" class="text-danger label-sm"></span>
+		</td>
 		@* EspecificacionesTecnicas *@
-        <td class="fs-td td-especificaciones">
-            <input name="Items[__idx__].EspecificacionesTecnicas" class="form-control input-sm" />
-            <span class="text-danger form-control-sm"></span>
-        </td>
+		<td class="fs-td td-especificaciones">
+			<input name="Items[__idx__].EspecificacionesTecnicas" class="form-control input-sm" />
+			<span data-valmsg-for="Items[__idx__].Cantidad" data-valmsg-replace="true" class="text-danger label-sm"></span>
+		</td>
 		@* NumeroParteFabricante *@
-        <td class="fs-td td-parte">
-            <input name="Items[__idx__].NumeroParteFabricante" class="form-control input-sm" />
-            <span class="text-danger form-control-sm"></span>
-        </td>
+		<td class="fs-td td-parte">
+			<input name="Items[__idx__].NumeroParteFabricante" class="form-control input-sm" />
+			<span data-valmsg-for="Items[__idx__].Cantidad" data-valmsg-replace="true" class="text-danger label-sm"></span>
+		</td>
 		@* NumeroSerieLps *@
-        <td class="fs-td td-serie">
-            <input name="Items[__idx__].NumeroSerieLps" class="form-control input-sm" />
-            <span class="text-danger form-control-sm"></span>
-        </td>
-        @* Ubicacion *@
-        <td class="fs-td td-ubicacion">
-            <select name="Items[__idx__].UbicacionId" class="form-select input-sm">
-                <option value="">-- Seleccione --</option>
-                @foreach (var o in Model.UbicacionesOptions)
-                {
-                    <option value="@o.Value">@o.Text</option>
-                }
-            </select>
-            <span class="text-danger form-control-sm"></span>
-        </td>
+		<td class="fs-td td-serie">
+			<input name="Items[__idx__].NumeroSerieLps" class="form-control input-sm" />
+			<span data-valmsg-for="Items[__idx__].Cantidad" data-valmsg-replace="true" class="text-danger label-sm"></span>
+		</td>
 		@* Estatus *@
-        <td class="fs-td td-estatus">
-            <select name="Items[__idx__].Estatus" class="form-select input-sm">
-                <option value="">-- Seleccione --</option>
-                @foreach (var o in Model.EstatusOptions)
-                {
-                    <option value="@o.Value">@o.Text</option>
-                }
-            </select>
-            <span class="text-danger form-control-sm"></span>
-        </td>
+		<td class="fs-td td-estatus">
+			<select name="Items[__idx__].Estatus" class="form-select input-sm">
+				<option value="">-- Seleccione --</option>
+				@foreach (var o in Model.EstatusOptions)
+				{
+					<option value="@o.Value">@o.Text</option>
+				}
+			</select>
+			<span data-valmsg-for="Items[__idx__].Estatus" data-valmsg-replace="true" class="text-danger label-sm"></span>
+		</td>
+		@* Ubicacion *@
+		<td class="fs-td td-ubicacion">
+			<select name="Items[__idx__].Ubicacion" class="form-select input-sm">
+				<option value="">-- Seleccione --</option>
+				@foreach (var o in Model.UbicacionesOptions)
+				{
+					<option value="@o.Value">@o.Text</option>
+				}
+			</select>
+			<span data-valmsg-for="Items[__idx__].Ubicacion" data-valmsg-replace="true" class="text-danger label-sm"></span>
+		</td>
 		@* Clasificacion *@
-        <td class="fs-td td-clasificacion">
-            <select name="Items[__idx__].ClasificacionId" class="form-select input-sm">
-                <option value="">-- Seleccione --</option>
-                @foreach (var o in Model.ClasificacionesOptions)
-                {
-                    <option value="@o.Value">@o.Text</option>
-                }
-            </select>
-            <span class="text-danger form-control-sm"></span>
-        </td>
-    </tr>
+		<td class="fs-td td-clasificacion">
+			<select name="Items[__idx__].Clasificacion" class="form-select input-sm">
+				<option value="">-- Seleccione --</option>
+				@foreach (var o in Model.ClasificacionesOptions)
+				{
+					<option value="@o.Value">@o.Text</option>
+				}
+			</select>
+			<span data-valmsg-for="Items[__idx__].Clasificacion" data-valmsg-replace="true" class="text-danger label-sm"></span>
+		</td>
+		@* Proveedor *@
+		<td class="fs-td td-proveedor">
+			<select name="Items[__idx__].Proveedor" class="form-select input-sm">
+				<option value="">-- Seleccione --</option>
+				@foreach (var o in Model.ProveedoresOptions)
+				{
+					<option value="@o.Value">@o.Text</option>
+				}
+			</select>
+			<span data-valmsg-for="Items[__idx__].Proveedor" data-valmsg-replace="true" class="text-danger label-sm"></span>
+		</td>
+	</tr>
 </template>
 
 
 <h5 class="ps-1">@ViewData["Title"]</h5>
 
-<form asp-action="Create" class="container-fluid border-top border-start">
-    <div class="row mt-3">
-        <div class="col-12">
-            <button type="submit" class="btn btn-primary btn-form">Guardar</button>
-        </div>
-    </div>
+<form asp-action="Create" class="container-fluid border-top border-start" id="formulario">
+	<div class="row mt-3">
+		<div class="col-12">
+			<button id="guardarBtn" class="btn btn-primary" disabled>
+				Guardar
+			</button>
 
-    <div class="row mx-2 mt-1">
-        <div class="col-8 col-md-6 col-lg-2">
-            <label asp-for="MontoTotal" class="form-label label-sm"></label>
-            <input asp-for="MontoTotal" class="form-control input-sm" />
-            <span asp-validation-for="MontoTotal" class="text-danger label-sm"></span>
-        </div>
-        <div class="col-8 col-md-6 col-lg-3">
-            <label asp-for="NumeroDocumento" class="form-label label-sm">No. Documento</label>
-            <input asp-for="NumeroDocumento" class="form-control input-sm" />
-            <span asp-validation-for="NumeroDocumento" class="text-danger label-sm"></span>
-        </div>
-        <div class="w-100 d-md-none"></div>
-        <div class="col-8 col-md-6 col-lg-4">
-            <label asp-for="FormaRegistroId" class="form-label label-sm">Forma de registro</label>
-            <select asp-for="FormaRegistroId" asp-items="Model.FormasRegistroOptions"
-                    class="form-select input-sm">
-                <option value="">-- Seleccione --</option>
-            </select>
-            <span asp-validation-for="FormaRegistroId" class="text-danger label-sm"></span>
-        </div>
-        <div class="col-8 col-md-6 col-lg-3">
-            <label asp-for="FechaCompra" class="form-label label-sm"></label>
-            <input asp-for="FechaCompra" class="form-control input-sm" />
-            <span asp-validation-for="FechaCompra" class="text-danger label-sm"></span>
-        </div>
-    </div>
+		</div>
+	</div>
+	<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+	<div class="row mx-2 mt-1">
+		<div class="col-8 col-md-6 col-lg-2">
+			<label asp-for="MontoTotal" class="form-label label-sm">Monto total</label>
+			<input asp-for="MontoTotal" class="form-control input-sm" id="montoIngresado" />
+			<span asp-validation-for="MontoTotal" class="text-danger label-sm"></span>
+			<div id="montoError" class="text-danger label-sm" style="display:none;">
+				Monto total y sumatoria deben coincidir
+			</div>
+		</div>
+		<div class="col-8 col-md-6 col-lg-3">
+			<label asp-for="NumeroDocumento" class="form-label label-sm">No. Documento</label>
+			<input asp-for="NumeroDocumento" class="form-control input-sm" />
+			<span asp-validation-for="NumeroDocumento" class="text-danger label-sm"></span>
+		</div>
+		<div class="w-100 d-md-none"></div>
+		<div class="col-8 col-md-6 col-lg-4">
+			<label asp-for="FormaRegistroId" class="form-label label-sm">Forma de registro</label>
+			<select asp-for="FormaRegistroId" asp-items="Model.FormasRegistroOptions"
+					class="form-select input-sm">
+				<option value="">-- Seleccione --</option>
+			</select>
+			<span asp-validation-for="FormaRegistroId" class="text-danger label-sm"></span>
+		</div>
+		<div class="col-8 col-md-6 col-lg-3">
+			<label asp-for="FechaCompra" class="form-label label-sm">Fecha de compra</label>
+			<input asp-for="FechaCompra" class="form-control input-sm" />
+			<span asp-validation-for="FechaCompra" class="text-danger label-sm"></span>
+		</div>
+	</div>
 
-    <hr class="mx-2" />
+	<hr class="mx-2" />
 
-    <div class="row overflow-auto">
-        <div class="d-flex justify-content-between align-items-center mb-2">
-            <h6>Registro de items</h6>
-            <div>
-                <button type="button" id="btnAddRow" class="btn btn-outline-dark btn-form">
-                    <i class="bi bi-plus-lg"></i> Agregar fila
-                </button>
-                <button type="button" id="btnDeleteSelected" class="btn btn-outline-danger btn-form">
-                    <i class="bi bi-trash"></i> Borrar seleccionados
-                </button>
-            </div>
-        </div>
-        <div class="table-responsive">
-            <table class="table">
-                <thead class="fs-theader">
-                    <tr>
-                        <th></th>
-                        <th><input type="checkbox" id="selectAllRows" /></th>
-                        <th>Código</th>
-                        <th>Cantidad</th>
-                        <th>Valor sin IVA</th>
-                        <th>Proveedor</th>
-                        <th>Producto</th>
-                        <th>Departamento</th>
-                        <th>Categoría</th>
-                        <th>Linea de servicio</th>
-                        <th>Sub-línea</th>
-                        <th>Descrip. específica</th>
-                        <th>Especifi. técnicas</th>
-                        <th># fabricante</th>
-                        <th># serie LPS</th>
-                        <th>Ubicación</th>
-                        <th>Estatus</th>
-                        <th>Clasificación</th>
-                    </tr>
-                </thead>
-                <tbody id="tbodyItems" class="fs-tbody">
-                    @* filas generadas por JS *@
-                </tbody>
-            </table>
-        </div>
-    </div>
+	<div class="row overflow-auto">
+		<div class="d-flex justify-content-between align-items-center mb-2">
+			<h6>Registro de items</h6>
+			<div class="d-flex align-items-center mb-2">
+				<label class="form-label mb-0 me-2">Suma total sin IVA:</label>
+				<input type="text" id="sumaTotalSinIva" class="form-control form-control-sm w-auto " readonly />
+			</div>
+
+			<div>
+				<button type="button" id="btnAddRow" class="btn btn-outline-dark btn-form">
+					<i class="bi bi-plus-lg"></i> Agregar fila
+				</button>
+				<button type="button" id="btnDeleteSelected" class="btn btn-outline-danger btn-form">
+					<i class="bi bi-trash"></i> Borrar seleccionados
+				</button>
+			</div>
+		</div>
+		<div class="table-responsive">
+			<table class="table">
+				<thead class="fs-theader">
+					<tr>
+						<th></th>
+						<th><input type="checkbox" id="selectAllRows" /></th>
+						<th>Código</th>
+						<th>Valor Unit. sin IVA</th>
+						<th>Cantidad</th>
+						<th>Total sin IVA</th>
+						<th>Producto</th>
+						<th>Departamento</th>
+						<th>Categoría</th>
+						<th>Linea de servicio</th>
+						<th>Sub-línea</th>
+						<th>Descrip. específica</th>
+						<th>Especifi. técnicas</th>
+						<th># fabricante</th>
+						<th># serie LPS</th>
+						<th>Estatus</th>
+						<th>Ubicación</th>
+						<th>Clasificación</th>
+						<th>Proveedor</th>
+					</tr>
+				</thead>
+				<tbody id="tbodyItems" class="fs-tbody">
+					@* filas generadas por JS *@
+				</tbody>
+			</table>
+		</div>
+	</div>
 </form>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    $(function() {
-      let rowCount = 0;
-      let selectedRowForDuplication = null;
-      const $tbody       = $('#tbodyItems');
-      const templateHtml = $('#row-template').html();
+	$(function() {
+		let rowCount = 0;
+		let selectedRowForDuplication = null;
+		const $tbody = $('#tbodyItems');
+		const templateHtml = $('#row-template').html();
 
-      function addRow(data = {}) {
-        let html = templateHtml.replace(/__idx__/g, rowCount);
-        const $row = $(html);
+		function addRow(data = {}) {
+			let html = templateHtml.replace(/__idx__/g, rowCount);
+			const $row = $(html);
+			for (let key in data) {
+				const $el = $row.find(`[name="Items[${rowCount}].${key}"]`);
+				if ($el.length) $el.val(data[key]).trigger('change');
+			}
+			if (!$row.find('input[name$=".Cantidad"]').val()) {
+				$row.find('input[name$=".Cantidad"]').val('0');
+			}
+			if (!$row.find('input[name$=".ValorUnitarioSinIva"]').val()) {
+				$row.find('input[name$=".ValorUnitarioSinIva"]').val('0');
+			}
+			$tbody.append($row);
+			rowCount++;
+			updateTotal($row);
+		}
 
-        // Rellenar datos si vienen (para duplicar)
-        for (let key in data) {
-          const $el = $row.find(`[name="Items[${rowCount}].${key}"]`);
-          if ($el.length) $el.val(data[key]).trigger('change');
-        }
+		$('#btnAddRow').click(() => addRow());
 
-        $tbody.append($row);
-        rowCount++;
-      }
+		$('#selectAllRows').change(function() {
+			$tbody.find('.row-select').prop('checked', this.checked);
+		});
 
-      // Agregar fila vacía
-      $('#btnAddRow').click(() => addRow());
+		$('#btnDeleteSelected').click(() => {
+			$tbody.find('.row-select:checked').closest('tr').remove();
+			updateMontoTotalCalculado();
+		});
 
-      // Seleccionar todo / deseleccionar
-      $('#selectAllRows').change(function(){
-        $tbody.find('.row-select').prop('checked', this.checked);
-      });
+		$(document).on('click', '.btn-remove-row', function() {
+			$(this).closest('tr').remove();
+			updateMontoTotalCalculado();
+		});
 
-      // Borrar filas seleccionadas
-      $('#btnDeleteSelected').click(() => {
-        $tbody.find('.row-select:checked').closest('tr').remove();
-      });
+		$(document).on('click', '.btn-duplicate-row', function() {
+			selectedRowForDuplication = $(this).closest('tr');
+			$('#duplicaModal').modal('show');
+		});
 
-      // Borrar fila individual
-      $(document).on('click', '.btn-remove-row', function(){
-        $(this).closest('tr').remove();
-      });
+		$('#confirmDuplica').click(() => {
+			const count = Math.min(Math.max(1, parseInt($('#duplicaCount').val()) || 1), 20);
+			const data = {};
+			selectedRowForDuplication.find('input[name], select[name]').each(function() {
+				let name = $(this).attr('name').split('.').pop();
+				data[name] = $(this).val();
+			});
+			for (let i = 0; i < count; i++) {
+				addRow(data);
+			}
+			$('#duplicaModal').modal('hide');
+			updateMontoTotalCalculado();
+		});
 
-      // Preparar duplicación (abrir modal)
-      $(document).on('click', '.btn-duplicate-row', function(){
-        selectedRowForDuplication = $(this).closest('tr');
-        $('#duplicaModal').modal('show');
-      });
+		$(document).on('change', 'select[name$=".CodigoProducto"]', function() {
+			const code = $(this).val(), info = productInfo[code] || {};
+			const $r = $(this).closest('tr');
+			$r.find('.departamento-field').val(info.Departamento || '');
+			$r.find('.categoria-field').val(info.Categoria || '');
+			$r.find('.linea-field').val(info.LineaServicio || '');
+			$r.find('.sublinea-field').val(info.SubLineaServicio || '');
+		});
 
-      // Confirmar duplicación N veces
-      $('#confirmDuplica').click(() => {
-        const count = Math.min(Math.max(1, parseInt($('#duplicaCount').val())||1), 20);
-        const data = {};
-        selectedRowForDuplication
-          .find('input[name], select[name]')
-          .each(function(){
-            let name = $(this).attr('name').split('.').pop();
-            data[name] = $(this).val();
-          });
+		addRow();
 
-        for (let i = 0; i < count; i++) {
-          addRow(data);
-        }
-        $('#duplicaModal').modal('hide');
-      });
+		$('#montoIngresado').on('input', validarSumatoria);
+	});
 
-      // Al cambiar producto, rellenar dependientes
-      $(document).on('change', 'select[name$=".CodigoProducto"]', function(){
-        const code = $(this).val(), info = productInfo[code] || {};
-        const $r = $(this).closest('tr');
-        $r.find('.departamento-field').val(info.Departamento || '');
-        $r.find('.categoria-field') .val(info.Categoria    || '');
-        $r.find('.linea-field')     .val(info.LineaServicio|| '');
-        $r.find('.sublinea-field')  .val(info.SubLineaServicio|| '');
-      });
+	function updateTotal($row) {
+		const cantidad = parseFloat($row.find('input[name$=".Cantidad"]').val()) || 0;
+		const valorUnit = parseFloat($row.find('input[name$=".ValorUnitarioSinIva"]').val()) || 0;
+		const total = cantidad * valorUnit;
+		$row.find('input[name$=".TotalSinIva"]').val(total.toFixed(2));
+		updateMontoTotalCalculado();
+	}
 
-      // Inicial: agrego la primera fila
-      addRow();
-    });
+	$(document).on('input', 'input[name$=".Cantidad"], input[name$=".ValorUnitarioSinIva"]', function() {
+		const $row = $(this).closest('tr');
+		updateTotal($row);
+	});
+
+	function updateMontoTotalCalculado() {
+		let suma = 0;
+		$('#tbodyItems tr').each(function() {
+			const val = parseFloat($(this).find('input[name$=".TotalSinIva"]').val()) || 0;
+			suma += val;
+		});
+		$('#sumaTotalSinIva').val(suma.toFixed(2));
+		validarSumatoria();
+	}
+
+	function validarSumatoria() {
+		const suma = parseFloat($('#sumaTotalSinIva').val()) || 0;
+		const montoIngresado = parseFloat($('#montoIngresado').val()) || 0;
+		const btnGuardar = $('#guardarBtn')[0];
+		const $montoError = $('#montoError');
+
+		if (suma === 0 || montoIngresado === 0 || suma !== montoIngresado) {
+			btnGuardar.disabled = true;
+			$montoError.show();
+		} else {
+			btnGuardar.disabled = false;
+			$montoError.hide();
+		}
+		return !btnGuardar.disabled;
+	}
+
+
+	$('#formulario').on('submit', function(e) {
+		if (!validarSumatoria()) {
+			e.preventDefault();
+			alert('La suma total sin IVA debe coincidir con el monto ingresado.');
+		}
+	});
 </script>
+
+
+
+

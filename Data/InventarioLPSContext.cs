@@ -272,6 +272,10 @@ public partial class InventarioLPSContext : DbContext
                 .IsRequired()
                 .HasMaxLength(120)
                 .IsUnicode(false);
+            entity.Property(e => e.Clasificacion)
+                .IsRequired()
+                .HasMaxLength(120)
+                .IsUnicode(false);
             entity.Property(e => e.CodigoItem)
                 .IsRequired()
                 .HasMaxLength(120)
@@ -311,37 +315,33 @@ public partial class InventarioLPSContext : DbContext
                 .HasMaxLength(100)
                 .IsUnicode(false)
                 .HasColumnName("NumeroSerieLPS");
+            entity.Property(e => e.Proveedor)
+                .IsRequired()
+                .HasMaxLength(500)
+                .IsUnicode(false);
             entity.Property(e => e.SubLineaServicio)
                 .HasMaxLength(120)
                 .IsUnicode(false);
-            entity.Property(e => e.ValorSinIva)
+            entity.Property(e => e.TotalSinIva)
                 .HasColumnType("decimal(18, 12)")
-                .HasColumnName("ValorSinIVA");
+                .HasColumnName("TotalSinIVA");
+            entity.Property(e => e.Ubicacion)
+                .IsRequired()
+                .HasMaxLength(120)
+                .IsUnicode(false);
+            entity.Property(e => e.ValorUnitarioSinIva)
+                .HasColumnType("decimal(18, 12)")
+                .HasColumnName("ValorUnitarioSinIVA");
 
             entity.HasOne(d => d.CodigoProductoNavigation).WithMany(p => p.ItemInventario)
                 .HasForeignKey(d => d.CodigoProducto)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_ItemInventario_Producto");
 
-            entity.HasOne(d => d.IdClasificacionNavigation).WithMany(p => p.ItemInventario)
-                .HasForeignKey(d => d.IdClasificacion)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_ItemInventario_Clasificacion");
-
             entity.HasOne(d => d.IdInformacionRegistroNavigation).WithMany(p => p.ItemInventario)
                 .HasForeignKey(d => d.IdInformacionRegistro)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_ItemInventario_InformacionRegistro");
-
-            entity.HasOne(d => d.IdProveedorNavigation).WithMany(p => p.ItemInventario)
-                .HasForeignKey(d => d.IdProveedor)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_RegistroItem_Proveedor");
-
-            entity.HasOne(d => d.IdUbicacionNavigation).WithMany(p => p.ItemInventario)
-                .HasForeignKey(d => d.IdUbicacion)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_ItemInventario_Ubicacion");
         });
 
         modelBuilder.Entity<ItemsNoOperativo>(entity =>
@@ -439,6 +439,7 @@ public partial class InventarioLPSContext : DbContext
 
         modelBuilder.Entity<Proveedor>(entity =>
         {
+            entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.Correo)
                 .IsRequired()
                 .HasMaxLength(120)

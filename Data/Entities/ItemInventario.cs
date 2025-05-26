@@ -14,6 +14,17 @@ public partial class ItemInventario
     /// </summary>
     public string CodigoItem { get; set; }
 
+    public decimal ValorUnitarioSinIva { get; set; }
+
+    public int Cantidad { get; set; }
+
+    public decimal TotalSinIva { get; set; }
+
+    /// <summary>
+    /// Clave foránea que ya tiene detalles
+    /// </summary>
+    public string CodigoProducto { get; set; }
+
     public string Departamento { get; set; }
 
     public string Categoria { get; set; }
@@ -26,38 +37,23 @@ public partial class ItemInventario
 
     public string EspecificacionesTecnicas { get; set; }
 
-    public decimal ValorSinIva { get; set; }
-
     public string NumeroParteFabricante { get; set; }
 
     public string NumeroSerieLps { get; set; }
 
     public string Estatus { get; set; }
 
-    public int IdUbicacion { get; set; }
+    public string Ubicacion { get; set; }
 
-    public int IdClasificacion { get; set; }
+    public string Clasificacion { get; set; }
 
-    /// <summary>
-    /// Clave foránea que ya tiene detalles
-    /// </summary>
-    public string CodigoProducto { get; set; }
-
-    public int IdProveedor { get; set; }
+    public string Proveedor { get; set; }
 
     public int IdInformacionRegistro { get; set; }
 
-    public int Cantidad { get; set; }
-
     public virtual Producto CodigoProductoNavigation { get; set; }
 
-    public virtual Clasificacion IdClasificacionNavigation { get; set; }
-
     public virtual InformacionRegistro IdInformacionRegistroNavigation { get; set; }
-
-    public virtual Proveedor IdProveedorNavigation { get; set; }
-
-    public virtual Ubicacion IdUbicacionNavigation { get; set; }
 
     public virtual ICollection<NovedadItem> NovedadItem { get; set; } = new List<NovedadItem>();
 

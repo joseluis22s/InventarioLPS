@@ -23,7 +23,7 @@
 			<th># fabricante</th>
 			<th># serie LPS</th>
 			<th>Estatus</th>
-			<th>
+			@* <th>
 				@Html.DisplayNameFor(model => model.CodigoProductoNavigation)
 			</th>
 			<th>
@@ -37,7 +37,7 @@
 			</th>
 			<th>
 				@Html.DisplayNameFor(model => model.IdUbicacionNavigation)
-			</th>
+			</th> *@
 		</tr>
 	</thead>
 	<tbody>
@@ -70,7 +70,7 @@
 					@Html.DisplayFor(modelItem => item.EspecificacionesTecnicas)
 				</td>
 				<td>
-					@Html.DisplayFor(modelItem => item.ValorSinIva)
+					@Html.DisplayFor(modelItem => item.ValorUnitarioSinIva)
 				</td>
 				<td>
 					@Html.DisplayFor(modelItem => item.NumeroParteFabricante)
@@ -85,16 +85,16 @@
 					@Html.DisplayFor(modelItem => item.CodigoProductoNavigation.Codigo)
 				</td>
 				<td>
-					@Html.DisplayFor(modelItem => item.IdClasificacionNavigation.Nombre)
+					@* @Html.DisplayFor(modelItem => item.IdClasificacionNavigation.Nombre) *@
 				</td>
 				<td>
 					@Html.DisplayFor(modelItem => item.IdInformacionRegistroNavigation.NumeroDocumento)
 				</td>
 				<td>
-					@Html.DisplayFor(modelItem => item.IdProveedorNavigation.Correo)
+					@* @Html.DisplayFor(modelItem => item.IdProveedorNavigation.Correo) *@
 				</td>
 				<td>
-					@Html.DisplayFor(modelItem => item.IdUbicacionNavigation.Nombre)
+					@* @Html.DisplayFor(modelItem => item.IdUbicacionNavigation.Nombre) *@
 				</td>
 			</tr>
 		}

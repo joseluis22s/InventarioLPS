@@ -54,10 +54,10 @@
             @Html.DisplayFor(model => model.EspecificacionesTecnicas)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ValorSinIva)
+            @Html.DisplayNameFor(model => model.ValorUnitarioSinIva)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ValorSinIva)
+            @Html.DisplayFor(model => model.ValorUnitarioSinIva)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.NumeroParteFabricante)
@@ -83,7 +83,7 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.CodigoProductoNavigation.Codigo)
         </dd>
-        <dt class = "col-sm-2">
+        @* <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.IdClasificacionNavigation)
         </dt>
         <dd class = "col-sm-10">
@@ -106,7 +106,7 @@
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.IdUbicacionNavigation.Nombre)
-        </dd>
+        </dd> *@
     </dl>
     
     <form asp-action="Delete">

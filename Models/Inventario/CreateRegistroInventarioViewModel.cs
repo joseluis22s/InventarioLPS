@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.Extensions.Options;
 
 namespace InventarioLPS.Models.Inventario
 {
@@ -14,7 +13,7 @@ namespace InventarioLPS.Models.Inventario
         public string NumeroDocumento { get; set; }
 
         [Required(ErrorMessage = "*Campo requerido.")]
-        [DisplayFormat(DataFormatString = "{0:dd-MMM-yyyy}")]
+        [DataType(DataType.Date)]
         public DateTime FechaCompra { get; set; } = DateTime.Now;
 
         [Required(ErrorMessage = "*Campo requerido.")]
@@ -23,7 +22,6 @@ namespace InventarioLPS.Models.Inventario
 
 
         // ITEMS.
-        [ValidateEnumeratedItems]
         public List<ItemInventarioViewModel> Items { get; set; } = new();
 
 

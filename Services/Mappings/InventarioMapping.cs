@@ -10,58 +10,59 @@ namespace InventarioLPS.Services.Mappings
             return new ItemInventario
             {
                 CodigoItem = model.CodigoItem,
+                ValorUnitarioSinIva = model.ValorUnitarioSinIva,
+                Cantidad = model.Cantidad,
+                TotalSinIva = model.TotalSinIva,
+                CodigoProducto = model.CodigoProducto,
                 Departamento = model.Departamento,
                 Categoria = model.Categoria,
                 LineaServicio = model.LineaServicio,
                 SubLineaServicio = model.SubLineaServicio,
                 DescripcionEspecifica = model.DescripcionEspecifica,
                 EspecificacionesTecnicas = model.EspecificacionesTecnicas,
-                ValorSinIva = model.ValorSinIva,
                 NumeroParteFabricante = model.NumeroParteFabricante,
                 NumeroSerieLps = model.NumeroSerieLps,
                 Estatus = model.Estatus,
-                IdUbicacion = model.UbicacionId,
-                IdClasificacion = model.ClasificacionId,
-                CodigoProducto = model.CodigoProducto,
-                IdProveedor = model.ProveedorId,
-                Cantidad = model.Cantidad
+                Ubicacion = model.Ubicacion,
+                Clasificacion = model.Clasificacion,
+                Proveedor = model.Proveedor,
             };
         }
         public static List<ItemInventario> ToItemInventarioEntityList(List<ItemInventarioViewModel> models) =>
             models.Select(ToItemInventarioEntity).ToList();
 
-        public static InventarioViewModel ToViewModel(ItemInventario itemInventario)
+        public static ItemInventarioViewModel ToItemInventarioViewModel(ItemInventario itemInventario)
         {
-            var invs = new InventarioViewModel
+            return new ItemInventarioViewModel
             {
                 Id = itemInventario.Id,
                 CodigoItem = itemInventario.CodigoItem,
                 FormaRegistro = itemInventario.IdInformacionRegistroNavigation.IdFormaRegistroNavigation.Nombre,
                 NumeroDocumento = itemInventario.IdInformacionRegistroNavigation.NumeroDocumento,
+                FechaCompra = itemInventario.IdInformacionRegistroNavigation.FechaCompra,
+                ValorUnitarioSinIva = itemInventario.ValorUnitarioSinIva,
+                Cantidad = itemInventario.Cantidad,
+                TotalSinIva = itemInventario.TotalSinIva,
+                Producto = itemInventario.CodigoProductoNavigation.Nombre,
                 Departamento = itemInventario.Departamento,
                 Categoria = itemInventario.Categoria,
                 LineaServicio = itemInventario.LineaServicio,
                 SubLineaServicio = itemInventario.SubLineaServicio,
-                FechaCompra = itemInventario.IdInformacionRegistroNavigation.FechaCompra,
-                ValorSinIva = itemInventario.ValorSinIva,
-                Proveedor = itemInventario.IdProveedorNavigation.RazonSocial,
-                Producto = itemInventario.CodigoProductoNavigation.Nombre,
                 DescripcionEspecifica = itemInventario.DescripcionEspecifica,
                 EspecificacionesTecnicas = itemInventario.EspecificacionesTecnicas,
                 NumeroParteFabricante = itemInventario.NumeroParteFabricante,
                 NumeroSerieLps = itemInventario.NumeroSerieLps,
-                Ubicacion = itemInventario.IdUbicacionNavigation.Nombre,
                 Estatus = itemInventario.Estatus,
-                Clasificacion = itemInventario.IdClasificacionNavigation.Nombre,
-                Cantidad = itemInventario.Cantidad
+                Ubicacion = itemInventario.Ubicacion,
+                Clasificacion = itemInventario.Clasificacion,
+                Proveedor = itemInventario.Proveedor
             };
-            return invs;
         }
 
-        public static List<InventarioViewModel> ToViewModelList(List<ItemInventario> itemInventario) =>
-            itemInventario.Select(ToViewModel).ToList();
+        public static List<ItemInventarioViewModel> ToInventarioViewModelList(List<ItemInventario> itemInventario) =>
+            itemInventario.Select(ToItemInventarioViewModel).ToList();
 
-        public static InformacionRegistro ToRegisterData (CreateRegistroInventarioViewModel model)
+        public static InformacionRegistro ToInformacionRegisterEntity(CreateRegistroInventarioViewModel model)
         {
             InformacionRegistro nuevo = new InformacionRegistro
             {
