@@ -61,7 +61,6 @@ namespace InventarioLPS.Controllers
         {
             try
             {
-
                 RemoveNonValidateFieldsCreation(model);
                 if (!ModelState.IsValid)
                 {
@@ -70,6 +69,24 @@ namespace InventarioLPS.Controllers
                     ModelState.AddModelError("", "Existen campos no válidos.");
                     return View(modelInvalid);
                 }
+
+                List<string> codigosItem = model.Items
+                    .Select(i => i.CodigoItem)
+                    .ToList();
+
+                List<string> existingCodigosItem = await _context.ItemInventario
+                    .Where(i => codigosItem.Contains(i.CodigoItem))
+                    .Select(i => i.CodigoItem)
+                    .ToListAsync();
+
+                if (existingCodigosItem.Any())
+                {
+                    CreateRegistroInventarioViewModel modelInvalid = await BuildCreateRegistroViewModelAsync();
+                    modelInvalid.Items = model.Items;
+                    ViewBag.ExistingCodigosItem = existingCodigosItem;
+                    return View(modelInvalid);
+                }
+
                 InformacionRegistro newDataRegister = InventarioMapping.ToInformacionRegisterEntity(model);
                 await _context.InformacionRegistro.AddAsync(newDataRegister);
                 await _context.SaveChangesAsync();

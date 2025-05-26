@@ -1,10 +1,8 @@
 ﻿@model InventarioLPS.Models.Inventario.CreateRegistroInventarioViewModel
-
 @{
 	ViewData["Title"] = "Nuevo registro de inventario";
 }
-
-@* — MODAL PARA DUPLICAR N VECES — *@
+@* — MODAL PARA DUPLICAR N VECES. — *@
 <div class="modal" id="duplicaModal" tabindex="-1">
 	<div class="modal-dialog">
 		<div class="modal-content">
@@ -32,11 +30,9 @@
 		</div>
 	</div>
 </div>
-
 <script>
 	var productInfo = @Html.Raw(Model.ProductInfoJson);
 </script>
-
 @* — TEMPLATE PARA CLONAR FILAS — *@
 <template id="row-template">
 	<tr>
@@ -169,17 +165,13 @@
 		</td>
 	</tr>
 </template>
-
-
 <h5 class="ps-1">@ViewData["Title"]</h5>
-
 <form asp-action="Create" class="container-fluid border-top border-start" id="formulario">
 	<div class="row mt-3">
 		<div class="col-12">
 			<button id="guardarBtn" class="btn btn-primary" disabled>
 				Guardar
 			</button>
-
 		</div>
 	</div>
 	<div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -212,9 +204,7 @@
 			<span asp-validation-for="FechaCompra" class="text-danger label-sm"></span>
 		</div>
 	</div>
-
 	<hr class="mx-2" />
-
 	<div class="row overflow-auto">
 		<div class="d-flex justify-content-between align-items-center mb-2">
 			<h6>Registro de items</h6>
@@ -222,7 +212,6 @@
 				<label class="form-label mb-0 me-2">Suma total sin IVA:</label>
 				<input type="text" id="sumaTotalSinIva" class="form-control form-control-sm w-auto " readonly />
 			</div>
-
 			<div>
 				<button type="button" id="btnAddRow" class="btn btn-outline-dark btn-form">
 					<i class="bi bi-plus-lg"></i> Agregar fila
@@ -258,7 +247,116 @@
 					</tr>
 				</thead>
 				<tbody id="tbodyItems" class="fs-tbody">
-					@* filas generadas por JS *@
+					@if(Model.Items.Count != 0){
+						@for (int i = 0; i < Model.Items.Count; i++)
+						{
+							<tr>
+								@* BOTONES PARA ELIMINAR O DUPLICAR FILA*@
+								<td class="fs-td">
+									<button type="button" class="btn btn-sm btn-outline-primary btn-duplicate-row px-2 py-1">
+										<i class="bi bi-copy"></i>
+									</button>
+									<button type="button" class="btn btn-sm btn-danger btn-remove-row px-2 py-1">
+										<i class="bi bi-x-circle"></i>
+									</button>
+								</td>
+								@* CHECKBOX PARA CADA FILA *@
+								<td class="fs-td">
+									<input type="checkbox" class="row-select form-check-input" />
+								</td>
+								@* CodigoItem *@
+								<td class="fs-td td-codigo">
+									<input asp-for="Items[@i].CodigoItem" class="form-control input-sm" />
+									<span asp-validation-for="Items[@i].CodigoItem" class="text-danger label-sm"></span>
+								</td>
+								@* ValorUnitarioSinIVA *@
+								<td class="fs-td td-valor">
+									<input asp-for="Items[@i].ValorUnitarioSinIva" class="form-control input-sm" />
+									<span asp-validation-for="Items[@i].ValorUnitarioSinIva" class="text-danger label-sm"></span>
+								</td>
+								@* Cantidad *@
+								<td class="fs-td td-cantidad">
+									<input asp-for="Items[@i].Cantidad" class="form-control input-sm" />
+									<span asp-validation-for="Items[@i].Cantidad" class="text-danger label-sm"></span>
+								</td>
+								@* TotalSinIVA *@
+								<td class="fs-td td-valor">
+									<input asp-for="Items[@i].TotalSinIva" class="form-control input-sm" />
+									<span asp-validation-for="Items[@i].TotalSinIva" class="text-danger label-sm"></span>
+								</td>
+								@* Producto *@
+								<td class="fs-td td-producto">
+									<select asp-for="Items[@i].CodigoProducto" asp-items="Model.ProductosOptions"  class="form-select input-sm">
+										<option value="">-- Seleccione --</option>
+									</select>
+									<span asp-validation-for="Items[@i].CodigoProducto" class="text-danger label-sm"></span>
+								</td>@* Departamento *@
+								<td class="fs-td td-departamento">
+									<input asp-for="Items[@i].Departamento" readonly class="form-control input-sm departamento-field readonly" />
+								</td>
+								@* Categoria *@
+								<td class="fs-td td-categoria">
+									<input asp-for="Items[@i].Categoria" readonly class="form-control input-sm categoria-field readonly" />
+								</td>
+								@* LineaServicio *@
+								<td class="fs-td td-linea">
+									<input asp-for="Items[@i].LineaServicio" readonly class="form-control input-sm linea-field readonly" />
+								</td>
+								@* SubLineaServicio *@
+								<td class="fs-td td-sublinea">
+									<input asp-for="Items[@i].SubLineaServicio" readonly class="form-control input-sm sublinea-field readonly" />
+								</td>
+								@* DescripcionEspecifica *@
+								<td class="fs-td td-descripcion">
+									<input asp-for="Items[@i].DescripcionEspecifica" class="form-control input-sm" />
+									<span asp-validation-for="Items[@i].DescripcionEspecifica" class="text-danger label-sm"></span>
+								</td>
+								@* EspecificacionesTecnicas *@
+								<td class="fs-td td-especificaciones">
+									<input asp-for="Items[@i].EspecificacionesTecnicas" class="form-control input-sm" />
+									<span asp-validation-for="Items[@i].EspecificacionesTecnicas" class="text-danger label-sm"></span>
+								</td>
+								@* NumeroParteFabricante *@
+								<td class="fs-td td-parte">
+									<input asp-for="Items[@i].NumeroParteFabricante" class="form-control input-sm" />
+									<span asp-validation-for="Items[@i].NumeroParteFabricante" class="text-danger label-sm"></span>
+								</td>
+								@* NumeroSerieLps *@
+								<td class="fs-td td-serie">
+									<input asp-for="Items[@i].NumeroSerieLps" class="form-control input-sm" />
+									<span asp-validation-for="Items[@i].NumeroSerieLps" class="text-danger label-sm"></span>
+								</td>
+								@* Estatus *@
+								<td class="fs-td td-estatus">
+									<select asp-for="Items[@i].Estatus" asp-items="Model.EstatusOptions" class="form-select input-sm">
+										<option value="">-- Seleccione --</option>
+									</select>
+									<span asp-validation-for="Items[@i].Estatus" class="text-danger label-sm"></span>
+								</td>
+								@* Ubicacion *@
+								<td class="fs-td td-ubicacion">
+									<select asp-for="Items[@i].Ubicacion" asp-items="Model.UbicacionesOptions" class="form-select input-sm">
+										<option value="">-- Seleccione --</option>
+									</select>
+									<span asp-validation-for="Items[@i].Ubicacion" class="text-danger label-sm"></span>
+								</td>
+								@* Clasificacion *@
+								<td class="fs-td td-clasificacion">
+									<select asp-for="Items[@i].Clasificacion" asp-items="Model.ClasificacionesOptions" class="form-select input-sm">
+										<option value="">-- Seleccione --</option>
+									</select>
+									<span asp-validation-for="Items[@i].Clasificacion" class="text-danger label-sm"></span>
+								</td>
+								@* Proveedor *@
+								<td class="fs-td td-proveedor">
+									<select asp-for="Items[@i].Proveedor" asp-items="Model.ProveedoresOptions" class="form-select input-sm">
+										<option value="">-- Seleccione --</option>
+									</select>
+									<span asp-validation-for="Items[@i].Proveedor" class="text-danger label-sm"></span>
+								</td>
+							</tr>
+						}
+					}
 				</tbody>
 			</table>
 		</div>
@@ -290,28 +388,23 @@
 			rowCount++;
 			updateTotal($row);
 		}
-
 		$('#btnAddRow').click(() => addRow());
 
 		$('#selectAllRows').change(function() {
 			$tbody.find('.row-select').prop('checked', this.checked);
 		});
-
 		$('#btnDeleteSelected').click(() => {
 			$tbody.find('.row-select:checked').closest('tr').remove();
 			updateMontoTotalCalculado();
 		});
-
 		$(document).on('click', '.btn-remove-row', function() {
 			$(this).closest('tr').remove();
 			updateMontoTotalCalculado();
 		});
-
 		$(document).on('click', '.btn-duplicate-row', function() {
 			selectedRowForDuplication = $(this).closest('tr');
 			$('#duplicaModal').modal('show');
 		});
-
 		$('#confirmDuplica').click(() => {
 			const count = Math.min(Math.max(1, parseInt($('#duplicaCount').val()) || 1), 20);
 			const data = {};
@@ -325,7 +418,6 @@
 			$('#duplicaModal').modal('hide');
 			updateMontoTotalCalculado();
 		});
-
 		$(document).on('change', 'select[name$=".CodigoProducto"]', function() {
 			const code = $(this).val(), info = productInfo[code] || {};
 			const $r = $(this).closest('tr');
@@ -334,12 +426,9 @@
 			$r.find('.linea-field').val(info.LineaServicio || '');
 			$r.find('.sublinea-field').val(info.SubLineaServicio || '');
 		});
-
 		addRow();
-
 		$('#montoIngresado').on('input', validarSumatoria);
 	});
-
 	function updateTotal($row) {
 		const cantidad = parseFloat($row.find('input[name$=".Cantidad"]').val()) || 0;
 		const valorUnit = parseFloat($row.find('input[name$=".ValorUnitarioSinIva"]').val()) || 0;
@@ -347,12 +436,10 @@
 		$row.find('input[name$=".TotalSinIva"]').val(total.toFixed(2));
 		updateMontoTotalCalculado();
 	}
-
 	$(document).on('input', 'input[name$=".Cantidad"], input[name$=".ValorUnitarioSinIva"]', function() {
 		const $row = $(this).closest('tr');
 		updateTotal($row);
 	});
-
 	function updateMontoTotalCalculado() {
 		let suma = 0;
 		$('#tbodyItems tr').each(function() {
@@ -362,7 +449,6 @@
 		$('#sumaTotalSinIva').val(suma.toFixed(2));
 		validarSumatoria();
 	}
-
 	function validarSumatoria() {
 		const suma = parseFloat($('#sumaTotalSinIva').val()) || 0;
 		const montoIngresado = parseFloat($('#montoIngresado').val()) || 0;
@@ -378,8 +464,6 @@
 		}
 		return !btnGuardar.disabled;
 	}
-
-
 	$('#formulario').on('submit', function(e) {
 		if (!validarSumatoria()) {
 			e.preventDefault();
@@ -387,7 +471,3 @@
 		}
 	});
 </script>
-
-
-
-
