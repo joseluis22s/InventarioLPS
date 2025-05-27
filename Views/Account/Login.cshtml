@@ -23,10 +23,24 @@
                     <label>Contraseña</label>
                     <div class="input-group">
                         <div class="input-group-text"><i class="bi bi-lock-fill"></i></div>
-                        <input asp-for="Contrasena" class="form-control" placeholder="Ingrese su contraseña">
+                        <input id="txtPass" asp-for="Contrasena" type="password" class="form-control" placeholder="Ingrese su contraseña">
                     </div>
                     <span asp-validation-for="Contrasena" class="text-danger"></span>
+                    <div class="form-check mt-2">
+                        <input type="checkbox" class="form-check-input" id="ckShowPass" onclick="myshowp(this)">
+                        <label class="form-check-label" for="ckShowPass">Mostrar contraseña</label>
+                    </div>
                 </div>
+                <script>
+                    function myshowp(e) {
+                        const txtBox = $('#txtPass');
+                        if (e.checked) {
+                            txtBox.attr("type", "text");
+                        } else {
+                            txtBox.attr("type", "password");
+                        }
+                    }
+                </script>
                 <div class="d-grid">
                     <button type="submit" class="btn btn-secondary bg-primary-site mx-5">Ingresar</button>
                 </div>

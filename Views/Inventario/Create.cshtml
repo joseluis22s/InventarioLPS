@@ -56,17 +56,17 @@
 		</td>
 		@* ValorUnitarioSinIVA *@
 		<td class="fs-td td-valor">
-			<input type="number" step="0.01" name="Items[__idx__].ValorUnitarioSinIva" class="form-control input-sm" />
+			<input type="number" name="Items[__idx__].ValorUnitarioSinIva" class="form-control input-sm" />
 			<span data-valmsg-for="Items[__idx__].ValorUnitarioSinIva" data-valmsg-replace="true" class="text-danger form-control-sm"></span>
 		</td>
 		@* Cantidad *@
 		<td class="fs-td td-cantidad">
-			<input type="number" name="Items[__idx__].Cantidad" class="form-control input-sm" />
+			<input type="number" name="Items[__idx__].Cantidad" min="1" class="form-control input-sm" />
 			<span data-valmsg-for="Items[__idx__].Cantidad" data-valmsg-replace="true" class="text-danger label-sm"></span>
 		</td>
 		@* TotalSinIVA *@
 		<td class="fs-td td-valor">
-			<input type="number" step="0.01" name="Items[__idx__].TotalSinIva" class="form-control input-sm readonly" readonly />
+			<input type="number" name="Items[__idx__].TotalSinIva" class="form-control input-sm readonly" readonly />
 			<span data-valmsg-for="Items[__idx__].TotalSinIva" data-valmsg-replace="true" class="text-danger label-sm"></span>
 		</td>
 		@* Producto *@
@@ -276,7 +276,7 @@
 								</td>
 								@* Cantidad *@
 								<td class="fs-td td-cantidad">
-									<input asp-for="Items[@i].Cantidad" class="form-control input-sm" />
+									<input asp-for="Items[@i].Cantidad" min="1" class="form-control input-sm" />
 									<span asp-validation-for="Items[@i].Cantidad" class="text-danger label-sm"></span>
 								</td>
 								@* TotalSinIVA *@
@@ -286,7 +286,7 @@
 								</td>
 								@* Producto *@
 								<td class="fs-td td-producto">
-									<select asp-for="Items[@i].CodigoProducto" asp-items="Model.ProductosOptions"  class="form-select input-sm">
+									<select asp-for="Items[@i].CodigoProducto" asp-items="Model.ProductosOptions" value="@(Model.Items[@i].TotalSinIva.ToString("0.################").TrimEnd('0').TrimEnd('.'))" class="form-select input-sm">
 										<option value="">-- Seleccione --</option>
 									</select>
 									<span asp-validation-for="Items[@i].CodigoProducto" class="text-danger label-sm"></span>
@@ -366,10 +366,15 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 	$(function() {
-		let rowCount = 0;
 		let selectedRowForDuplication = null;
 		const $tbody = $('#tbodyItems');
+		let rowCount = $tbody.find('tr').length;
 		const templateHtml = $('#row-template').html();
+
+			$tbody.find('tr').each(function() {
+		updateTotal($(this));
+	});
+	updateMontoTotalCalculado();
 
 		function addRow(data = {}) {
 			let html = templateHtml.replace(/__idx__/g, rowCount);
@@ -426,14 +431,17 @@
 			$r.find('.linea-field').val(info.LineaServicio || '');
 			$r.find('.sublinea-field').val(info.SubLineaServicio || '');
 		});
-		addRow();
+		if ($('#tbodyItems tr').length === 0) {
+			addRow();
+		}
+
 		$('#montoIngresado').on('input', validarSumatoria);
 	});
 	function updateTotal($row) {
 		const cantidad = parseFloat($row.find('input[name$=".Cantidad"]').val()) || 0;
 		const valorUnit = parseFloat($row.find('input[name$=".ValorUnitarioSinIva"]').val()) || 0;
 		const total = cantidad * valorUnit;
-		$row.find('input[name$=".TotalSinIva"]').val(total.toFixed(2));
+		$row.find('input[name$=".TotalSinIva"]').val(formatDecimal(total));
 		updateMontoTotalCalculado();
 	}
 	$(document).on('input', 'input[name$=".Cantidad"], input[name$=".ValorUnitarioSinIva"]', function() {
@@ -446,7 +454,8 @@
 			const val = parseFloat($(this).find('input[name$=".TotalSinIva"]').val()) || 0;
 			suma += val;
 		});
-		$('#sumaTotalSinIva').val(suma.toFixed(2));
+		$('#sumaTotalSinIva').val(formatDecimal(suma));
+
 		validarSumatoria();
 	}
 	function validarSumatoria() {
@@ -470,4 +479,9 @@
 			alert('La suma total sin IVA debe coincidir con el monto ingresado.');
 		}
 	});
+	function formatDecimal(valor) {
+		const num = parseFloat(valor);
+		if (isNaN(num)) return '';
+		return num % 1 === 0 ? num.toFixed(0) : num.toFixed(12).replace(/\.?0+$/, '');
+	}
 </script>

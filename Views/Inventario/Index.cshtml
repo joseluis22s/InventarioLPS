@@ -31,7 +31,6 @@
 				<th>Ubicación</th>
 				<th>Clasificación</th>
 				<th>Proveedor</th>
-				<th>Novedades</th>
 			</tr>
 		</thead>
 		<tbody class="fs-tbody">
@@ -39,23 +38,23 @@
 			{
 				<tr>
 					<td class="ps-4 pe-5">
-						<a asp-action="Edit" asp-route-id="@item.Id" data-bs-toggle="tooltip" data-bs-title="Editar" class="btn btn-light px-2 py-1">
+						<a asp-action="Edit" asp-route-id="@item.Id" data-bs-toggle="tooltip" data-bs-title="Editar" class=" border btn btn-light btn-sm px-2 py-1">
 							<i class="bi bi-pencil-square"></i>
 						</a>
-						<a asp-action="Delete" asp-route-id="@item.Id" data-bs-toggle="tooltip" data-bs-title="Eliminar" class="btn btn-danger px-2 py-1">
+						<a asp-action="Delete" asp-route-id="@item.Id" data-bs-toggle="tooltip" data-bs-title="Eliminar" class="btn btn-danger btn-sm px-2 py-1 my-1">
 							<i class="bi bi-trash"></i>
 						</a>
-						<a asp-controller="NovedadesItem" asp-action="Index" asp-route-id="@item.Id" data-bs-toggle="tooltip" data-bs-title="Ver Novedades" class="btn btn-light px-2 py-1">
+						<a asp-controller="NovedadesItem" asp-action="Index" asp-route-id="@item.Id" data-bs-toggle="tooltip" data-bs-title="Ver Novedades" class=" border btn btn-light btn-sm px-2 py-1">
 							<i class="bi bi-card-list"></i>
 						</a>
 					</td>
 					<td class="fs-td td-codigo">@item.CodigoItem</td>
-					<td>@item.FormaRegistro</td>
-					<td>@item.NumeroDocumento</td>
-					<td>@item.FechaCompra</td>
-					<td class="fs-td td-valor">@item.ValorUnitarioSinIva</td>
+					<td class="fs-td td-formaRegistro">@item.FormaRegistro</td>
+					<td class="fs-td td-numDoc">@item.NumeroDocumento</td>
+					<td class="fs-td td-fechaCompra">@item.FechaCompra.ToString("yyyy-MM-dd")</td>
+					<td class="fs-td td-valor">@item.ValorUnitarioSinIva.ToString("0.################").TrimEnd('0').TrimEnd('.')</td>
 					<td class="fs-td td-cantidad">@item.Cantidad</td>
-					<td class="fs-td td-valor">@item.TotalSinIva</td>
+					<td class="fs-td td-valor">@item.TotalSinIva.ToString("0.################").TrimEnd('0').TrimEnd('.')</td>
 					<td class="fs-td td-producto">@item.Producto</td>
 					<td class="fs-td td-departamento">@item.Departamento</td>
 					<td class="fs-td td-categoria">@item.Categoria</td>

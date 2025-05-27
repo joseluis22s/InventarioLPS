@@ -83,7 +83,14 @@ namespace InventarioLPS.Controllers
                 {
                     CreateRegistroInventarioViewModel modelInvalid = await BuildCreateRegistroViewModelAsync();
                     modelInvalid.Items = model.Items;
-                    ViewBag.ExistingCodigosItem = existingCodigosItem;
+                    for (int i = 0; i < model.Items.Count; i++)
+                    {
+                        var codigo = model.Items[i].CodigoItem;
+                        if (existingCodigosItem.Contains(codigo))
+                        {
+                            ModelState.AddModelError($"Items[{i}].CodigoItem", $"Código ya existente.");
+                        }
+                    }
                     return View(modelInvalid);
                 }
 
