@@ -1,0 +1,35 @@
+﻿@model NovedadesViewModel
+
+@{
+    ViewData["Title"] = "Agregar detalle a item";
+}
+<h4>@ViewBag.Title</h4>
+<hr />
+<form asp-action="Create" >
+    <div class="row">
+		<div class="col">
+			<button type="submit" class="btn btn-primary">Guardar</button>
+        </div>
+        <div class="col">
+            <a asp-action="Index" asp-controller="Inventario" class="btn btn-primary"><i class="bi bi-arrow-left-square"></i> Regresar</a>
+        </div>
+    </div>
+	<div class="row">
+		<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+		<div class="col-5 col-md-3">
+			<label asp-for="FechaNuevaNovedad" class="form-label">Fecha</label>
+			<input asp-for="FechaNuevaNovedad" class="form-control" />
+			<span asp-validation-for="FechaNuevaNovedad" class="text-danger"></span>
+		</div>
+		<div class="col-5">
+			<label asp-for="NuevaNovedad" class="form-label">Nueva novedad</label>
+			<textarea asp-for="NuevaNovedad" class="form-control" placeholder="Ingresar nueva novedad"></textarea>
+			<span asp-validation-for="NuevaNovedad" class="text-danger"></span>
+		</div>
+    </div>
+
+	<hr />
+	<div class="row">
+		@await Html.PartialAsync("_ResumenNovedadesPartial.cshtml", Model)
+	</div>
+</form>

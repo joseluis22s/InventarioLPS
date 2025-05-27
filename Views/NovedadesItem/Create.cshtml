@@ -1,20 +1,28 @@
 ﻿@model InventarioLPS.Data.Entities.NovedadItem
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Crear novedad";
 }
 
-<h1>Create</h1>
-
-<h4>NovedadItem</h4>
-<hr />
+<h5 class="ps-1">@ViewBag.Title</h5>
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
+            <div class="row form-group">
+                <div class="col">
+                    <button type="submit" class="btn btn-primary bg-primary-site">
+                        Guardar
+                    </button>
+                </div>
+                <div class="col">
+                    <button asp-action="Index" class="btn btn-outline-primary"><i class="bi bi-arrow-left-square"></i> Regresar</button>
+                </div>
+            </div>
+            <hr class="mx-2" />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Fecha" class="control-label"></label>
-                <input asp-for="Fecha" class="form-control" />
+                <input asp-for="Fecha" type="date" class="form-control" />
                 <span asp-validation-for="Fecha" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -23,16 +31,12 @@
                 <span asp-validation-for="Novedad" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="IdItemInventario" class="control-label"></label>
+                <label asp-for="IdItemInventario" class="control-label">Código item</label>
                 <select asp-for="IdItemInventario" class ="form-control" asp-items="ViewBag.IdItemInventario"></select>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
 </div>

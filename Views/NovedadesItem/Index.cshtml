@@ -1,32 +1,32 @@
 ﻿@model IEnumerable<InventarioLPS.Data.Entities.NovedadItem>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Novedades";
 }
 
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
+<h1>@ViewBag.Title</h1>
+<a asp-action="Create" class="btn btn-secondary bg-primary-site"><i class="bi bi-plus"></i>Nuevo</a>
+<div class="mt-5">
+    <p class="h5 text-center">Presione en <b>"+ Nuevo"</b> para agregar una novedad a un item de inventario.</p>
+    <img src="~/images/logo-lps.png" class="img-fluid mx-auto d-block col-sm-6 col-8" />
+</div>
+@* <table class="table">
     <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Fecha)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Novedad)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IdItemInventarioNavigation)
-            </th>
-            <th></th>
+		<tr>
+			<th>Opciones</th>
+            <th>Fecha</th>
+            <th>Novedad</th>
+            <th>Código</th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
-        <tr>
+			<tr>
+				<td>
+					<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+					<a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+					<a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+				</td>
             <td>
                 @Html.DisplayFor(modelItem => item.Fecha)
             </td>
@@ -34,14 +34,9 @@
                 @Html.DisplayFor(modelItem => item.Novedad)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.IdItemInventarioNavigation.Categoria)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                @Html.DisplayFor(modelItem => item.IdItemInventarioNavigation.CodigoItem)
             </td>
         </tr>
 }
     </tbody>
-</table>
+</table> *@

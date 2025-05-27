@@ -1,0 +1,85 @@
+﻿@model NovedadesViewModel
+
+<h4 class="mx-auto">Información de item de Inventario</h4>
+<dl class="row">
+	<div class="col-7 col-lg-4">
+		<dt>Codigo de Item</dt>
+		<dd>@Model.CodigoItem</dd>
+	</div>
+	<div class="col-7 col-lg-4">
+		<dt>Producto</dt>
+		<dd>@Model.NombreProducto</dd>
+	</div>
+	<div class="col-7 col-lg-4">
+		<dt>Descripción Específica</dt>
+		<dd>@Model.DescripcionEspecifica</dd>
+	</div>
+	<div class="col-7 col-lg-4">
+		<dt>Especificaciones Técnicas</dt>
+		<dd>@Model.EspecificacionesTecnicas</dd>
+	</div>
+	<div class="col-7 col-lg-4">
+		<dt>Forma de Registro</dt>
+		<dd>@Model.FormaRegistro</dd>
+	</div>
+	<div class="col-7 col-lg-4">
+		<dt># de Documento</dt>
+		<dd>@Model.NumeroDocumento</dd>
+	</div>
+</dl>
+
+<hr />
+
+<h4>Detalle de Novedades</h4>
+
+<div class="table-responsive">
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Fecha</th>
+				<th>Fecha</th>
+				<th>Novedad</th>
+			</tr>
+		</thead>
+		<tbody>
+			@if (Model.Detalles?.Any() == true)
+			{
+				@foreach (var item in Model.Detalles)
+				{
+					<tr>
+						<td>
+							<a asp-action="Edit" asp-route-id="@item.Id" data-bs-toggle="tooltip" data-bs-title="Editar" class="border btn btn-light btn-sm px-2 py-1">
+								<i class="bi bi-pencil-square"></i>
+							</a>
+							<button type="button"
+									data-bs-toggle="modal"
+									data-bs-target="#genericConfirmModal"
+									data-action="/Novedades/Delete/@item.Id"
+									data-body="¿Desea eliminar la novedad?<br><strong>Fecha:</strong> @item.Fecha.ToString("yyyy-MM-dd")<br><strong>Novedad:</strong> @item.Novedad"
+									title="Eliminar"
+									class="btn btn-danger btn-sm px-2 py-1 my-1">
+								<i class="bi bi-trash"></i>
+							</button>
+
+						</td>
+						<td>@item.Fecha.ToString("yyyy-MM-dd")</td>
+						<td>@item.Novedad</td>
+					</tr>
+				}
+			}
+			else
+			{
+				<tr>
+					<td colspan="2">
+						<div class="text-center text-muted small">
+							No existen detalles por el momento.
+						</div>
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+</div>
+
+
+

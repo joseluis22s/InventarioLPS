@@ -4,9 +4,12 @@
 	ViewData["Title"] = "Inventario";
 }
 <h2>@ViewBag.Title</h2>
-<a asp-action="Create" class="btn btn-secondary bg-primary-site"><i class="bi bi-plus"></i>Nuevo</a>
-<div class="table-responsive">
-
+<div class="row">
+	<div class="col">
+		<a asp-action="Create" class="btn btn-secondary bg-primary-site"><i class="bi bi-plus"></i>Nuevo</a>
+	</div>
+</div>
+<div class="table-responsive ">
 	<table class="table">
 		<thead class="fs-theader">
 			<tr>
@@ -41,10 +44,19 @@
 						<a asp-action="Edit" asp-route-id="@item.Id" data-bs-toggle="tooltip" data-bs-title="Editar" class=" border btn btn-light btn-sm px-2 py-1">
 							<i class="bi bi-pencil-square"></i>
 						</a>
-						<a asp-action="Delete" asp-route-id="@item.Id" data-bs-toggle="tooltip" data-bs-title="Eliminar" class="btn btn-danger btn-sm px-2 py-1 my-1">
+						<button type="button"
+								data-bs-toggle="modal"
+								data-bs-target="#genericConfirmModal"
+								data-action="/Novedades/Delete/@item.Id"
+								data-body="¿Desea eliminar este item? Se eliminaran sus novedades registradas en cada de existir.<br><strong>Código:</strong> @item.CodigoItem<br><strong>Producto:</strong> @item.Producto<br><strong>Desc. Específica:</strong> @item.DescripcionEspecifica"
+								title="Eliminar"
+								class="btn btn-danger btn-sm px-2 py-1 my-1">
 							<i class="bi bi-trash"></i>
+						</button>
+						<a asp-controller="Novedades" asp-action="Create" asp-route-idItem="@item.Id" data-bs-toggle="tooltip" data-bs-title="Agregar novedades" class=" border btn btn-light btn-sm px-2 py-1">
+							<i class="bi bi-clipboard-plus"></i>
 						</a>
-						<a asp-controller="NovedadesItem" asp-action="Index" asp-route-id="@item.Id" data-bs-toggle="tooltip" data-bs-title="Ver Novedades" class=" border btn btn-light btn-sm px-2 py-1">
+						<a asp-controller="Novedades" asp-action="Details" asp-route-idItem="@item.Id" data-bs-toggle="tooltip" data-bs-title="Ver novedades" class=" border btn btn-light btn-sm px-2 py-1">
 							<i class="bi bi-card-list"></i>
 						</a>
 					</td>

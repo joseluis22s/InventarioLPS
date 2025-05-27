@@ -1,0 +1,16 @@
+﻿@model NovedadesViewModel
+
+@{
+    ViewData["Title"] = "Detalle de novedades de inventario";
+}
+<h4>@ViewBag.Title</h4>
+<hr />
+<div class="row">
+    <div class="col">
+        <a asp-action="Create" asp-route-idItem="@Model.IdItemInventario" class="btn btn-secondary bg-primary-site"><i class="bi bi-plus"></i>Nuevo</a>
+    </div>
+    <div class="col">
+        <a asp-action="Index" asp-controller="Inventario" class="btn btn-primary"><i class="bi bi-arrow-left-square"></i> Regresar</a>
+    </div>
+</div>
+@await Html.PartialAsync("_ResumenNovedadesPartial.cshtml", Model)

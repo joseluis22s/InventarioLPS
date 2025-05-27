@@ -137,25 +137,19 @@ namespace InventarioLPS.Controllers
             }
         }
 
-        // GET: InventarioController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
 
-        // POST: InventarioController/Delete/5
-        [HttpPost]
+        // POST: NovedadesItem/Delete/5
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            try
+            var item = await _context.ItemInventario.FindAsync(id);
+            if (item != null)
             {
-                return RedirectToAction(nameof(Index));
+                _context.ItemInventario.Remove(item);
             }
-            catch
-            {
-                return View();
-            }
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
         private async Task<CreateRegistroInventarioViewModel> BuildCreateRegistroViewModelAsync()

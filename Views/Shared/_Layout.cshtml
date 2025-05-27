@@ -13,7 +13,7 @@
 	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
-<body class="d-flex flex-column" data-controller="@ViewContext.RouteData.Values["controller"]">
+<body class="d-flex flex-column flex-grow-1 overflow-hidden" data-controller="@ViewContext.RouteData.Values["controller"]">
 
 	<main class="d-flex h-100">
 		<aside id="sidebarMenu" class="collapse d-md-block bg-primary-site p-3 flex-shrink-0" style="width: 280px;">
@@ -48,9 +48,6 @@
 						<a asp-controller="Inventario" asp-action="Index" class="nav-link nav-link-sidebar text-white d-flex align-items-center gap-2 @(ViewContext.RouteData.Values["controller"]?.ToString() == "Inventario" ? "active" : "")"><i class="bi bi-box"></i> Inventario</a>
 					</li>
 					<li class="nav-item">
-						<a asp-controller="NovedadesItem" asp-action="Index" class="nav-link nav-link-sidebar text-white d-flex align-items-center gap-2 @(ViewContext.RouteData.Values["controller"]?.ToString() == "NovedadesItem" ? "active" : "")"><i class="bi bi-duffle"></i> Novedades de inventario</a>
-					</li>
-					<li class="nav-item">
 						<a asp-controller="OpcionesSistema" asp-action="Index" class="nav-link nav-link-sidebar text-white d-flex align-items-center gap-2 @(ViewContext.RouteData.Values["controller"]?.ToString() == "OpcionesSistema" ? "active" : "")"><i class="bi bi-duffle"></i> Opciones sistema</a>
 					</li>
 				</ul>
@@ -69,8 +66,7 @@
 					<i class="bi bi-person-circle"></i> Cerrar Sesión
 				</a>
 			</header>
-
-			<div class="shadow-lg rounded-2 bg-light-subtle flex-grow-1 overflow-auto mt-3 p-2 mx-2">
+			<div class="shadow-lg rounded-2 bg-light-subtle flex-grow-1 overflow-hidden mt-3 p-2 mx-2">
 				@RenderBody()
 			</div>
 		</section>
@@ -109,5 +105,43 @@
 		});
 
 	</script>
+	<div class="modal" id="genericConfirmModal" tabindex="-1" aria-labelledby="genericConfirmLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="genericConfirmLabel">Confirmar acción</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+				</div>
+				<div class="modal-body" id="genericConfirmBody"></div>
+				<div class="modal-footer">
+					<form id="genericConfirmForm" method="post">
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+						<button type="submit" class="btn btn-danger">Confirmar</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		document.addEventListener("DOMContentLoaded", function () {
+			var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+			tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+				new bootstrap.Tooltip(tooltipTriggerEl)
+			});
+
+			var modal = document.getElementById("genericConfirmModal");
+
+			modal.addEventListener("show.bs.modal", function (event) {
+				var button = event.relatedTarget;
+				var action = button.getAttribute("data-action");
+				var body = button.getAttribute("data-body");
+
+				document.getElementById("genericConfirmBody").innerHTML = body;
+				document.getElementById("genericConfirmForm").action = action;
+			});
+		});
+	</script>
+
 </body>
 </html>

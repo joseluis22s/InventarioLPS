@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using InventarioLPS.Data;
+using InventarioLPS.Data.Entities;
+using InventarioLPS.Models.NovedadesItem;
+using InventarioLPS.Services.Mappings;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using InventarioLPS.Data;
-using InventarioLPS.Data.Entities;
 
 namespace InventarioLPS.Controllers
 {
@@ -27,29 +25,32 @@ namespace InventarioLPS.Controllers
         }
 
         // GET: NovedadesItem/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int idItem)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            ItemInventario itemInvetario = await _context.ItemInventario
+                .FirstAsync(i => i.Id == idItem);
+            List<NovedadItem> novedadesItem = await _context.NovedadItem
+                .Where(i => i.IdItemInventario == idItem)
+                .ToListAsync();
 
-            var novedadItem = await _context.NovedadItem
-                .Include(n => n.IdItemInventarioNavigation)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (novedadItem == null)
-            {
+            if (novedadesItem.Count == 0)
                 return NotFound();
-            }
 
-            return View(novedadItem);
+            NovedadesViewModel model = NovedadesMapping.ToNovedadesItemViewModel(itemInvetario, novedadesItem);
+
+            return View(model);
         }
 
         // GET: NovedadesItem/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["IdItemInventario"] = new SelectList(_context.ItemInventario, "Id", "Categoria");
-            return View();
+            var model = new NovedadItem
+            {
+                Fecha = DateTime.Now
+            };
+            var itemsInventario = await _context.ItemInventario.Select(i => new { i.Id, i.CodigoItem }).ToListAsync();
+            ViewData["IdItemInventario"] = new SelectList(itemsInventario, "Id", "CodigoItem");
+            return View(model);
         }
 
         // POST: NovedadesItem/Create
@@ -65,7 +66,7 @@ namespace InventarioLPS.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdItemInventario"] = new SelectList(_context.ItemInventario, "Id", "Categoria", novedadItem.IdItemInventario);
+            ViewData["IdItemInventario"] = new SelectList(_context.ItemInventario, "Id", "CodigoItem", novedadItem.IdItemInventario);
             return View(novedadItem);
         }
 
