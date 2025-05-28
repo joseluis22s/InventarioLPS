@@ -9,6 +9,7 @@
 		<a asp-action="Create" class="btn btn-secondary bg-primary-site"><i class="bi bi-plus"></i>Nuevo</a>
 	</div>
 </div>
+
 <div class="table-responsive ">
 	<table class="table">
 		<thead class="fs-theader">
@@ -47,8 +48,8 @@
 						<button type="button"
 								data-bs-toggle="modal"
 								data-bs-target="#genericConfirmModal"
-								data-action="/Novedades/Delete/@item.Id"
-								data-body="¿Desea eliminar este item? Se eliminaran sus novedades registradas en cada de existir.<br><strong>Código:</strong> @item.CodigoItem<br><strong>Producto:</strong> @item.Producto<br><strong>Desc. Específica:</strong> @item.DescripcionEspecifica"
+								data-action="/Inventario/Delete/@item.Id"
+								data-body="¿Desea eliminar este item? Se eliminaran sus novedades registradas en caso de existir.<br><strong>Código:</strong> @item.CodigoItem<br><strong>Producto:</strong> @item.Producto<br><strong>Desc. Específica:</strong> @item.DescripcionEspecifica"
 								title="Eliminar"
 								class="btn btn-danger btn-sm px-2 py-1 my-1">
 							<i class="bi bi-trash"></i>

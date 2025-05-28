@@ -13,9 +13,8 @@
 	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
-<body class="d-flex flex-column flex-grow-1 overflow-hidden" data-controller="@ViewContext.RouteData.Values["controller"]">
-
-	<main class="d-flex h-100">
+<body class="vh-100 d-flex flex-column overflow-hidden" data-controller="@ViewContext.RouteData.Values["controller"]">
+	<main class="d-flex flex-grow-1 overflow-hidden">
 		<aside id="sidebarMenu" class="collapse d-md-block bg-primary-site p-3 flex-shrink-0" style="width: 280px;">
 			<div class="d-flex flex-column flex-shrink-0 ps-1 pe-4">
 				<a asp-action="Index">
@@ -54,7 +53,7 @@
 			</div>
 		</aside>
 
-		<section class="d-flex flex-column flex-grow-1 bg-light overflow-hidden" style="min-height: calc(100vh - 120px);">
+		<section class="d-flex flex-column flex-grow-1 overflow-hidden">
 			<header class="d-flex justify-content-between align-items-center mt-2 mx-2">
 				<div class="d-md-none">
 					<button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
@@ -66,7 +65,7 @@
 					<i class="bi bi-person-circle"></i> Cerrar Sesión
 				</a>
 			</header>
-			<div class="shadow-lg rounded-2 bg-light-subtle flex-grow-1 overflow-hidden mt-3 p-2 mx-2">
+			<div class="flex-grow-1 overflow-y-auto overflow-x-hidden mt-3 p-2 mx-2">
 				@RenderBody()
 			</div>
 		</section>

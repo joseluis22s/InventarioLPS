@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using InventarioLPS.Data;
+using InventarioLPS.Data.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using InventarioLPS.Data;
-using InventarioLPS.Data.Entities;
 
 namespace InventarioLPS.Controllers
 {
@@ -55,6 +51,13 @@ namespace InventarioLPS.Controllers
             ViewData["IdDepartamento"] = new SelectList(_context.Departamento, "Id", "Nombre");
             ViewData["IdLineaServicio"] = new SelectList(_context.LineaServicio, "Id", "Nombre");
             ViewData["IdSubLineaServicio"] = new SelectList(_context.SubLineaServicio, "Id", "Nombre");
+            ViewData["SublineasPorLinea"] = _context.SubLineaServicio
+                .AsEnumerable()
+                .GroupBy(s => s.IdLineaServicio)
+                .ToDictionary(
+                    g => g.Key.ToString(),
+                    g => g.Select(s => new { id = s.Id, nombre = s.Nombre }).ToList());
+
             return View();
         }
 
@@ -95,6 +98,12 @@ namespace InventarioLPS.Controllers
             ViewData["IdDepartamento"] = new SelectList(_context.Departamento, "Id", "Nombre", producto.IdDepartamento);
             ViewData["IdLineaServicio"] = new SelectList(_context.LineaServicio, "Id", "Nombre", producto.IdLineaServicio);
             ViewData["IdSubLineaServicio"] = new SelectList(_context.SubLineaServicio, "Id", "Nombre", producto.IdSubLineaServicio);
+            ViewData["SublineasPorLinea"] = _context.SubLineaServicio
+                .AsEnumerable()
+                .GroupBy(s => s.IdLineaServicio)
+                .ToDictionary(
+                    g => g.Key.ToString(),
+                    g => g.Select(s => new { id = s.Id, nombre = s.Nombre }).ToList());
             return View(producto);
         }
 

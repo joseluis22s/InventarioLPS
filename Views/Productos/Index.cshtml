@@ -5,7 +5,7 @@
 
 }
 <h2>@ViewBag.Title</h2>
-<button asp-action="Create" class="btn btn-primary bg-primary-site">+ Nuevo</button>
+<a asp-action="Create" class="btn btn-primary bg-primary-site">+ Nuevo</a>
 <table class="table">
 	<thead>
 		<tr>
@@ -42,7 +42,12 @@
 					@Html.DisplayFor(modelItem => item.IdLineaServicioNavigation.Nombre)
 				</td>
 				<td>
-					@Html.DisplayFor(modelItem => item.IdSubLineaServicioNavigation.Nombre)
+					@if (item.IdSubLineaServicioNavigation != null)
+					{
+						@Html.DisplayFor(modelItem => item.IdSubLineaServicioNavigation.Nombre)
+					}else{
+						<span>...</span>
+					}
 				</td>
 			</tr>
 		}
