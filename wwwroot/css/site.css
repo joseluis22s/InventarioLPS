@@ -1,5 +1,6 @@
 :root {
-    --color-primary-site: #001988;
+    /*--color-primary-site: #001988;*/
+    --color-primary-site: #002b82;
 }
 
 html {
@@ -46,12 +47,21 @@ body {
 
 /* Pila de navegación */
 .nav-link-sidebar:hover {
-    background-color: #0022bb;
+    background-color: #11409e;
 }
 
 .sub-nav-link:hover {
-    background-color: #091c70;
+    background-color: #1f4fad;
 }
+
+.transition {
+    transition: transform 0.3s ease;
+}
+
+a[aria-expanded="true"] .bi-chevron-down {
+    transform: rotate(180deg);
+}
+
 
 /* PARA ITEM ADMINISTRADOR DE NAVEGACION*/
 .cursor-pointer {

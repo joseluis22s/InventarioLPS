@@ -1,4 +1,12 @@
-﻿<!DOCTYPE html>
+﻿@{
+	// Layout = null;
+	Func<string[], string> ActiveGroup = controllers => controllers.Contains(ViewContext.RouteData.Values["controller"]?.ToString()) ? "active" : "";
+	Func<string, string> Active = controller => ViewContext.RouteData.Values["controller"]?.ToString() == controller ? "active" : "";
+	Func<string[], string> ShowGroup = controllers => controllers.Contains(ViewContext.RouteData.Values["controller"]?.ToString()) ? "show" : "";
+	Func<string[], bool> IsChildActive = controllers => controllers.Contains(ViewContext.RouteData.Values["controller"]?.ToString());
+	Func<bool, string> ActiveIf = isActive => isActive ? "active" : "";
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="utf-8" />
@@ -7,125 +15,92 @@
 	<link rel="shortcut icon" href="~/favicon.ico">
 
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-	<script src="https://unpkg.com/popperjs/core@2"></script>
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
 	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
-<body class="vh-100 d-flex flex-column overflow-hidden" data-controller="@ViewContext.RouteData.Values["controller"]">
-	<main class="d-flex flex-grow-1 overflow-hidden">
-
-		<aside id="sidebarMenu" class="collapse d-md-flex flex-column bg-primary-site p-3 flex-shrink-0 h-100" style="width: 280px;">
-			<a asp-action="Index" class="mb-3 me-md-auto text-white text-decoration-none">
-				<img src="~/images/logo-lps.png" class="toWhite my-2" width="180" />
-			</a>
-			<hr class="toWhite" />
-			<ul class="nav nav-pills flex-column mb-3">
-				<li class="nav-item">
-					<a asp-controller="Home" asp-action="Index" class="nav-link nav-link-sidebar text-white @(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" ? "active" : "")">
-						<i class="bi bi-house-door-fill"></i> Inicio
+@* <body class="vh-100 d-flex flex-column overflow-hidden" data-controller="@ViewContext.RouteData.Values["controller"]"> *@
+<body class="d-flex flex-column">
+	<main class="d-flex flex-grow-1 w-100">
+		<aside id="sidebarMenu" class="bg-primary-site p-3">
+			<nav class="h-100 flex-column align-items-stretch">
+				<nav class="nav nav-pills flex-column gap-1">
+					<a asp-action="Index" class="mx-auto">
+						<img src="~/images/logo-lps.png" class="toWhite d-none d-md-block" width="180" />
+						<img src="~/images/icon-lps.png" class="toWhite d-md-none" width="46" />
 					</a>
-				</li>
-				<li class="nav-item">
-					<div class="nav-link nav-link-sidebar text-white cursor-pointer user-select-none" data-bs-toggle="collapse" data-bs-target="#permisosNav">
-						<i class="bi bi-people-fill"></i> Administrador
+					<hr class="toWhite mx-3" />
+					<a asp-controller="OpcionesSistema" asp-action="Index" class="nav-link nav-link-sidebar text-white @Active("OpcionesSistema")">
+						<i class="bi bi-laptop me-2"></i><span class="d-none d-md-inline-block"> Mi sistema</span>
+					</a>
+					<a data-bs-toggle="collapse" data-bs-target="#items-administrador"
+					   class="nav-link nav-link-sidebar text-white d-flex align-items-center justify-content-between @(IsChildActive(new[] { "Usuarios", "Perfiles", "Permisos" }) ? "active" : "")"
+					   aria-expanded="@(IsChildActive(new[] { "Usuarios", "Perfiles", "Permisos" }).ToString().ToLower())">
+						<span>
+							<i class="bi bi-pc-display me-2"></i><span class="d-none d-md-inline-block"> Administrador</span>
+						</span>
+						<i class="bi bi-chevron-down transition"></i>
+					</a>
+					<div id="items-administrador" class="collapse @(IsChildActive(new[] { "Usuarios", "Perfiles", "Permisos" }) ? "show" : "")">
+						<nav class="nav nav-pills flex-column ms-4">
+							<a asp-controller="Usuarios" asp-action="Index" class="nav-link sub-nav-link text-white @Active("Usuarios")">
+								<i class="bi bi-people me-2"></i><span class="d-none d-md-inline-block"> Usuarios</span>
+							</a>
+							<a asp-controller="Perfiles" asp-action="Index" class="nav-link sub-nav-link text-white @Active("Perfiles")">
+								<i class="bi bi-person-badge me-2"></i><span class="d-none d-md-inline-block"> Perfiles</span>
+							</a>
+							<a asp-controller="Permisos" asp-action="Index" class="nav-link sub-nav-link text-white @Active("Permisos")">
+								<i class="bi bi-person-lines-fill me-2"></i><span class="d-none d-md-inline-block"> Permisos</span>
+							</a>
+						</nav>
 					</div>
-					<ul id="permisosNav" class="collapse nav nav-pills flex-column ms-3">
-						<li class="nav-item">
-							<a asp-controller="Usuarios" asp-action="Index" class="sub-nav-link nav-link text-white d-flex align-items-center gap-2 @(ViewContext.RouteData.Values["controller"]?.ToString() == "Usuarios" ? "active" : "")"><i class="bi bi-eyeglasses"></i> Usuarios</a>
-						</li>
-						<li class="nav-item">
-							<a asp-controller="Perfiles" asp-action="Index" class="sub-nav-link nav-link text-white d-flex align-items-center gap-2 @(ViewContext.RouteData.Values["controller"]?.ToString() == "Perfiles" ? "active" : "")"><i class="bi bi-circle-square"></i> Perfiles</a>
-						</li>
-						<li class="nav-item">
-							<a asp-controller="Permisos" asp-action="Index" class="sub-nav-link nav-link text-white d-flex align-items-center gap-2 @(ViewContext.RouteData.Values["controller"]?.ToString() == "Permisos" ? "active" : "")"><i class="bi bi-card-checklist"></i> Permisos</a>
-						</li>
-					</ul>
-				</li>
-				<li class="mb-1">
-					<button class="btn btn-toggle aling-items-center rounded" data-bs-toggle="collapse" data-bs-target="#inventario-collapse" aria-expanded="true">
-						::before "Inventario"
-						<div class="collapse show" id="inventario-collapse" style>
-							<ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-								<li><a href="#" class="link-dark rounded">Overview</a></li>
-								<li><a href="#" class="link-dark rounded">Updates</a></li>
-								<li><a href="#" class="link-dark rounded">Reports</a></li>
-							</ul>
-						</div>
-					</button>
-
-				</li>
-				@* <li class="nav-item">
-					<a asp-controller="Inventario" asp-action="Index" class="nav-link nav-link-sidebar text-white d-flex align-items-center gap-2 @(ViewContext.RouteData.Values["controller"]?.ToString() == "Inventario" ? "active" : "")"><i class="bi bi-box"></i> Inventario</a>
-				</li> *@
-				<li class="nav-item">
-					<a asp-controller="OpcionesSistema" asp-action="Index" class="nav-link nav-link-sidebar text-white d-flex align-items-center gap-2 @(ViewContext.RouteData.Values["controller"]?.ToString() == "OpcionesSistema" ? "active" : "")"><i class="bi bi-duffle"></i> Opciones sistema</a>
-				</li>
-			</ul>
-			<div class="mt-auto">
-				<a asp-controller="Account" asp-action="Logout" class="btn btn-secondary bg-primary-site w-100 mt-3">
-					<i class="bi bi-person-circle"></i> Cerrar Sesión
-				</a>
-			</div>
-		</aside>
-
-		@*
-		<aside id="sidebarMenu" class="collapse d-md-block bg-primary-site p-3 flex-shrink-0 h-100" style="width: 280px;">
-			<div class="d-flex flex-column flex-shrink-0 ps-1 pe-4">
-				<a asp-action="Index">
-					<img src="~/images/logo-lps.png" class="toWhite my-2 mx-3" width="180" />
-				</a>
-				<hr class="toWhite" />
-				<ul class="nav nav-pills flex-column">
-					<li class="nav-item">
-						<a asp-controller="Home" asp-action="Index" class="nav-link nav-link-sidebar text-white @(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" ? "active" : "")">
-							<i class="bi bi-house-door-fill"></i> Inicio
-						</a>
-					</li>
-					<li class="nav-item">
-						<div class="nav-link nav-link-sidebar text-white cursor-pointer user-select-none" data-bs-toggle="collapse" data-bs-target="#permisosNav">
-							<i class="bi bi-people-fill"></i> Administrador
-						</div>
-						<ul id="permisosNav" class="collapse nav nav-pills flex-column ms-3">
-							<li class="nav-item">
-								<a asp-controller="Usuarios" asp-action="Index" class="sub-nav-link nav-link text-white d-flex align-items-center gap-2 @(ViewContext.RouteData.Values["controller"]?.ToString() == "Usuarios" ? "active" : "")"><i class="bi bi-eyeglasses"></i> Usuarios</a>
-							</li>
-							<li class="nav-item">
-								<a asp-controller="Perfiles" asp-action="Index" class="sub-nav-link nav-link text-white d-flex align-items-center gap-2 @(ViewContext.RouteData.Values["controller"]?.ToString() == "Perfiles" ? "active" : "")"><i class="bi bi-circle-square"></i> Perfiles</a>
-							</li>
-							<li class="nav-item">
-								<a asp-controller="Permisos" asp-action="Index" class="sub-nav-link nav-link text-white d-flex align-items-center gap-2 @(ViewContext.RouteData.Values["controller"]?.ToString() == "Permisos" ? "active" : "")"><i class="bi bi-card-checklist"></i> Permisos</a>
-							</li>
-						</ul>
-					</li>
-					<li class="nav-item">
-						<a asp-controller="Inventario" asp-action="Index" class="nav-link nav-link-sidebar text-white d-flex align-items-center gap-2 @(ViewContext.RouteData.Values["controller"]?.ToString() == "Inventario" ? "active" : "")"><i class="bi bi-box"></i> Inventario</a>
-					</li>
-					<li class="nav-item">
-						<a asp-controller="OpcionesSistema" asp-action="Index" class="nav-link nav-link-sidebar text-white d-flex align-items-center gap-2 @(ViewContext.RouteData.Values["controller"]?.ToString() == "OpcionesSistema" ? "active" : "")"><i class="bi bi-duffle"></i> Opciones sistema</a>
-					</li>
-				</ul>
-				<div class="mt-auto">
-					<a asp-controller="Account" asp-action="Logout" class="btn btn-secondary bg-primary-site w-100 mt-3">
-						<i class="bi bi-person-circle"></i> Cerrar Sesión
+					<a asp-controller="Inventario" asp-action="Index" class="nav-link nav-link-sidebar @Active("Inventario") text-white">
+						<i class="bi bi-box-seam me-2"></i><span class="d-none d-md-inline-block">Inventario</span>
 					</a>
-				</div>
-			</div>
-		</aside> *@
+					<div class="dropdown mt-auto">
+						<a data-bs-toggle="dropdown" class="btn btn-outline-light dropdown-toggle w-100">
+							<i class="bi bi-person-circle me-2"></i><span class="d-none d-md-inline-block">@User.Identity.Name</span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a class="d-md-none dropdown-item" href="#">@User.Identity.Name</a></li>
+							<li><a asp-controller="Account" asp-action="Logout" class="dropdown-item">Cerrar sesión</a></li>
+						</ul>
+					</div>
+				</nav>
+			</nav>
+		</aside>
+		<script>
+			document.querySelectorAll('[data-bs-toggle="collapse"]').forEach(trigger => {
+				const targetId = trigger.getAttribute('data-bs-target');
+				const target = document.querySelector(targetId);
 
-		<section class="d-flex flex-column flex-grow-1 overflow-hidden">
-			<header class="d-flex justify-content-between align-items-center mt-2 mx-2">
+				const update = () => {
+					trigger.classList.toggle('active', target.classList.contains('show'));
+				};
+
+				// Inicial
+				update();
+
+				// Al toggle
+				target.addEventListener('shown.bs.collapse', update);
+				target.addEventListener('hidden.bs.collapse', update);
+			});
+		</script>
+		<section class="flex-grow-1 d-flex flex-column">
+			<header class="p-2">
 				<div class="d-md-none">
 					<button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
 						<i class="bi bi-list"></i>
 					</button>
 				</div>
 			</header>
-			<div class="flex-grow-1 overflow-y-auto overflow-x-hidden mt-3 p-2 mx-2">
+			<div class="flex-grow-1 overflow-auto p-3">
 				@RenderBody()
 			</div>
 		</section>
+
+
 	</main>
 	<footer class="text-muted">
 		<div class="container">
@@ -135,9 +110,8 @@
 	@{
 		await Html.RenderPartialAsync("_ValidationScriptsPartial");
 	}
-	@* @RenderSection("Scripts", required: false) *@
 	<script>
-				document.addEventListener("DOMContentLoaded", function () {
+		document.addEventListener("DOMContentLoaded", function () {
 			const collapseId = "permisosNav";
 			const collapseEl = document.getElementById(collapseId);
 			const currentController = document.body.getAttribute("data-controller");
@@ -198,177 +172,4 @@
 	</script>
 
 </body>
-@* 
-<body class="vh-100 d-flex flex-column overflow-hidden" data-controller="@ViewContext.RouteData.Values["controller"]">
-	<main class="d-flex flex-grow-1 overflow-hidden">
-
-		<aside id="sidebarMenu" class="collapse d-md-flex flex-column bg-primary-site p-3 flex-shrink-0 h-100" style="width: 280px;">
-			<a asp-action="Index" class="mb-3 me-md-auto text-white text-decoration-none">
-				<img src="~/images/logo-lps.png" class="toWhite my-2" width="180" />
-			</a>
-			<hr class="toWhite" />
-			<ul class="nav nav-pills flex-column mb-3">
-				<li class="nav-item">
-					<a asp-controller="Home" asp-action="Index" class="nav-link nav-link-sidebar text-white @(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" ? "active" : "")">
-						<i class="bi bi-house-door-fill"></i> Inicio
-					</a>
-				</li>
-				<li class="nav-item">
-					<div class="nav-link nav-link-sidebar text-white cursor-pointer user-select-none" data-bs-toggle="collapse" data-bs-target="#permisosNav">
-						<i class="bi bi-people-fill"></i> Administrador
-					</div>
-					<ul id="permisosNav" class="collapse nav nav-pills flex-column ms-3">
-						<li class="nav-item">
-							<a asp-controller="Usuarios" asp-action="Index" class="sub-nav-link nav-link text-white d-flex align-items-center gap-2 @(ViewContext.RouteData.Values["controller"]?.ToString() == "Usuarios" ? "active" : "")"><i class="bi bi-eyeglasses"></i> Usuarios</a>
-						</li>
-						<li class="nav-item">
-							<a asp-controller="Perfiles" asp-action="Index" class="sub-nav-link nav-link text-white d-flex align-items-center gap-2 @(ViewContext.RouteData.Values["controller"]?.ToString() == "Perfiles" ? "active" : "")"><i class="bi bi-circle-square"></i> Perfiles</a>
-						</li>
-						<li class="nav-item">
-							<a asp-controller="Permisos" asp-action="Index" class="sub-nav-link nav-link text-white d-flex align-items-center gap-2 @(ViewContext.RouteData.Values["controller"]?.ToString() == "Permisos" ? "active" : "")"><i class="bi bi-card-checklist"></i> Permisos</a>
-						</li>
-					</ul>
-				</li>
-				<li class="nav-item">
-					<a asp-controller="Inventario" asp-action="Index" class="nav-link nav-link-sidebar text-white d-flex align-items-center gap-2 @(ViewContext.RouteData.Values["controller"]?.ToString() == "Inventario" ? "active" : "")"><i class="bi bi-box"></i> Inventario</a>
-				</li>
-				<li class="nav-item">
-					<a asp-controller="OpcionesSistema" asp-action="Index" class="nav-link nav-link-sidebar text-white d-flex align-items-center gap-2 @(ViewContext.RouteData.Values["controller"]?.ToString() == "OpcionesSistema" ? "active" : "")"><i class="bi bi-duffle"></i> Opciones sistema</a>
-				</li>
-			</ul>
-			<div class="mt-auto">
-				<a asp-controller="Account" asp-action="Logout" class="btn btn-secondary bg-primary-site w-100 mt-3">
-					<i class="bi bi-person-circle"></i> Cerrar Sesión
-				</a>
-			</div>
-		</aside>
-
-		@*
-		<aside id="sidebarMenu" class="collapse d-md-block bg-primary-site p-3 flex-shrink-0 h-100" style="width: 280px;">
-			<div class="d-flex flex-column flex-shrink-0 ps-1 pe-4">
-				<a asp-action="Index">
-					<img src="~/images/logo-lps.png" class="toWhite my-2 mx-3" width="180" />
-				</a>
-				<hr class="toWhite" />
-				<ul class="nav nav-pills flex-column">
-					<li class="nav-item">
-						<a asp-controller="Home" asp-action="Index" class="nav-link nav-link-sidebar text-white @(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" ? "active" : "")">
-							<i class="bi bi-house-door-fill"></i> Inicio
-						</a>
-					</li>
-					<li class="nav-item">
-						<div class="nav-link nav-link-sidebar text-white cursor-pointer user-select-none" data-bs-toggle="collapse" data-bs-target="#permisosNav">
-							<i class="bi bi-people-fill"></i> Administrador
-						</div>
-						<ul id="permisosNav" class="collapse nav nav-pills flex-column ms-3">
-							<li class="nav-item">
-								<a asp-controller="Usuarios" asp-action="Index" class="sub-nav-link nav-link text-white d-flex align-items-center gap-2 @(ViewContext.RouteData.Values["controller"]?.ToString() == "Usuarios" ? "active" : "")"><i class="bi bi-eyeglasses"></i> Usuarios</a>
-							</li>
-							<li class="nav-item">
-								<a asp-controller="Perfiles" asp-action="Index" class="sub-nav-link nav-link text-white d-flex align-items-center gap-2 @(ViewContext.RouteData.Values["controller"]?.ToString() == "Perfiles" ? "active" : "")"><i class="bi bi-circle-square"></i> Perfiles</a>
-							</li>
-							<li class="nav-item">
-								<a asp-controller="Permisos" asp-action="Index" class="sub-nav-link nav-link text-white d-flex align-items-center gap-2 @(ViewContext.RouteData.Values["controller"]?.ToString() == "Permisos" ? "active" : "")"><i class="bi bi-card-checklist"></i> Permisos</a>
-							</li>
-						</ul>
-					</li>
-					<li class="nav-item">
-						<a asp-controller="Inventario" asp-action="Index" class="nav-link nav-link-sidebar text-white d-flex align-items-center gap-2 @(ViewContext.RouteData.Values["controller"]?.ToString() == "Inventario" ? "active" : "")"><i class="bi bi-box"></i> Inventario</a>
-					</li>
-					<li class="nav-item">
-						<a asp-controller="OpcionesSistema" asp-action="Index" class="nav-link nav-link-sidebar text-white d-flex align-items-center gap-2 @(ViewContext.RouteData.Values["controller"]?.ToString() == "OpcionesSistema" ? "active" : "")"><i class="bi bi-duffle"></i> Opciones sistema</a>
-					</li>
-				</ul>
-				<div class="mt-auto">
-					<a asp-controller="Account" asp-action="Logout" class="btn btn-secondary bg-primary-site w-100 mt-3">
-						<i class="bi bi-person-circle"></i> Cerrar Sesión
-					</a>
-				</div>
-			</div>
-		</aside>
-
-		<section class="d-flex flex-column flex-grow-1 overflow-hidden">
-			<header class="d-flex justify-content-between align-items-center mt-2 mx-2">
-				<div class="d-md-none">
-					<button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
-						<i class="bi bi-list"></i>
-					</button>
-				</div>
-			</header>
-			<div class="flex-grow-1 overflow-y-auto overflow-x-hidden mt-3 p-2 mx-2">
-				@RenderBody()
-			</div>
-		</section>
-	</main>
-	<footer class="text-muted">
-		<div class="container">
-			&copy; 2025 - Desoteem
-		</div>
-	</footer>
-	@{
-		await Html.RenderPartialAsync("_ValidationScriptsPartial");
-	}
-	// @RenderSection("Scripts", required: false) 
-	<script>
-				document.addEventListener("DOMContentLoaded", function () {
-			const collapseId = "permisosNav";
-			const collapseEl = document.getElementById(collapseId);
-			const currentController = document.body.getAttribute("data-controller");
-
-			const relatedControllers = ["Usuarios", "Perfiles", "Permisos"];
-			const shouldExpand = relatedControllers.includes(currentController);
-
-			if (shouldExpand) {
-				new bootstrap.Collapse(collapseEl, { toggle: true });
-			}
-
-			document.querySelector(`[data-bs-target="#${collapseId}"]`).addEventListener("click", function () {
-				const visible = collapseEl.classList.contains("show");
-				localStorage.setItem(collapseId, !visible);
-			});
-			document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function (el) {
-			new bootstrap.Tooltip(el);
-		});
-		});
-
-	</script>
-	<div class="modal" id="genericConfirmModal" tabindex="-1" aria-labelledby="genericConfirmLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="genericConfirmLabel">Confirmar acción</h5>
-					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-				</div>
-				<div class="modal-body" id="genericConfirmBody"></div>
-				<div class="modal-footer">
-					<form id="genericConfirmForm" method="post">
-						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-						<button type="submit" class="btn btn-danger">Confirmar</button>
-					</form>
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<script>
-		document.addEventListener("DOMContentLoaded", function () {
-			var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-			tooltipTriggerList.forEach(function (tooltipTriggerEl) {
-				new bootstrap.Tooltip(tooltipTriggerEl)
-			});
-
-			var modal = document.getElementById("genericConfirmModal");
-
-			modal.addEventListener("show.bs.modal", function (event) {
-				var button = event.relatedTarget;
-				var action = button.getAttribute("data-action");
-				var body = button.getAttribute("data-body");
-
-				document.getElementById("genericConfirmBody").innerHTML = body;
-				document.getElementById("genericConfirmForm").action = action;
-			});
-		});
-	</script>
-
-</body> *@
 </html>
