@@ -20,22 +20,21 @@
 	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
-@* <body class="vh-100 d-flex flex-column overflow-hidden" data-controller="@ViewContext.RouteData.Values["controller"]"> *@
-<body class="d-flex flex-column">
+<body class="d-flex flex-column min-vh-100">
 	<main class="d-flex flex-grow-1 w-100">
-		<aside id="sidebarMenu" class="bg-primary-site p-3">
-			<nav class="h-100 flex-column align-items-stretch">
+		<aside id="sidebarMenu" class="bg-primary-site p-3" style="max-width: 230px;">
+			<nav class="h-100 d-flex flex-column ">
 				<nav class="nav nav-pills flex-column gap-1">
 					<a asp-action="Index" class="mx-auto">
 						<img src="~/images/logo-lps.png" class="toWhite d-none d-md-block" width="180" />
 						<img src="~/images/icon-lps.png" class="toWhite d-md-none" width="46" />
 					</a>
 					<hr class="toWhite mx-3" />
-					<a asp-controller="OpcionesSistema" asp-action="Index" class="nav-link nav-link-sidebar text-white @Active("OpcionesSistema")">
+					<a asp-controller="OpcionesSistema" asp-action="Index" class=" nav-link nav-link-sidebar text-white text-nowrap @Active("OpcionesSistema")">
 						<i class="bi bi-laptop me-2"></i><span class="d-none d-md-inline-block"> Mi sistema</span>
 					</a>
 					<a data-bs-toggle="collapse" data-bs-target="#items-administrador"
-					   class="nav-link nav-link-sidebar text-white d-flex align-items-center justify-content-between @(IsChildActive(new[] { "Usuarios", "Perfiles", "Permisos" }) ? "active" : "")"
+					   class="nav-link nav-link-sidebar text-white text-nowrap d-flex align-items-center justify-content-between @(IsChildActive(new[] { "Usuarios", "Perfiles", "Permisos" }) ? "active" : "")"
 					   aria-expanded="@(IsChildActive(new[] { "Usuarios", "Perfiles", "Permisos" }).ToString().ToLower())">
 						<span>
 							<i class="bi bi-pc-display me-2"></i><span class="d-none d-md-inline-block"> Administrador</span>
@@ -44,31 +43,33 @@
 					</a>
 					<div id="items-administrador" class="collapse @(IsChildActive(new[] { "Usuarios", "Perfiles", "Permisos" }) ? "show" : "")">
 						<nav class="nav nav-pills flex-column ms-4">
-							<a asp-controller="Usuarios" asp-action="Index" class="nav-link sub-nav-link text-white @Active("Usuarios")">
+							<a asp-controller="Usuarios" asp-action="Index" class="nav-link sub-nav-link text-nowrap text-white @Active("Usuarios")">
 								<i class="bi bi-people me-2"></i><span class="d-none d-md-inline-block"> Usuarios</span>
 							</a>
-							<a asp-controller="Perfiles" asp-action="Index" class="nav-link sub-nav-link text-white @Active("Perfiles")">
+							<a asp-controller="Perfiles" asp-action="Index" class="nav-link sub-nav-link text-nowrap text-white @Active("Perfiles")">
 								<i class="bi bi-person-badge me-2"></i><span class="d-none d-md-inline-block"> Perfiles</span>
 							</a>
-							<a asp-controller="Permisos" asp-action="Index" class="nav-link sub-nav-link text-white @Active("Permisos")">
+							<a asp-controller="Permisos" asp-action="Index" class="nav-link sub-nav-link text-nowrap text-white @Active("Permisos")">
 								<i class="bi bi-person-lines-fill me-2"></i><span class="d-none d-md-inline-block"> Permisos</span>
 							</a>
 						</nav>
 					</div>
-					<a asp-controller="Inventario" asp-action="Index" class="nav-link nav-link-sidebar @Active("Inventario") text-white">
+					<a asp-controller="Inventario" asp-action="Index" class="nav-link nav-link-sidebar  text-nowrap @Active("Inventario") text-white">
 						<i class="bi bi-box-seam me-2"></i><span class="d-none d-md-inline-block">Inventario</span>
 					</a>
-					<div class="dropdown mt-auto">
-						<a data-bs-toggle="dropdown" class="btn btn-outline-light dropdown-toggle w-100">
-							<i class="bi bi-person-circle me-2"></i><span class="d-none d-md-inline-block">@User.Identity.Name</span>
-						</a>
-						<ul class="dropdown-menu">
-							<li><a class="d-md-none dropdown-item" href="#">@User.Identity.Name</a></li>
-							<li><a asp-controller="Account" asp-action="Logout" class="dropdown-item">Cerrar sesión</a></li>
-						</ul>
-					</div>
 				</nav>
+				<div class="dropdown mt-auto">
+					<a data-bs-toggle="dropdown" class="btn btn-outline-light dropdown-toggle w-100 d-flex align-items-center justify-content-center overflow-hidden">
+						<i class="bi bi-person-circle me-2"></i>
+						<span class="d-none d-md-inline-block text-truncate">@User.Identity.Name</span>
+					</a>
+					<ul class="dropdown-menu">
+						<li><a class="d-md-none dropdown-item text-truncate" style="max-width: 160px;">@User.Identity.Name</a></li>
+						<li><a asp-controller="Account" asp-action="Logout" class="dropdown-item">Cerrar sesión</a></li>
+					</ul>
+				</div>
 			</nav>
+
 		</aside>
 		<script>
 			document.querySelectorAll('[data-bs-toggle="collapse"]').forEach(trigger => {
